@@ -1,0 +1,26 @@
+﻿/********************************** PBM Items **********************************/
+h1.pbm {
+    font-size: 300%;
+    text-align: center;
+}
+#root{
+    display: block;
+    text-align: center;
+}
+/********************************** React PBM Items **********************************/
+.redError {
+    color: red;
+    font-size: 300%;
+    text-align: center;
+}
+.signInLink{
+    text-align: center;
+    font-size: 200%;
+}
+    .signInLink:visited, .signInLink:hover, .signInLink:link {
+        color: red;
+        text-align: center;
+    }
+    .signInLink:hover{
+        font-weight: 900;
+    }
