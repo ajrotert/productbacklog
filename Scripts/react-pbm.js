@@ -36,18 +36,11 @@ class PB extends React.Component {
     }
 
     render() {
-        //NOT WORKING HERE. JUST SAVING
 
-        const PBIContainer = temp.map((index, array) => {
-            db.collection(uid).get()
-                .then((querySnapshot) => {
-                    querySnapshot.forEach((doc) => {
-                        var local = doc.data();
-                        if (local != null) {
-                            <div>{this.renderPBI(doc.id, local.title, local.description)}</div>
-                        }
-                    })
-                });
+        const PBIContainer = this.props.data.docs.map((object, index) => {
+            return (
+                <div key={index}>{this.renderPBI(object.id, object.data().title, object.data().description)}</div>
+                );
         });
 
         return (
@@ -62,5 +55,9 @@ const domContainer = document.querySelector('#root');
 if (uid == null)
     ReactDOM.render(<NotAuthError />, domContainer);
 else {
-    ReactDOM.render(<PB />, domContainer);
+
+    db.collection(uid).get()
+        .then((snapshot) => {
+            ReactDOM.render(<PB data={snapshot} />, domContainer);
+        })
 }
