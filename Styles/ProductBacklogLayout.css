@@ -1,4 +1,11 @@
-﻿/********************************** PBM Items **********************************/
+﻿
+/********************************** Grid Layout **********************************/
+.grid-container {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+/********************************** PBM Items **********************************/
 h1.pbm {
     font-size: 300%;
     text-align: center;
@@ -7,6 +14,7 @@ h1.pbm {
     display: block;
     text-align: center;
 }
+
 /********************************** React PBM Items **********************************/
 .redError {
     color: red;
@@ -24,3 +32,63 @@ h1.pbm {
     .signInLink:hover{
         font-weight: 900;
     }
+
+.button {
+    text-align: center;
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-top: .75em;
+    padding-bottom: .75em;
+    color: white;
+    font-size: 150%;
+    background-color: #022E6D;
+    display: block;
+    text-decoration: none;
+    margin: 0 20%;
+    position: relative;
+}
+
+    .button:hover {
+        background-color: #0066FF;
+    }
+.PBI {
+    background-color: #848482;
+    border: 2px solid #0066FF;
+    margin: 5% 20%;
+}
+    .PBI > h1 {
+        font-size: 1.75em;
+    }
+
+
+.PBI > p{
+    text-align: left;
+    font-size: 1em;
+}
+
+.PBI > p:last-of-type{
+    text-align: right;
+    font-size: .2em;
+}
+.grid_item_one {
+    position: relative;
+    grid-column: 1;
+}
+.grid_item_two {
+    position: relative;
+    grid-column: 2;
+}
+.grid_border_right {
+    border-right: 2px solid black;
+}
+.grid_border_left {
+    border-left: 2px solid black;
+}
+.grid_border_bottom {
+    padding-bottom: 2%;
+    border-bottom: 2px solid #022E6D;
+}
+
+.box_shadow {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
