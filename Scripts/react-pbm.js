@@ -2,7 +2,9 @@
 var db = firebase.firestore();
 const uid = sessionStorage.getItem('uid');
 
-    
+function updatePBI(docId, completed) {
+    db.collection(uid).doc(docId).update({completed: completed});
+};   
 
 class NotAuthError extends React.Component {
     render() {
@@ -24,7 +26,6 @@ class ModalView extends React.Component {
     addToDatabase() {
         var title = document.getElementById('title').value;
         var description = document.getElementById('description').value;
-        console.log(title + " " + description + " " + uid);
         if (title != "" && description != "" && uid != null) {
 
             db.collection(uid).doc().set({
@@ -59,14 +60,21 @@ class ModalView extends React.Component {
 }
 
 class PBI extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            shadowColor: "PBI box_shadow_blue"
+        }
+    }
+
     render() {
         return (
-            <div className="PBI box_shadow">
+            <div className={this.state.shadowColor} id={this.props.id}>
                 <h1>{this.props.title}</h1>
                 <hr />
                 <p>Description: {this.props.description}</p>
-                <input type="checkbox" id={"done" + this.props.id} name={"done" + this.props.id} value={this.props.completed}/>
-                <label htmlFor={"done" + this.props.id }> Item Completed</label><br />
+                <input type="checkbox" id={"done" + this.props.id} name={"done" + this.props.id} checked={this.props.completed} disabled/>
+                <label htmlFor={"done" + this.props.id} disabled> Item Completed</label><br />
                 <p>ID: {this.props.id}</p>
                 
             </div>
@@ -76,10 +84,8 @@ class PBI extends React.Component {
 class PB extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            obj: null
-        }
     }
+
     renderPBI(id, title, description, completed) {
         return (
             <PBI id={id} title={title} description={description} completed={completed} />
@@ -92,11 +98,18 @@ class PB extends React.Component {
         modal.style.display = "block";
     }
 
+    pbiClicked = (e) => {
+        e.currentTarget.className = e.currentTarget.className == "grid_item_one grid_border_right" ? "grid_item_two grid_border_left" : "grid_item_one grid_border_right";
+        e.currentTarget.querySelector('input').checked = !e.currentTarget.querySelector('input').checked;
+        updatePBI(e.currentTarget.querySelector('div').id, e.currentTarget.querySelector('input').checked);
+    }
+
     render() {
 
         const PBIContainer = this.props.data.docs.map((object, index) => {
+            var classname = object.data().completed ? "grid_item_two grid_border_left" : "grid_item_one grid_border_right";
             return (
-                <div className="grid_item_one grid_border_right" key={index}>{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed)}</div>
+                <div className={classname} onClick={((e) => this.pbiClicked(e))} key={index}>{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed)}</div>
                 );
         });
 

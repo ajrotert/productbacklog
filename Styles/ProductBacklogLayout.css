@@ -86,6 +86,7 @@ h1.pbm {
     border-right: 2px solid black;
 }
 .grid_border_left {
+    margin-left: -2px;
     border-left: 2px solid black;
 }
 .grid_border_bottom {
@@ -93,7 +94,13 @@ h1.pbm {
     border-bottom: 2px solid #022E6D;
 }
 
-.box_shadow {
+.box_shadow_blue {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.box_shadow_green {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.box_shadow_red {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
