@@ -2,9 +2,15 @@
 var db = firebase.firestore();
 const uid = sessionStorage.getItem('uid');
 
+function getPbiDatabase(docId) {
+    return db.collection(uid).doc(docId).get();
+};
 function updatePbiDatabase(docId, completed) {
-    db.collection(uid).doc(docId).update({completed: completed});
+    return db.collection(uid).doc(docId).update({ completed: completed });
 };   
+function deletePbiDatabase(docId) {
+    return db.collection(uid).doc(docId).delete();
+};
 
 class NotAuthError extends React.Component {
     render() {
@@ -69,9 +75,24 @@ class PBI extends React.Component {
         }
     }
 
+    deleteNode = () => {
+        deletePbiDatabase(this.state.ID).then(() => {
+        });
+    }
+
     updateHandler = (e) => {
-        updatePbiDatabase(this.state.ID, !this.state.completed);
-        this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : "box_shadow_blue"), completed: !this.state.completed, ID: this.state.ID });
+        getPbiDatabase(this.state.ID).then((doc) => {
+            if (doc.exists) {
+                updatePbiDatabase(this.state.ID, !this.state.completed)
+                    .then(() => {
+                        this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : "box_shadow_blue"), completed: !this.state.completed, ID: this.state.ID });
+                    })
+                    .catch((error) => {
+                        console.error("Error removing document: ", error);
+                    });
+            }
+            
+        });
 
         /*
         if (!this.state.completed) {
@@ -92,6 +113,7 @@ class PBI extends React.Component {
     render() {
         return (
             <div className={this.state.shadowColor} id={this.props.id} onClick={(e) => this.updateHandler(e)}>
+                <span className="close" onClick={() => this.deleteNode()}>&times;</span>
                 <h1>{this.props.title}</h1>
                 <hr />
                 <p>Description: {this.props.description}</p>
@@ -130,14 +152,14 @@ class PB extends React.Component {
 
         return (
             <div className="grid-container">
-                <div id="grid1">
+                <div id="grid1" className="grid_border_right">
                     <h1 className="grid_border_bottom">Backlog</h1>
-                    <div className="grid_border_right">
+                    <div>
                         <a className="button" onClick={this.handler}>New Item</a>
                     </div>
                     {PBIContainer}
                 </div>
-                <div id="grid2">
+                <div id="grid2" className="grid_border_left">
                     <h1 className="grid_border_bottom">Completed</h1>
                 </div>
 
@@ -153,28 +175,39 @@ else {
 
     db.collection(uid)
         .onSnapshot((snapshot) => {
-            ReactDOM.render(<PB data={snapshot} />, domContainer);
+            ReactDOM.render(<PB data={snapshot} />, domContainer, () => {
+                var inProgressItems = document.getElementById('grid1');
+                var completedItems = document.getElementById('grid2');
+                var completedNodeList = new Array(0);
+                var inProgressNodeList = new Array(0);
+                inProgressItems.childNodes.forEach((node) => {
+                    if (node.className === 'true') {
+                        completedNodeList.push(node);
+                    }
+                });
+                completedItems.childNodes.forEach((node) => {
+                    if (node.className === 'false') {
+                        inProgressNodeList.push(node);
+                    }
+                });
+                completedNodeList.forEach((node) => {
+                    completedItems.appendChild(node);
+                });
+                inProgressNodeList.forEach((node) => {
+                    inProgressItems.appendChild(node);
+                });
+                if (inProgressItems.childNodes.length > completedItems.childNodes.length) {
 
-            var inProgressItems = document.getElementById('grid1');
-            var completedItems = document.getElementById('grid2');
-            var completedNodeList = new Array(0);
-            var inProgressNodeList = new Array(0);
-            inProgressItems.childNodes.forEach((node) => {
-                if (node.className === 'true') {
-                    completedNodeList.push(node);
+                    inProgressItems.className = "grid_border_right";
+                    completedItems.className = "";
+                }
+                else {
+                    inProgressItems.className = "";
+                    completedItems.className = "grid_border_left";
                 }
             });
-            completedItems.childNodes.forEach((node) => {
-                if (node.className === 'false') {
-                    inProgressNodeList.push(node);
-                }
-            });
-            completedNodeList.forEach((node) => {
-                completedItems.appendChild(node);
-            });
-            inProgressNodeList.forEach((node) => {
-                inProgressItems.appendChild(node);
-            });
+
+            
 
         })
     ReactDOM.render(<ModalView />, document.querySelector('#rootModal'));

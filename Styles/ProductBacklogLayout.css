@@ -78,10 +78,16 @@ h1.pbm {
     font-size: .2em;
 }
 
-#grid1{
+#grid1 {
     width: 50%;
     float: left;
     position: relative;
+}
+.grid_border_left {
+    margin-left: -1px;
+    border-left: 1px solid black;
+}
+.grid_border_right {
     margin-right: -1px;
     border-right: 1px solid black;
 }
@@ -90,8 +96,6 @@ h1.pbm {
     width: 50%;
     float: right;
     position: relative;
-    margin-left: -1px;
-    border-left: 1px solid black;
 }
 
 .grid_border_bottom {
