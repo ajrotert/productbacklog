@@ -2,7 +2,7 @@
 var db = firebase.firestore();
 const uid = sessionStorage.getItem('uid');
 
-function updatePBI(docId, completed) {
+function updatePbiDatabase(docId, completed) {
     db.collection(uid).doc(docId).update({completed: completed});
 };   
 
@@ -63,19 +63,41 @@ class PBI extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            shadowColor: "PBI box_shadow_blue"
+            shadowColor: "PBI " + (props.completed ? "box_shadow_green" : "box_shadow_blue"),
+            completed: props.completed,
+            ID: props.id
         }
+    }
+
+    updateHandler = (e) => {
+        updatePbiDatabase(this.state.ID, !this.state.completed);
+        this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : "box_shadow_blue"), completed: !this.state.completed, ID: this.state.ID });
+
+        /*
+        if (!this.state.completed) {
+            var completedItems = document.getElementById('grid2');
+            var obj = e.currentTarget.parentElement;
+            obj.remove();
+            completedItems.appendChild(obj);
+        }
+        else {
+            var inProgressItems = document.getElementById('grid1');
+            var obj = e.currentTarget.parentElement;
+            obj.remove();
+            inProgressItems.appendChild(obj);
+        }
+        */
     }
 
     render() {
         return (
-            <div className={this.state.shadowColor} id={this.props.id}>
+            <div className={this.state.shadowColor} id={this.props.id} onClick={(e) => this.updateHandler(e)}>
                 <h1>{this.props.title}</h1>
                 <hr />
                 <p>Description: {this.props.description}</p>
-                <input type="checkbox" id={"done" + this.props.id} name={"done" + this.props.id} checked={this.props.completed} disabled/>
-                <label htmlFor={"done" + this.props.id} disabled> Item Completed</label><br />
-                <p>ID: {this.props.id}</p>
+                <input type="checkbox" id={"done" + this.state.ID} name={"done" + this.state.ID} checked={this.state.completed} value="none" disabled/>
+                <label htmlFor={"done" + this.state.ID} disabled> Item Completed</label><br />
+                <p>ID: {this.state.ID}</p>
                 
             </div>
         );
@@ -98,30 +120,27 @@ class PB extends React.Component {
         modal.style.display = "block";
     }
 
-    pbiClicked = (e) => {
-        e.currentTarget.className = e.currentTarget.className == "grid_item_one grid_border_right" ? "grid_item_two grid_border_left" : "grid_item_one grid_border_right";
-        e.currentTarget.querySelector('input').checked = !e.currentTarget.querySelector('input').checked;
-        updatePBI(e.currentTarget.querySelector('div').id, e.currentTarget.querySelector('input').checked);
-    }
-
     render() {
 
         const PBIContainer = this.props.data.docs.map((object, index) => {
-            var classname = object.data().completed ? "grid_item_two grid_border_left" : "grid_item_one grid_border_right";
             return (
-                <div className={classname} onClick={((e) => this.pbiClicked(e))} key={index}>{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed)}</div>
+                <div key={index} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed)}</div>
                 );
         });
 
         return (
             <div className="grid-container">
-                <h1 className="grid_item_one grid_border_bottom">Backlog</h1>
-                <h1 className="grid_item_two grid_border_bottom">Completed</h1>
-                <div className="grid_item_one grid_border_right">
-                    <a className="button" onClick={this.handler}>New Item</a>
+                <div id="grid1">
+                    <h1 className="grid_border_bottom">Backlog</h1>
+                    <div className="grid_border_right">
+                        <a className="button" onClick={this.handler}>New Item</a>
+                    </div>
+                    {PBIContainer}
+                </div>
+                <div id="grid2">
+                    <h1 className="grid_border_bottom">Completed</h1>
                 </div>
 
-                {PBIContainer}
             </div>
         );
     }
@@ -135,6 +154,15 @@ else {
     db.collection(uid)
         .onSnapshot((snapshot) => {
             ReactDOM.render(<PB data={snapshot} />, domContainer);
+
+            var completedItems = document.getElementById('grid2');
+            document.getElementById('grid1').childNodes.forEach((node) => {
+                if (node.className === 'true') {
+                    node.remove();
+                    completedItems.appendChild(node);
+                }
+            });
+
         })
     ReactDOM.render(<ModalView />, document.querySelector('#rootModal'));
 }
