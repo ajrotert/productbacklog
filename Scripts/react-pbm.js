@@ -155,12 +155,25 @@ else {
         .onSnapshot((snapshot) => {
             ReactDOM.render(<PB data={snapshot} />, domContainer);
 
+            var inProgressItems = document.getElementById('grid1');
             var completedItems = document.getElementById('grid2');
-            document.getElementById('grid1').childNodes.forEach((node) => {
+            var completedNodeList = new Array(0);
+            var inProgressNodeList = new Array(0);
+            inProgressItems.childNodes.forEach((node) => {
                 if (node.className === 'true') {
-                    node.remove();
-                    completedItems.appendChild(node);
+                    completedNodeList.push(node);
                 }
+            });
+            completedItems.childNodes.forEach((node) => {
+                if (node.className === 'false') {
+                    inProgressNodeList.push(node);
+                }
+            });
+            completedNodeList.forEach((node) => {
+                completedItems.appendChild(node);
+            });
+            inProgressNodeList.forEach((node) => {
+                inProgressItems.appendChild(node);
             });
 
         })
