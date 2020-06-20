@@ -26,6 +26,13 @@ class NotAuthError extends React.Component {
 const debug = true;
 
 class ModalView extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            shadowColor: "box_shadow_blue"
+        };//this.props.completed ? "box_shadow_green" : "box_shadow_blue"
+    }
+
     handler() {
         var modal = document.getElementById("InputModal")
         modal.style.display = "none";
@@ -50,18 +57,25 @@ class ModalView extends React.Component {
         return (
             <div id="InputModal" className="modal">
                 <div className="modal-content">
-                    <span className="close" onClick={this.handler}>&times;</span>
-                    <h1>Please enter the following information: </h1>
-                    <label htmlFor="title">Title for Product Backlog Item: </label><br/>
-                    <input id="title" type="textbox" name="title" placeholder="Enter title"/>
+                    <div className={"samplePBI " + this.state.shadowColor}>
+                        <span className="close" onClick={this.handler}>&times;</span>
+                        <input className="heading" id="title" type="textbox" name="title" placeholder="Enter Story Title" />
+                        <hr/>
+                        <br />
+                        <textarea id="description" name="description" placeholder="Enter Story Description"/>
+                        <br />
+                        <br />
+                        <input type="checkbox" id="sample_checked" name="sample_checked" checked={false} value="none" disabled />
+                        <label htmlFor="sample_checked" disabled> Item Completed</label><br />
+                        <br />
+                        <div>
+                            <p className="small_info">Timestamp: Not yet generated.</p>
+                            <p className="small_info">ID: Not yet generated.</p>
+                        </div>
+                    </div>
                     <br />
                     <br />
-                    <label htmlFor="description">Product Backlog Item Description: </label><br/>
-                    <textarea id="description" name="description" placeholder="Enter description"/>
-                    <br />
-                    <br />
-                    <button onClick={this.addToDatabase}>Submit</button>
-                    <br/>
+                    <center><a className="button" onClick={this.addToDatabase}>Submit</a></center>
                 </div>
             </div>
             );
@@ -112,8 +126,8 @@ class PBI extends React.Component {
                 <p>Description: {this.props.description}</p>
                 <input type="checkbox" id={"done" + this.state.ID} name={"done" + this.state.ID} checked={this.state.completed} value="none" disabled/>
                 <label htmlFor={"done" + this.state.ID} disabled> Item Completed</label><br />
-                <p>Date: {this.props.timestamp} </p>
-                <p>ID: {this.state.ID}</p>
+                <p className="small_info">Timestamp: {this.props.timestamp} </p>
+                <p className="small_info">ID: {this.state.ID}</p>
             </div>
         );
     }
