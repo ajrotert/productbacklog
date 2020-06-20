@@ -10,6 +10,7 @@
 
 
 
+
     ul.nav {
         list-style-type: none;
         margin: 0;
@@ -77,10 +78,29 @@
         width: 90%;
         z-index: 100;
     }
+    .sticky-full {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 100;
+    }
+
     .PBIDEV {
         float: right !important;
-        font-stretch:ultra-expanded;
+        font-stretch: ultra-expanded;
         font-weight: 900;
+    }
+
+    .pad {
+        padding-left: 60px;
+    }
+
+    img.logo-nav {
+        z-index: 1;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 60px;
     }
 
     /*********************** Mobile Layout ***************************/
@@ -170,10 +190,11 @@
                 </div>
         </li>
 -->
-
+<img src="Images/PBDLogo.png" class="logo-nav" id="logo-nav" />
 <nav id="nav-placeholder">
     <ul class="nav">
-        <li class="navitem" id="Home-Page"><a href="index.html">Home</a></li>
+        <li class="navitem pad" id="Home-Page"><a href="index.html">Home</a></li>
+        <li class="navitem" id="PB-Page"><a href="ProductBacklog.html">Product Backlog</a></li>
         <li class="navitem PBIDEV" id="Parent"><a href="javascript:void(0)">ProductBacklog.Dev</a></li>
     </ul>
 </nav>
@@ -182,11 +203,16 @@
     This will show the active page, if the active page's title contains uniquely identifiying data
     Make sure that the element ID matches the ID from above
 -->
-<script>var title = document.title;
+<script>
+    var title = document.title;
 
     if (title.includes("Home"))
         document.getElementById("Home-Page").classList.add("active");
-
+    else if (title.includes("Online")) {
+        document.getElementById("PB-Page").classList.add("active");
+        document.getElementById("logo-nav").style.display = "none";
+        document.getElementById("Home-Page").classList = "navitem";
+    }
 
     function toggleFunction() {
         var x = document.getElementById("navStart");
@@ -195,4 +221,5 @@
         } else {
             x.className = "nav";
         }
-    }</script>
+    }
+</script>

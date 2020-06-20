@@ -24,6 +24,8 @@
     <None Include="Scripts\react-pbm.js" />
     <None Include="Styles\ProductBacklogLayout.css" />
     <None Include="Scripts\connection.js" />
+    <None Include="Images\ServersImage.png" />
+    <None Include="Images\PBDLogo.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />

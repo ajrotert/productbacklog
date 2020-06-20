@@ -1,5 +1,6 @@
 ﻿// Initialize the FirebaseUI Widget using Firebase.
 var ui = new firebaseui.auth.AuthUI(firebase.auth());
+var loaded = false;
 
 var uiConfig = {
     callbacks: {
@@ -13,14 +14,16 @@ var uiConfig = {
             return false;
         },
         uiShown: function () {
-            // The widget is rendered.
-            // Hide the loader.
             try {
                 document.getElementById('loader').style.display = 'none';
+                document.getElementById('firebaseui-auth-container').blur();
+                document.getElementById('Home-Page').focus();
             }
             catch{ }
         }
     },
+    signInFlow: 'popup',
+    
     signInOptions: [
         {
             provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
@@ -36,7 +39,7 @@ var uiConfig = {
     //privacyPolicyUrl: '<developednotdownloaded.com>'
 };
 
-ui.start('#firebaseui-auth-container', uiConfig);
+
 
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
@@ -47,12 +50,33 @@ firebase.auth().onAuthStateChanged(function (user) {
         document.getElementById('welcome-label').style.display = 'none';
     }
 });
-var loadPB = function () {
+loadPB = function () {
     if (firebase.auth().currentUser.uid != null) {
         sessionStorage.setItem('uid', firebase.auth().currentUser.uid);
         window.location.href = 'ProductBacklog.html';
     }
-}
+};
+
+showLogin = function () {
+    ui.start('#firebaseui-auth-container', uiConfig);
+    document.getElementById('pb-button-login').style.display = "none";
+    loaded = true;
+};
+
+window.onload = () => {
+    loaded = false;
+    if (!loaded) {
+        setTimeout(() => {
+            if (!loaded) {
+                document.getElementById('pb-button-login').style.display = "none";
+                ui.start('#firebaseui-auth-container', uiConfig);
+                loaded = true;
+            }
+
+        }, 3000);
+
+    }
+};
 
 window.onclose = (() => {
     firebase.auth().signOut().then(function () {

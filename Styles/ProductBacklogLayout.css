@@ -13,6 +13,8 @@
 h1.pbm {
     font-size: 300%;
     text-align: center;
+    color: white;
+    font-weight: 900;
 }
 #root{
     display: block;
@@ -199,7 +201,24 @@ h1.pbm {
     font-size: 125%;
     font-weight: 900;
 }
+/*********************** Parallax Layout ***************************/
 
+.parallax-container {
+    min-height: 15vh;
+    background-image: url("../Images/ServersImage.png");
+    position: relative;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-bottom: 2%;
+}
+.inner-parallax-container {
+    position: absolute;
+    text-align: center;
+    top: 10%;
+    width: 100%;
+}
 /*********************** Mobile Layout ***************************/
 @media screen and (max-width: 1000px) {
     .PBI > h1 {

@@ -1,10 +1,32 @@
-﻿
+﻿/********************************** Override Items **********************************/
+html{
+    margin: 0;
+    width: 100%;
+    padding: 0;
+}
+body{
+    margin: 0;
+    width: 100%;
+    padding: 0;
+}
 /********************************** Index Items **********************************/
 h1.index {
-    font-size: 300%;
+    font-size: 500%;
     text-align: center;
+    color: white;
 }
-h2.index{
+h2.index {
+    font-size: 350%;
+    text-align: center;
+    color: white;
+}
+h3.index {
+    font-size: 200%;
+    text-align: justify;
+    color: white;
+    margin: 0 5%;
+}
+h2.index-user{
     font-size: 250%;
     text-align: center;
 }
@@ -30,6 +52,10 @@ h2.index{
     text-align: center;
     display: none;
 }
+.container-show {
+    display: block;
+    text-align: center;
+}
 .button {
     margin-top: 5%;
     margin-bottom: 5%;
@@ -47,6 +73,31 @@ h2.index{
     .button:hover {
         background-color: #0066FF;
     }
+
+/*********************** Parallex Layout ***************************/
+
+.index-container {
+    position: absolute;
+    text-align: center;
+    top: 25%;
+    width: 100%;
+}
+.parallax1 {
+    min-height: 100vh;
+    background-image: url("../Images/ServersImage.png");
+    position: relative;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.margin-bottom {
+    margin-bottom: 10%;
+}
+.margin-top {
+    margin-top: 10%;
+}
+
 /*********************** Mobile Layout ***************************/
 @media screen and (max-width: 1000px) {
     .grid-container{
@@ -56,24 +107,26 @@ h2.index{
     .button{
         font-size: 100%;
     }
-}
-@media screen and (max-width: 750px) {
     h1.index {
-        font-size: 125%;
+        font-size: 400%;
     }
 
-}
+    h2.index {
+        font-size: 250%;
+    }
 
+    h3.index {
+        font-size: 200%
+    }
+}
 @media screen and (max-width: 415px) {
-    h1.index {
-        font-size: 100%;
+    h1.index{
+        font-size: 300%;
     }
-
-}
-
-@media screen and (max-width: 275px) {
-    h1.index {
-        font-size: 5px;
+    h2.index {
+        font-size: 200%;
     }
-
+    h3.index {
+        font-size: 100%
+    }
 }

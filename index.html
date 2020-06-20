@@ -22,20 +22,36 @@
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
 <body>
-    <center><img src="Images/productbacklogdev.png" class="logo" alt="Logo" /></center>
-
-    <hr class="nav" />
     <nav id="nav-placeholder"></nav>
-    <hr class="nav" />
 
-    <h1 class="index">Product Backlog Management Software</h1>
-    <h2 class="index" id="welcome-label">Welcome, <object id="welcome-user"></object></h2>
+    <header id="index-header" class="parallax1 margin-bottom">
+        <div class="index-container">
+            <h1 class="index">Official Website of Product Backlog</h1>
+            <h2 class="index">A realtime product backlog development technology.</h2>
+        </div>
+    </header>
+
+    <h2 class="index-user" id="welcome-label">Welcome, <object id="welcome-user"></object></h2>
+
+    <div class="container-show" id="pb-button-login">
+        <a class="button" onclick="showLogin()">Show Login</a>
+    </div>
     <div id="firebaseui-auth-container"></div>
 
     <div class="container" id="pb-button">
         <a class="button" onclick="loadPB()">Go to Product Backlog</a>
     </div>
 
+    <main id="index-main" class="parallax1 margin-top">
+        <div class="index-container">
+            <h1 class="index">About Product Backlog Developer</h1>
+            <h3 class="index">
+                Product Backlog Developer is a full stack application. This technology uses a realtime firebase backend, and a react frontend. Users
+                can sign in using googles AuthUI. Once users have access they can add stories to their backlog. The user can choose to add a new story or a
+                new defect. Product backlog items can the be competed or deleted.
+            </h3>
+        </div>
+    </main>
 
     <footer>
         <div class="right_position">
