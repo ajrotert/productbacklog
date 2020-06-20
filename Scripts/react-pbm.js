@@ -38,16 +38,23 @@ class ModalView extends React.Component {
         modal.style.display = "none";
     }
 
+    handlerStory = () => {
+        var story = document.getElementById('story-selector').value == 'story';
+        this.setState({ shadowColor: story ? "box_shadow_blue" : "box_shadow_red" });
+    }
+
     addToDatabase() {
         var title = document.getElementById('title').value;
         var description = document.getElementById('description').value;
+        var story = document.getElementById('story-selector').value == 'story';
         if (title != "" && description != "" && uid != null) {
 
             db.collection(uid).doc().set({
                 title: title,
                 description: description,
                 completed: false,
-                timestamp: Date.now()
+                timestamp: Date.now(),
+                isStory: story
             });
             document.getElementById("InputModal").style.display = "none";
         }
@@ -63,6 +70,12 @@ class ModalView extends React.Component {
                         <hr/>
                         <br />
                         <textarea id="description" name="description" placeholder="Enter Story Description"/>
+                        <br />
+                        <br />
+                        <select id="story-selector" onChange={() => this.handlerStory()}>
+                            <option value="story">Story</option>
+                            <option value="defect">Defect</option>
+                        </select>
                         <br />
                         <br />
                         <input type="checkbox" id="sample_checked" name="sample_checked" checked={false} value="none" disabled />
@@ -86,7 +99,7 @@ class PBI extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            shadowColor: "PBI " + (this.props.completed ? "box_shadow_green" : "box_shadow_blue"),
+            shadowColor: "PBI " + (this.props.completed ? "box_shadow_green" : this.props.isStory ? "box_shadow_blue" : "box_shadow_red"),
             completed: this.props.completed,
             ID: this.props.id
         }
@@ -104,7 +117,7 @@ class PBI extends React.Component {
             if (doc.exists) {
                 updatePbiDatabase(this.state.ID, !this.state.completed)
                     .then(() => {
-                        this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : "box_shadow_blue"), completed: !this.state.completed, ID: this.state.ID });
+                        this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : this.props.isStory ? "box_shadow_blue" : "box_shadow_red"), completed: !this.state.completed, ID: this.state.ID });
                     })
                     .catch((error) => {
                         debug ? console.error("Error removing document: ", error) : "";
@@ -124,7 +137,8 @@ class PBI extends React.Component {
                 <h1>{this.props.title}</h1>
                 <hr />
                 <p>Description: {this.props.description}</p>
-                <input type="checkbox" id={"done" + this.state.ID} name={"done" + this.state.ID} checked={this.state.completed} value="none" disabled/>
+                <h3>{this.props.isStory ? "Story" : "Defect"}</h3>
+                <input type="checkbox" id={"done" + this.state.ID} name={"done" + this.state.ID} checked={this.state.completed} value="none" disabled />
                 <label htmlFor={"done" + this.state.ID} disabled> Item Completed</label><br />
                 <p className="small_info">Timestamp: {this.props.timestamp} </p>
                 <p className="small_info">ID: {this.state.ID}</p>
@@ -132,15 +146,21 @@ class PBI extends React.Component {
         );
     }
 }
+/*
+{this.props.isStory ? "Story" : "Defect"}
+, story
+, object.data().isStory
+ story={story}
+*/
 class PB extends React.Component {
     constructor(props) {
         super(props);
     }
 
-    renderPBI(id, title, description, completed, timestamp) {
+    renderPBI(id, title, description, completed, timestamp, isStory) {
         debug ? console.log(`Rendered Function: ID: ${id} Title: ${title} Desc: ${description} Completed: ${completed}`) : "";
         return (
-            <PBI id={id} title={title} description={description} completed={completed} timestamp={timestamp}/>
+            <PBI id={id} title={title} description={description} completed={completed} timestamp={timestamp} isStory={isStory}/>
             );
     }
 
@@ -153,8 +173,9 @@ class PB extends React.Component {
     render() {
         const orderedData = this.props.data.docs.sort((object1, object2) => object1.data().timestamp > object2.data().timestamp);
         const PBIContainer = orderedData.map((object, index) => {
+            debug ? console.log(object.data()) : "";
             return (
-                <div key={index} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed, object.data().timestamp)}</div>
+                <div key={index} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed, object.data().timestamp, object.data().isStory)}</div>
                 );
         });
 

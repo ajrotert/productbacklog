@@ -66,6 +66,9 @@ h1.pbm {
     .PBI > h1 {
         font-size: 1.75em;
     }
+    .PBI > h3{
+        font-size: 1.35em;
+    }
 
 
 .PBI > p{
@@ -134,7 +137,7 @@ h1.pbm {
 
 .modal-content {
     background-color: #45433f;
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(0,0,0,0.3);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     margin: auto;
     padding: 20px;
@@ -190,6 +193,12 @@ h1.pbm {
     width: 100%;
     text-align: right;
 }
+.samplePBI > select{
+    background-color: #848482;
+    color: black;
+    font-size: 125%;
+    font-weight: 900;
+}
 
 /*********************** Mobile Layout ***************************/
 @media screen and (max-width: 1000px) {
@@ -201,6 +210,9 @@ h1.pbm {
     .PBI > p {
         text-align: left;
         font-size: .95em;
+    }
+    .PBI > h3 {
+        font-size: 1.25em;
     }
 }
 
@@ -214,6 +226,9 @@ h1.pbm {
         text-align: left;
         font-size: .85em;
     }
+    .PBI > h3 {
+        font-size: 0.90em;
+    }
 }
 
 @media screen and (max-width: 415px) {
@@ -226,6 +241,9 @@ h1.pbm {
         text-align: left;
         font-size: .65em;
     }
+    .PBI > h3 {
+        font-size: 0.85em;
+    }
 }
 
 @media screen and (max-width: 275px) {
@@ -237,5 +255,8 @@ h1.pbm {
     .PBI > p {
         text-align: left;
         font-size: .5em;
+    }
+    .PBI > h3 {
+        font-size: 0.5em;
     }
 }
