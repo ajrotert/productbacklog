@@ -24,7 +24,10 @@ var uiConfig = {
     signInOptions: [
         {
             provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-            requireDisplayName: true
+            requireDisplayName: true,
+            customParameters: {
+                prompt: 'none'
+            }
         }
     ]
     // Terms of service url.
