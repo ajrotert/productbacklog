@@ -23,6 +23,8 @@ class NotAuthError extends React.Component {
     }
 }
 
+const debug = true;
+
 class ModalView extends React.Component {
     handler() {
         var modal = document.getElementById("InputModal")
@@ -37,7 +39,8 @@ class ModalView extends React.Component {
             db.collection(uid).doc().set({
                 title: title,
                 description: description,
-                completed: false
+                completed: false,
+                timestamp: Date.now()
             });
             document.getElementById("InputModal").style.display = "none";
         }
@@ -69,15 +72,17 @@ class PBI extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            shadowColor: "PBI " + (props.completed ? "box_shadow_green" : "box_shadow_blue"),
-            completed: props.completed,
-            ID: props.id
+            shadowColor: "PBI " + (this.props.completed ? "box_shadow_green" : "box_shadow_blue"),
+            completed: this.props.completed,
+            ID: this.props.id
         }
+        debug ? console.log(`Constructor: ${this.state.shadowColor} Completed: ${this.state.completed} Title: ${this.props.title} ID: ${this.state.ID}`) : "";
     }
 
     deleteNode = () => {
         deletePbiDatabase(this.state.ID).then(() => {
         });
+        debug ? console.log(`Deleted Node: ${this.state.ID}`) : "";
     }
 
     updateHandler = (e) => {
@@ -88,39 +93,27 @@ class PBI extends React.Component {
                         this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : "box_shadow_blue"), completed: !this.state.completed, ID: this.state.ID });
                     })
                     .catch((error) => {
-                        console.error("Error removing document: ", error);
+                        debug ? console.error("Error removing document: ", error) : "";
                     });
+                debug ? console.log(`Updated Node: ${this.state.ID}`) : "";
             }
             
         });
 
-        /*
-        if (!this.state.completed) {
-            var completedItems = document.getElementById('grid2');
-            var obj = e.currentTarget.parentElement;
-            obj.remove();
-            completedItems.appendChild(obj);
-        }
-        else {
-            var inProgressItems = document.getElementById('grid1');
-            var obj = e.currentTarget.parentElement;
-            obj.remove();
-            inProgressItems.appendChild(obj);
-        }
-        */
     }
 
     render() {
+        debug ? console.log(`Rendered PBI: Color: ${this.state.shadowColor} ID: ${this.state.ID} Title: ${this.props.title} Desc: ${this.props.description} Completed: ${this.state.completed}`) : "";
         return (
-            <div className={this.state.shadowColor} id={this.props.id} onClick={(e) => this.updateHandler(e)}>
+            <div className={this.state.shadowColor} id={this.state.id} onClick={(e) => this.updateHandler(e)}>
                 <span className="close" onClick={() => this.deleteNode()}>&times;</span>
                 <h1>{this.props.title}</h1>
                 <hr />
                 <p>Description: {this.props.description}</p>
                 <input type="checkbox" id={"done" + this.state.ID} name={"done" + this.state.ID} checked={this.state.completed} value="none" disabled/>
                 <label htmlFor={"done" + this.state.ID} disabled> Item Completed</label><br />
+                <p>Date: {this.props.timestamp} </p>
                 <p>ID: {this.state.ID}</p>
-                
             </div>
         );
     }
@@ -130,9 +123,10 @@ class PB extends React.Component {
         super(props);
     }
 
-    renderPBI(id, title, description, completed) {
+    renderPBI(id, title, description, completed, timestamp) {
+        debug ? console.log(`Rendered Function: ID: ${id} Title: ${title} Desc: ${description} Completed: ${completed}`) : "";
         return (
-            <PBI id={id} title={title} description={description} completed={completed} />
+            <PBI id={id} title={title} description={description} completed={completed} timestamp={timestamp}/>
             );
     }
 
@@ -143,10 +137,10 @@ class PB extends React.Component {
     }
 
     render() {
-
-        const PBIContainer = this.props.data.docs.map((object, index) => {
+        const orderedData = this.props.data.docs.sort((object1, object2) => object1.data().timestamp > object2.data().timestamp);
+        const PBIContainer = orderedData.map((object, index) => {
             return (
-                <div key={index} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed)}</div>
+                <div key={index} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed, object.data().timestamp)}</div>
                 );
         });
 
