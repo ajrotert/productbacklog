@@ -233,6 +233,9 @@ h1.pbm {
     .PBI > h3 {
         font-size: 1.25em;
     }
+    h1.pbm {
+        font-size: 250%;
+    }
 }
 
 @media screen and (max-width: 750px) {
@@ -263,6 +266,9 @@ h1.pbm {
     .samplePBI > select {
         font-size: 95%;
     }
+    h1.pbm {
+        font-size: 200%;
+    }
 }
 
 @media screen and (max-width: 415px) {
@@ -290,6 +296,9 @@ h1.pbm {
     .small_info {
         font-size: 10px;
     }
+    h1.pbm {
+        font-size: 150%;
+    }
 }
 
 @media screen and (max-width: 275px) {
@@ -313,5 +322,8 @@ h1.pbm {
     }
     .small_info {
         font-size: 10px;
+    }
+    h1.pbm {
+        font-size: 50%;
     }
 }

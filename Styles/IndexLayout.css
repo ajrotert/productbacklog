@@ -120,13 +120,13 @@ h2.index-user{
     }
 }
 @media screen and (max-width: 415px) {
-    h1.index{
-        font-size: 300%;
-    }
-    h2.index {
+    h1.index {
         font-size: 200%;
     }
+    h2.index {
+        font-size: 125%;
+    }
     h3.index {
-        font-size: 100%
+        font-size: 85%
     }
 }
