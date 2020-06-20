@@ -229,6 +229,21 @@ h1.pbm {
     .PBI > h3 {
         font-size: 0.90em;
     }
+    .samplePBI > label {
+        font-size: 95%;
+    }
+
+    .samplePBI > input.heading {
+        font-size: 125%;
+    }
+
+    .samplePBI > textarea {
+        font-size: 100%;
+        width: 96%;
+    }
+    .samplePBI > select {
+        font-size: 95%;
+    }
 }
 
 @media screen and (max-width: 415px) {
@@ -244,6 +259,18 @@ h1.pbm {
     .PBI > h3 {
         font-size: 0.85em;
     }
+    .button{
+        font-size: .65em;
+    }
+    .PBI > label{
+        font-size: .65em;
+    }
+    .samplePBI > textarea{
+        width: 90%;
+    }
+    .small_info {
+        font-size: 10px;
+    }
 }
 
 @media screen and (max-width: 275px) {
@@ -258,5 +285,14 @@ h1.pbm {
     }
     .PBI > h3 {
         font-size: 0.5em;
+    }
+    .button{
+        font-size: .5em;
+    }
+    .PBI > label{
+        font-size: .65em;
+    }
+    .small_info {
+        font-size: 10px;
     }
 }
