@@ -23,14 +23,14 @@ class NotAuthError extends React.Component {
     }
 }
 
-const debug = true;
+const debug = false;
 
 class ModalView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             shadowColor: "box_shadow_blue"
-        };//this.props.completed ? "box_shadow_green" : "box_shadow_blue"
+        };
     }
 
     handler() {
@@ -106,26 +106,27 @@ class PBI extends React.Component {
         debug ? console.log(`Constructor: ${this.state.shadowColor} Completed: ${this.state.completed} Title: ${this.props.title} ID: ${this.state.ID}`) : "";
     }
 
-    deleteNode = () => {
-        deletePbiDatabase(this.state.ID).then(() => {
-        });
-        debug ? console.log(`Deleted Node: ${this.state.ID}`) : "";
-    }
-
     updateHandler = (e) => {
-        getPbiDatabase(this.state.ID).then((doc) => {
-            if (doc.exists) {
-                updatePbiDatabase(this.state.ID, !this.state.completed)
-                    .then(() => {
-                        this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : this.props.isStory ? "box_shadow_blue" : "box_shadow_red"), completed: !this.state.completed, ID: this.state.ID });
-                    })
-                    .catch((error) => {
-                        debug ? console.error("Error removing document: ", error) : "";
-                    });
-                debug ? console.log(`Updated Node: ${this.state.ID}`) : "";
-            }
-            
-        });
+        if (e.target.className.includes("close")) {
+            deletePbiDatabase(this.state.ID).then(() => {
+            });
+        }
+        else {
+            getPbiDatabase(this.state.ID).then((doc) => {
+                if (doc.exists) {
+                    updatePbiDatabase(this.state.ID, !this.state.completed)
+                        .then(() => {
+                            this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : this.props.isStory ? "box_shadow_blue" : "box_shadow_red"), completed: !this.state.completed, ID: this.state.ID });
+                        })
+                        .catch((error) => {
+                            debug ? console.error("Error removing document: ", error) : "";
+                        });
+                    debug ? console.log(`Updated Node: ${this.state.ID}`) : "";
+                }
+
+            });
+        }
+        
 
     }
 
@@ -133,7 +134,7 @@ class PBI extends React.Component {
         debug ? console.log(`Rendered PBI: Color: ${this.state.shadowColor} ID: ${this.state.ID} Title: ${this.props.title} Desc: ${this.props.description} Completed: ${this.state.completed}`) : "";
         return (
             <div className={this.state.shadowColor} id={this.state.id} onClick={(e) => this.updateHandler(e)}>
-                <span className="close" onClick={() => this.deleteNode()}>&times;</span>
+                <span className="close" >&times;</span> 
                 <h1>{this.props.title}</h1>
                 <hr />
                 <p>Description: {this.props.description}</p>
