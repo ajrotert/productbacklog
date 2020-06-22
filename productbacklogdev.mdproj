@@ -26,6 +26,7 @@
     <None Include="Scripts\connection.js" />
     <None Include="Images\ServersImage.png" />
     <None Include="Images\PBDLogo.png" />
+    <None Include="Images\ServersImageWideSmall.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />

@@ -44,8 +44,10 @@ class ModalView extends React.Component {
     }
 
     addToDatabase() {
-        var title = document.getElementById('title').value;
-        var description = document.getElementById('description').value;
+        var titleNode = document.getElementById('title');
+        var descriptionNode = document.getElementById('description');
+        var title = titleNode.value;
+        var description = descriptionNode.value;
         var story = document.getElementById('story-selector').value == 'story';
         if (title != "" && description != "" && uid != null) {
 
@@ -56,7 +58,23 @@ class ModalView extends React.Component {
                 timestamp: Date.now(),
                 isStory: story
             });
+            titleNode.style.border = "1px solid black";
+            descriptionNode.style.border = "1px solid black";
             document.getElementById("InputModal").style.display = "none";
+        }
+        else {
+            if (title == "") {
+                titleNode.style.border = "1px solid red";
+            }
+            else {
+                titleNode.style.border = "1px solid black";
+            }
+            if (description == "") {
+                descriptionNode.style.border = "1px solid red";
+            }
+            else {
+                descriptionNode.style.border = "1px solid black";
+            }
         }
     }
 
@@ -66,10 +84,10 @@ class ModalView extends React.Component {
                 <div className="modal-content">
                     <div className={"samplePBI " + this.state.shadowColor}>
                         <span className="close" onClick={this.handler}>&times;</span>
-                        <input className="heading" id="title" type="textbox" name="title" placeholder="Enter Story Title" />
+                        <input className="heading" id="title" type="textbox" name="title" placeholder="Enter Story Title" required/>
                         <hr/>
                         <br />
-                        <textarea id="description" name="description" placeholder="Enter Story Description"/>
+                        <textarea id="description" name="description" placeholder="Enter Story Description" required/>
                         <br />
                         <br />
                         <select id="story-selector" onChange={() => this.handlerStory()}>
@@ -126,8 +144,6 @@ class PBI extends React.Component {
 
             });
         }
-        
-
     }
 
     render() {
@@ -147,12 +163,6 @@ class PBI extends React.Component {
         );
     }
 }
-/*
-{this.props.isStory ? "Story" : "Defect"}
-, story
-, object.data().isStory
- story={story}
-*/
 class PB extends React.Component {
     constructor(props) {
         super(props);
@@ -167,7 +177,6 @@ class PB extends React.Component {
 
     handler(){
         var modal = document.getElementById("InputModal");
-        // When the user clicks the button, open the modal 
         modal.style.display = "block";
     }
 

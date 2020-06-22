@@ -45,6 +45,7 @@ firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         document.getElementById('welcome-label').style.display = 'block';
         document.getElementById('welcome-user').innerText = `${user.displayName}`
+        document.getElementById('Login_Button').textContent = 'Show Login';
 
     } else {
         document.getElementById('welcome-label').style.display = 'none';
@@ -61,31 +62,14 @@ showLogin = function () {
     ui.start('#firebaseui-auth-container', uiConfig);
     document.getElementById('pb-button-login').style.display = "none";
     loaded = true;
+    document.getElementById('Login_Button').textContent = "Show Login";
 };
 
 window.onload = () => {
     loaded = false;
-    if (!loaded) {
-        setTimeout(() => {
-            if (!loaded) {
-                document.getElementById('pb-button-login').style.display = "none";
-                ui.start('#firebaseui-auth-container', uiConfig);
-                loaded = true;
-            }
-
-        }, 3000);
-
-    }
 };
 
 window.onclose = (() => {
-    firebase.auth().signOut().then(function () {
-        // Sign-out successful.
-    }).catch(function (error) {
-        // An error happened.
-    });
-});
-window.onbeforeunload = (() => {
     firebase.auth().signOut().then(function () {
         // Sign-out successful.
     }).catch(function (error) {

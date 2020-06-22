@@ -192,34 +192,34 @@
 -->
 <img src="Images/PBDLogo.png" class="logo-nav" id="logo-nav" />
 <nav id="nav-placeholder">
-    <ul class="nav">
+    <ul class="nav" id="navStart">
         <li class="navitem pad" id="Home-Page"><a href="index.html">Home</a></li>
-        <li class="navitem" id="PB-Page"><a href="ProductBacklog.html">Product Backlog</a></li>
         <li class="navitem PBIDEV" id="Parent"><a href="javascript:void(0)">ProductBacklog.Dev</a></li>
+        <li class="navitem" id="PB-Page"><a href="ProductBacklog.html">Product Backlog</a></li>
+        <li class="navitem hamburgerBar" id="Drop-Down"><a href="javascript:void(0)" onclick="toggleFunction()">&#9776;</a></li>
+
     </ul>
-</nav>
+    </nav>
 
-<!--
-    This will show the active page, if the active page's title contains uniquely identifiying data
-    Make sure that the element ID matches the ID from above
--->
-<script>
-    var title = document.title;
+    <!--
+        This will show the active page, if the active page's title contains uniquely identifiying data
+        Make sure that the element ID matches the ID from above
+    -->
+        <script>var title = document.title;
 
-    if (title.includes("Home"))
-        document.getElementById("Home-Page").classList.add("active");
-    else if (title.includes("Online")) {
-        document.getElementById("PB-Page").classList.add("active");
-        document.getElementById("logo-nav").style.display = "none";
-        document.getElementById("Home-Page").classList = "navitem";
-    }
+            if (title.includes("Home"))
+                document.getElementById("Home-Page").classList.add("active");
+            else if (title.includes("Online")) {
+                document.getElementById("PB-Page").classList.add("active");
+                document.getElementById("logo-nav").style.display = "none";
+                document.getElementById("Home-Page").classList = "navitem";
+            }
 
-    function toggleFunction() {
-        var x = document.getElementById("navStart");
-        if (x.className === "nav") {
-            x.className += " responsive";
-        } else {
-            x.className = "nav";
-        }
-    }
-</script>
+            function toggleFunction() {
+                var x = document.getElementById("navStart");
+                if (x.className === "nav") {
+                    x.className += " responsive";
+                } else {
+                    x.className = "nav";
+                }
+            }</script>
