@@ -135,7 +135,7 @@ class PBI extends React.Component {
         else {
             getPbiDatabase(this.state.ID).then((doc) => {
                 if (doc.exists) {
-                    var confirms = window.confirm(`Complete: ${this.props.title}`);
+                    var confirms = window.confirm(`Move: ${this.props.title} \nTo: ${this.state.completed ? "Backlog" : "Completed"}`);
                     if (confirms) {
                         updatePbiDatabase(this.state.ID, !this.state.completed)
                             .then(() => {
