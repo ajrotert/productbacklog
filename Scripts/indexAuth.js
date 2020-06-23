@@ -54,6 +54,7 @@ firebase.auth().onAuthStateChanged(function (user) {
 loadPB = function () {
     if (firebase.auth().currentUser.uid != null) {
         sessionStorage.setItem('uid', firebase.auth().currentUser.uid);
+        sessionStorage.setItem('readonly', false);
         window.location.href = 'ProductBacklog.html';
     }
 };
@@ -64,6 +65,20 @@ showLogin = function () {
     loaded = true;
     document.getElementById('Login_Button').textContent = "Show Login";
 };
+shareCodeEntered = function () {
+    sessionStorage.setItem('uid', input.value);
+    sessionStorage.setItem('readonly', true);
+    window.location.href = 'ProductBacklog.html';    
+}
+
+var input = document.getElementById("inputShareCode");
+
+input.addEventListener("keyup", function (event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        shareCodeEntered();
+    }
+});
 
 window.onload = () => {
     loaded = false;

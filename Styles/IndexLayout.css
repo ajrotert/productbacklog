@@ -74,8 +74,12 @@ h2.index-user{
         background-color: #0066FF;
     }
 
+#inputShareCode {
+    background-color: #DCDCDC;
+    font-size: 150%;
+    margin-bottom: 1em;
+}
 /*********************** Parallex Layout ***************************/
-
 .index-container {
     position: absolute;
     text-align: center;

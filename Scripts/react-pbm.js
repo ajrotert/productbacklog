@@ -1,15 +1,31 @@
 ﻿'use strict';
 var db = firebase.firestore();
 const uid = sessionStorage.getItem('uid');
+const readonly = (sessionStorage.getItem('readonly') == null ? true : sessionStorage.getItem('readonly') == 'true' ? true : false);
 
 function getPbiDatabase(docId) {
-    return db.collection(uid).doc(docId).get();
+    if (!readonly) {
+        return db.collection(uid).doc(docId).get();
+    }
+    else {
+        console.log("readonly");
+    }
 };
 function updatePbiDatabase(docId, completed) {
-    return db.collection(uid).doc(docId).update({ completed: completed });
+    if (!readonly) {
+        return db.collection(uid).doc(docId).update({ completed: completed });
+    }
+    else {
+        console.log("readonly");
+    }
 };   
 function deletePbiDatabase(docId) {
-    return db.collection(uid).doc(docId).delete();
+    if (!readonly) {
+        return db.collection(uid).doc(docId).delete();
+    }
+    else {
+        console.log("readonly");
+    }
 };
 
 class NotAuthError extends React.Component {
@@ -125,31 +141,38 @@ class PBI extends React.Component {
     }
 
     updateHandler = (e) => {
-        if (e.target.className.includes("close")) {
-            var confirms = window.confirm(`Delete: ${this.props.title}`);
-            if (confirms) {
-                deletePbiDatabase(this.state.ID).then(() => {
+        if (!readonly) {
+
+            if (e.target.className.includes("close")) {
+                var confirms = window.confirm(`Delete: ${this.props.title}`);
+                if (confirms) {
+                    deletePbiDatabase(this.state.ID).then(() => {
+                    });
+                }
+            }
+            else {
+                getPbiDatabase(this.state.ID).then((doc) => {
+                    if (doc.exists) {
+                        var confirms = window.confirm(`Move: ${this.props.title} \nTo: ${this.state.completed ? "Backlog" : "Completed"}`);
+                        if (confirms) {
+                            updatePbiDatabase(this.state.ID, !this.state.completed)
+                                .then(() => {
+                                    this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : this.props.isStory ? "box_shadow_blue" : "box_shadow_red"), completed: !this.state.completed, ID: this.state.ID });
+                                })
+                                .catch((error) => {
+                                    debug ? console.error("Error removing document: ", error) : "";
+                                });
+                        }
+                        debug ? console.log(`Updated Node: ${this.state.ID}`) : "";
+                    }
+
                 });
             }
         }
         else {
-            getPbiDatabase(this.state.ID).then((doc) => {
-                if (doc.exists) {
-                    var confirms = window.confirm(`Move: ${this.props.title} \nTo: ${this.state.completed ? "Backlog" : "Completed"}`);
-                    if (confirms) {
-                        updatePbiDatabase(this.state.ID, !this.state.completed)
-                            .then(() => {
-                                this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : this.props.isStory ? "box_shadow_blue" : "box_shadow_red"), completed: !this.state.completed, ID: this.state.ID });
-                            })
-                            .catch((error) => {
-                                debug ? console.error("Error removing document: ", error) : "";
-                            });
-                    }
-                    debug ? console.log(`Updated Node: ${this.state.ID}`) : "";
-                }
-
-            });
+            console.log("readonly");
         }
+
     }
 
     render() {
@@ -181,9 +204,18 @@ class PB extends React.Component {
             );
     }
 
-    handler(){
-        var modal = document.getElementById("InputModal");
-        modal.style.display = "block";
+    handler() {
+        if (!readonly) {
+            var modal = document.getElementById("InputModal");
+            modal.style.display = "block";
+        }
+        else {
+            console.log("readonly");
+        }
+        
+    }
+    shareLink() {
+        window.alert(`Allow other users to view your product backlog.\n\nCode: ${uid}`);
     }
 
     static getDerivedStateFromError(error) {
@@ -204,6 +236,7 @@ class PB extends React.Component {
 
         return (
             <div className="grid-container">
+                <div><a id="shareLink" href="" onClick={this.shareLink}>Get Shareable Readonly Code</a></div>
                 <div id="grid1" className="grid_border_right">
                     <h1 className="grid_border_bottom">Backlog</h1>
                     <div>
