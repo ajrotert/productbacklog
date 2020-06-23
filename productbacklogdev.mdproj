@@ -27,6 +27,7 @@
     <None Include="Images\ServersImage.png" />
     <None Include="Images\PBDLogo.png" />
     <None Include="Images\ServersImageWideSmall.png" />
+    <None Include="Images\scroll.gif" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />

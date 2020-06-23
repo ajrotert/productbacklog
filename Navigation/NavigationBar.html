@@ -190,16 +190,17 @@
                 </div>
         </li>
 -->
-<img src="Images/PBDLogo.png" class="logo-nav" id="logo-nav" />
 <nav id="nav-placeholder">
+    <img src="Images/PBDLogo.png" class="logo-nav" id="logo-nav" />
     <ul class="nav" id="navStart">
         <li class="navitem pad" id="Home-Page"><a href="index.html">Home</a></li>
+        <li id="nav-logo"> <img src="Images/PBDLogo.png" class="logo-nav" id="logo-nav" /> </li>
         <li class="navitem PBIDEV" id="Parent"><a href="javascript:void(0)">ProductBacklog.Dev</a></li>
         <li class="navitem" id="PB-Page"><a href="ProductBacklog.html">Product Backlog</a></li>
         <li class="navitem hamburgerBar" id="Drop-Down"><a href="javascript:void(0)" onclick="toggleFunction()">&#9776;</a></li>
 
     </ul>
-    </nav>
+</nav>
 
     <!--
         This will show the active page, if the active page's title contains uniquely identifiying data
@@ -212,6 +213,7 @@
             else if (title.includes("Online")) {
                 document.getElementById("PB-Page").classList.add("active");
                 document.getElementById("logo-nav").style.display = "none";
+                document.getElementById("nav-logo").style.display = "none";
                 document.getElementById("Home-Page").classList = "navitem";
             }
 

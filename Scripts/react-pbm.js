@@ -126,19 +126,25 @@ class PBI extends React.Component {
 
     updateHandler = (e) => {
         if (e.target.className.includes("close")) {
-            deletePbiDatabase(this.state.ID).then(() => {
-            });
+            var confirms = window.confirm(`Delete: ${this.props.title}`);
+            if (confirms) {
+                deletePbiDatabase(this.state.ID).then(() => {
+                });
+            }
         }
         else {
             getPbiDatabase(this.state.ID).then((doc) => {
                 if (doc.exists) {
-                    updatePbiDatabase(this.state.ID, !this.state.completed)
-                        .then(() => {
-                            this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : this.props.isStory ? "box_shadow_blue" : "box_shadow_red"), completed: !this.state.completed, ID: this.state.ID });
-                        })
-                        .catch((error) => {
-                            debug ? console.error("Error removing document: ", error) : "";
-                        });
+                    var confirms = window.confirm(`Complete: ${this.props.title}`);
+                    if (confirms) {
+                        updatePbiDatabase(this.state.ID, !this.state.completed)
+                            .then(() => {
+                                this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : this.props.isStory ? "box_shadow_blue" : "box_shadow_red"), completed: !this.state.completed, ID: this.state.ID });
+                            })
+                            .catch((error) => {
+                                debug ? console.error("Error removing document: ", error) : "";
+                            });
+                    }
                     debug ? console.log(`Updated Node: ${this.state.ID}`) : "";
                 }
 
@@ -178,6 +184,13 @@ class PB extends React.Component {
     handler(){
         var modal = document.getElementById("InputModal");
         modal.style.display = "block";
+    }
+
+    static getDerivedStateFromError(error) {
+        console.log(`Error ${error}`);
+        window.alert(`A ReactDOM Error Occured. Please reload the webpage.`);
+        //location.href = 'ProductBacklog.html';
+        return { hasError: true };
     }
 
     render() {
