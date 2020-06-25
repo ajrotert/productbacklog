@@ -8,7 +8,7 @@ function getPbiDatabase(docId) {
         return db.collection(uid).doc(docId).get();
     }
     else {
-        console.log("readonly");
+        //Readonly
     }
 };
 function updatePbiDatabase(docId, completed) {
@@ -16,7 +16,7 @@ function updatePbiDatabase(docId, completed) {
         return db.collection(uid).doc(docId).update({ completed: completed });
     }
     else {
-        console.log("readonly");
+        //Readonly
     }
 };   
 function deletePbiDatabase(docId) {
@@ -24,7 +24,7 @@ function deletePbiDatabase(docId) {
         return db.collection(uid).doc(docId).delete();
     }
     else {
-        console.log("readonly");
+        //Readonly
     }
 };
 
@@ -145,6 +145,9 @@ class PBI extends React.Component {
             if (e.target.className.includes("close")) {
                 var confirms = window.confirm(`Delete: ${this.props.title}`);
                 if (confirms) {
+
+                    ReactDOM.unmountComponentAtNode(domContainer);
+
                     deletePbiDatabase(this.state.ID).then(() => {
                     });
                 }
@@ -167,7 +170,7 @@ class PBI extends React.Component {
             }
         }
         else {
-            console.log("readonly");
+            //Readonly
         }
 
     }
@@ -205,7 +208,7 @@ class PB extends React.Component {
             modal.style.display = "block";
         }
         else {
-            console.log("readonly");
+            //Readonly
         }
         
     }
@@ -227,7 +230,6 @@ class PB extends React.Component {
         const orderedData = this.props.data.docs.sort((object1, object2) => compare(object1.data().timestamp, object2.data().timestamp));
 
         const PBIContainer = orderedData.map((object, index) => {
-            //console.log(object.id);
             return (
                 <div key={object.id} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed, object.data().timestamp, object.data().isStory)}</div>
                 );
@@ -271,7 +273,6 @@ else {
                 completedItems.childNodes.forEach((node) => {
                     if (node.className === 'false') {
                         inProgressNodeList.push(node);
-                        console.log(node);
                     }
                 });
                 completedNodeList.forEach((node) => {
