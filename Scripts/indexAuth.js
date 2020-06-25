@@ -1,6 +1,5 @@
 ﻿// Initialize the FirebaseUI Widget using Firebase.
 var ui = new firebaseui.auth.AuthUI(firebase.auth());
-var loaded = false;
 
 var uiConfig = {
     callbacks: {
@@ -15,11 +14,12 @@ var uiConfig = {
         },
         uiShown: function () {
             try {
-                document.getElementById('loader').style.display = 'none';
                 document.getElementById('firebaseui-auth-container').blur();
                 document.getElementById('Home-Page').focus();
             }
-            catch{ }
+            catch (error) {
+                console.log('An error has occured');
+            }
         }
     },
     signInFlow: 'popup',
@@ -32,26 +32,25 @@ var uiConfig = {
                 prompt: 'none'
             }
         }
-    ]
+    ],
     // Terms of service url.
-    //tosUrl: '<developednotdownloaded.com>',
+    tosUrl: '<https://developednotdownloaded.com>',
     // Privacy policy url.
-    //privacyPolicyUrl: '<developednotdownloaded.com>'
+    privacyPolicyUrl: '<https://developednotdownloaded.com>'
 };
 
-
+ui.start('#firebaseui-auth-container', uiConfig);
 
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         document.getElementById('welcome-label').style.display = 'block';
         document.getElementById('welcome-user').innerText = `${user.displayName}`
-        document.getElementById('Login_Button').textContent = 'Show Login';
 
     } else {
         document.getElementById('welcome-label').style.display = 'none';
     }
 });
-loadPB = function () {
+function loadPB() {
     if (firebase.auth().currentUser.uid != null) {
         sessionStorage.setItem('uid', firebase.auth().currentUser.uid);
         sessionStorage.setItem('readonly', false);
@@ -59,30 +58,21 @@ loadPB = function () {
     }
 };
 
-showLogin = function () {
-    ui.start('#firebaseui-auth-container', uiConfig);
-    document.getElementById('pb-button-login').style.display = "none";
-    loaded = true;
-    document.getElementById('Login_Button').textContent = "Show Login";
-};
-shareCodeEntered = function () {
+function shareCodeEntered() {
     sessionStorage.setItem('uid', input.value);
     sessionStorage.setItem('readonly', true);
-    window.location.href = 'ProductBacklog.html';    
-}
+    window.location.href = 'ProductBacklog.html';
+};
 
 var input = document.getElementById("inputShareCode");
 
 input.addEventListener("keyup", function (event) {
+    document.getElementById('labelShareCode').style.display = 'inline-block';
     if (event.keyCode === 13) {
         event.preventDefault();
         shareCodeEntered();
     }
 });
-
-window.onload = () => {
-    loaded = false;
-};
 
 window.onclose = (() => {
     firebase.auth().signOut().then(function () {

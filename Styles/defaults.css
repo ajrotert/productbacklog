@@ -39,8 +39,8 @@ hr.nav {
 #scroller-gif {
     width: 50px;
     position: absolute;
-    text-align: center;
     bottom: 150px;
+    left: calc(50vw - 25px);
 }
 /********************************** Side Navagation Items **********************************/
 ul.sidenav {

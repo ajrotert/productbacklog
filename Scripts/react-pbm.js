@@ -137,7 +137,6 @@ class PBI extends React.Component {
             completed: this.props.completed,
             ID: this.props.id
         }
-        debug ? console.log(`Constructor: ${this.state.shadowColor} Completed: ${this.state.completed} Title: ${this.props.title} ID: ${this.state.ID}`) : "";
     }
 
     updateHandler = (e) => {
@@ -160,10 +159,8 @@ class PBI extends React.Component {
                                     this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : this.props.isStory ? "box_shadow_blue" : "box_shadow_red"), completed: !this.state.completed, ID: this.state.ID });
                                 })
                                 .catch((error) => {
-                                    debug ? console.error("Error removing document: ", error) : "";
                                 });
                         }
-                        debug ? console.log(`Updated Node: ${this.state.ID}`) : "";
                     }
 
                 });
@@ -176,7 +173,6 @@ class PBI extends React.Component {
     }
 
     render() {
-        debug ? console.log(`Rendered PBI: Color: ${this.state.shadowColor} ID: ${this.state.ID} Title: ${this.props.title} Desc: ${this.props.description} Completed: ${this.state.completed}`) : "";
         return (
             <div className={this.state.shadowColor} id={this.state.id} onClick={(e) => this.updateHandler(e)}>
                 <span className="close" >&times;</span> 
@@ -198,7 +194,6 @@ class PB extends React.Component {
     }
 
     renderPBI(id, title, description, completed, timestamp, isStory) {
-        debug ? console.log(`Rendered Function: ID: ${id} Title: ${title} Desc: ${description} Completed: ${completed}`) : "";
         return (
             <PBI id={id} title={title} description={description} completed={completed} timestamp={timestamp} isStory={isStory}/>
             );
@@ -226,11 +221,15 @@ class PB extends React.Component {
     }
 
     render() {
-        const orderedData = this.props.data.docs.sort((object1, object2) => object1.data().timestamp > object2.data().timestamp);
+        function compare(object1, object2) {
+            return object1 > object2 ? 1 : -1;
+        };
+        const orderedData = this.props.data.docs.sort((object1, object2) => compare(object1.data().timestamp, object2.data().timestamp));
+
         const PBIContainer = orderedData.map((object, index) => {
-            debug ? console.log(object.data()) : "";
+            //console.log(object.id);
             return (
-                <div key={index} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed, object.data().timestamp, object.data().isStory)}</div>
+                <div key={object.id} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed, object.data().timestamp, object.data().isStory)}</div>
                 );
         });
 
@@ -247,7 +246,6 @@ class PB extends React.Component {
                 <div id="grid2" className="grid_border_left">
                     <h1 className="grid_border_bottom">Completed</h1>
                 </div>
-
             </div>
         );
     }
@@ -273,6 +271,7 @@ else {
                 completedItems.childNodes.forEach((node) => {
                     if (node.className === 'false') {
                         inProgressNodeList.push(node);
+                        console.log(node);
                     }
                 });
                 completedNodeList.forEach((node) => {

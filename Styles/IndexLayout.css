@@ -79,6 +79,11 @@ h2.index-user{
     font-size: 150%;
     margin-bottom: 1em;
 }
+#labelShareCode {
+    font-size: 110%;
+    color: #0066FF;
+    display: none;
+}
 /*********************** Parallex Layout ***************************/
 .index-container {
     position: absolute;
