@@ -91,6 +91,12 @@ h2.index-user{
     top: 25%;
     width: 100%;
 }
+.index-container2 {
+    position: absolute;
+    text-align: center;
+    top: 5%;
+    width: 100%;
+}
 .parallax1 {
     min-height: 100vh;
     background-image: url("../Images/ServersImage.png");
