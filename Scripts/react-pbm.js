@@ -237,7 +237,7 @@ class PB extends React.Component {
 
         return (
             <div className="grid-container">
-                <div><a id="shareLink" href="" onClick={this.shareLink}>Get Shareable Readonly Code</a></div>
+                <div><a id="shareLink" href="#null" onClick={this.shareLink}>Get Shareable Readonly Code</a></div>
                 <div id="grid1" className="grid_border_right">
                     <h1 className="grid_border_bottom">Backlog</h1>
                     <div>

@@ -14,11 +14,11 @@ var uiConfig = {
         },
         uiShown: function () {
             try {
-                document.getElementById('firebaseui-auth-container').blur();
-                document.getElementById('Home-Page').focus();
+
             }
             catch (error) {
                 console.log('An error has occured');
+                console.log(error);
             }
         }
     },

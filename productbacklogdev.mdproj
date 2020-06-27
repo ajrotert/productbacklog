@@ -14,9 +14,6 @@
     <None Include="Styles\IndexLayout.css" />
     <None Include="Styles\defaults.css" />
     <None Include="Styles\normalize.css" />
-    <None Include="Navigation\NavBar.js" />
-    <None Include="Navigation\NavigationBarJS.js" />
-    <None Include="Navigation\NavigationBar.html" />
     <None Include="Images\ARLogo.png" />
     <None Include="Scripts\indexAuth.js" />
     <None Include="Images\productbacklogdev.png" />
@@ -28,6 +25,7 @@
     <None Include="Images\PBDLogo.png" />
     <None Include="Images\ServersImageWideSmall.png" />
     <None Include="Images\scroll.gif" />
+    <None Include="Navigation\reactnav.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
