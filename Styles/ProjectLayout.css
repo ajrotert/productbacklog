@@ -1,0 +1,264 @@
+﻿
+/********************************** Grid Layout **********************************/
+
+
+/********************************** Default Items **********************************/
+h1.pbm {
+    font-size: 300%;
+    text-align: center;
+    color: white;
+    font-weight: 900;
+}
+
+.project_item {
+    border: 5px #022E6D solid;
+    margin: 1em 20%;
+}
+
+    .project_item:hover {
+        border: 5px #0066FF solid;
+        background-color: rgba(0,0,0,0.4);
+    }
+
+.project_item > h1{
+
+}
+
+.project_item > h3{
+
+}
+
+#root {
+    display: block;
+    text-align: center;
+}
+
+/********************************** React PBM Items **********************************/
+.redError {
+    color: red;
+    font-size: 300%;
+    text-align: center;
+}
+
+.signInLink {
+    text-align: center;
+    font-size: 200%;
+}
+
+    .signInLink:visited, .signInLink:hover, .signInLink:link {
+        color: red;
+        text-align: center;
+    }
+
+    .signInLink:hover {
+        font-weight: 900;
+    }
+
+.button {
+    text-align: center;
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-top: .75em;
+    padding-bottom: .75em;
+    color: white;
+    font-size: 150%;
+    background-color: #022E6D;
+    display: block;
+    text-decoration: none;
+    margin: 0 20%;
+    position: relative;
+}
+
+    .button:hover {
+        background-color: #0066FF;
+    }
+
+/*********************** Parallax Layout ***************************/
+
+.parallax-container {
+    min-height: 15vh;
+    background-image: url("../Images/ServersImage.png");
+    position: relative !important;
+    background-attachment: fixed !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    margin-bottom: 2%;
+}
+
+.inner-parallax-container {
+    position: absolute;
+    text-align: center;
+    top: 10%;
+    width: 100%;
+}
+/********************************** React Modal Items **********************************/
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 25vh;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #45433f;
+    background-color: rgba(0,0,0,0.3);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin: auto;
+    padding: 20px;
+    width: 80%;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 20%;
+}
+
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+.samplePBI {
+    margin: 0 20%;
+    background-color: #848482
+}
+
+    .samplePBI > label {
+        color: black;
+        font-size: 125%;
+        font-weight: 900;
+    }
+
+    .samplePBI > input.heading {
+        background-color: #848482;
+        color: black;
+        font-size: 175%;
+        font-weight: 500;
+        width: 75%;
+        margin-top: 5%;
+        margin-bottom: 2.5%;
+        border: 1px solid black;
+        text-align: center;
+    }
+
+    .samplePBI > textarea {
+        background-color: #848482;
+        color: black;
+        font-size: 125%;
+        font-weight: 500;
+        width: 98%;
+        border: 1px solid black;
+    }
+
+    .samplePBI > div {
+        width: 100%;
+        text-align: right;
+    }
+
+    .samplePBI > select {
+        background-color: #848482;
+        color: black;
+        font-size: 125%;
+        font-weight: 900;
+    }
+
+/*********************** Mobile Layout ***************************/
+@media screen and (max-width: 1000px) {
+    h1.pbm {
+        font-size: 250%;
+    }
+
+    .parallax-container {
+        background-image: url("../Images/ServersImageWideSmall.png");
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .samplePBI > label {
+        font-size: 95%;
+    }
+
+    .samplePBI > input.heading {
+        font-size: 125%;
+    }
+
+    .samplePBI > textarea {
+        font-size: 100%;
+        width: 96%;
+    }
+
+    .samplePBI > select {
+        font-size: 95%;
+    }
+
+    h1.pbm {
+        font-size: 200%;
+        color: #131313;
+    }
+
+    .parallax-container {
+        background-image: none;
+    }
+}
+
+@media screen and (max-width: 415px) {
+    .button {
+        font-size: .65em;
+    }
+
+    .samplePBI > textarea {
+        width: 90%;
+    }
+
+    .small_info {
+        font-size: 10px;
+    }
+
+    h1.pbm {
+        font-size: 150%;
+        color: #131313;
+    }
+
+    .parallax-container {
+        background-image: none;
+    }
+}
+
+@media screen and (max-width: 275px) {
+    
+    .button {
+        font-size: .5em;
+    }
+
+    .PBI > label {
+        font-size: .65em;
+    }
+
+    .small_info {
+        font-size: 10px;
+    }
+
+    h1.pbm {
+        font-size: 50%;
+        color: #131313;
+    }
+
+    .parallax-container {
+        background-image: none;
+    }
+}

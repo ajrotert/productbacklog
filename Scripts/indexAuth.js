@@ -54,14 +54,15 @@ function loadPB() {
     if (firebase.auth().currentUser.uid != null) {
         sessionStorage.setItem('uid', firebase.auth().currentUser.uid);
         sessionStorage.setItem('readonly', false);
-        window.location.href = 'ProductBacklog.html';
+        window.location.href = 'Projects.html';
     }
 };
 
 function shareCodeEntered() {
     sessionStorage.setItem('uid', input.value);
     sessionStorage.setItem('readonly', true);
-    window.location.href = 'ProductBacklog.html';
+    //window.location.href = 'ProductBacklog.html';
+    window.location.href = 'Projects.html';
 };
 
 var input = document.getElementById("inputShareCode");

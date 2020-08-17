@@ -26,6 +26,9 @@
     <None Include="Images\ServersImageWideSmall.png" />
     <None Include="Images\scroll.gif" />
     <None Include="Navigation\reactnav.js" />
+    <None Include="Projects.html" />
+    <None Include="Styles\ProjectLayout.css" />
+    <None Include="Scripts\react-project-selection.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
