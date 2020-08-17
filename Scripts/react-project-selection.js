@@ -89,7 +89,7 @@ class Projects extends React.Component {
         console.log(`clicked ${this.props.id} ${this.props.name} ${this.props.description}`);
         //Set sessionStorage params for UID, and ID
         //Window href to ProductBacklog
-        //ProductBacklog will need refactoring
+        //ProductBacklog will need refactoring 
 
     }
 
