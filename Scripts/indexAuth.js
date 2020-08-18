@@ -59,11 +59,12 @@ function loadPB() {
 };
 
 function shareCodeEntered() {
-    sessionStorage.setItem('uid', input.value);
+    uid = input.value.split('»')[0]
+    pid = input.value.split('»')[1]
+    sessionStorage.setItem('uid', uid);
+    sessionStorage.setItem('pid', pid);
     sessionStorage.setItem('readonly', true);
-    //Moving landing page to a project selection screen
-    //window.location.href = 'ProductBacklog.html';
-    window.location.href = 'Projects.html';
+    window.location.href = 'ProductBacklog.html';
 };
 
 var input = document.getElementById("inputShareCode");

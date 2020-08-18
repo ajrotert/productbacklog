@@ -1,11 +1,12 @@
 ﻿'use strict';
 var db = firebase.firestore();
-const uid = sessionStorage.getItem('uid');
+const uid = sessionStorage.getItem('uid');  //User ID
+const pid = sessionStorage.getItem('pid');  //Project ID
 const readonly = (sessionStorage.getItem('readonly') == null ? true : sessionStorage.getItem('readonly') == 'true' ? true : false);
 
 function getPbiDatabase(docId) {
     if (!readonly) {
-        return db.collection(uid).doc(docId).get();
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).get();
     }
     else {
         //Readonly
@@ -13,7 +14,7 @@ function getPbiDatabase(docId) {
 };
 function updatePbiDatabase(docId, completed) {
     if (!readonly) {
-        return db.collection(uid).doc(docId).update({ completed: completed });
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).update({ completed: completed });
     }
     else {
         //Readonly
@@ -21,7 +22,7 @@ function updatePbiDatabase(docId, completed) {
 };   
 function deletePbiDatabase(docId) {
     if (!readonly) {
-        return db.collection(uid).doc(docId).delete();
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).delete();
     }
     else {
         //Readonly
@@ -34,6 +35,17 @@ class NotAuthError extends React.Component {
             <div>
                 <h1 className="redError">Not Authorized.</h1>
                 <a href="index.html" className="signInLink">Sign In.</a>
+            </div>
+        );
+    }
+}
+
+class NoProjectError extends React.Component {
+    render() {
+        return (
+            <div>
+                <h1 className="redError">No Project.</h1>
+                <a href="Projects.html" className="signInLink">Select Project.</a>
             </div>
         );
     }
@@ -67,7 +79,7 @@ class ModalView extends React.Component {
         var story = document.getElementById('story-selector').value == 'story';
         if (title != "" && description != "" && uid != null) {
 
-            db.collection(uid).doc().set({
+            db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc().set({
                 title: title,
                 description: description,
                 completed: false,
@@ -213,7 +225,8 @@ class PB extends React.Component {
         
     }
     shareLink() {
-        window.alert(`Allow other users to view your product backlog.\n\nCode: ${uid}`);
+        var shareCode = uid + '»' + pid
+        window.alert(`Allow other users to view your product backlog.\n\nCode: ${shareCode}`);
     }
 
     static getDerivedStateFromError(error) {
@@ -256,9 +269,11 @@ class PB extends React.Component {
 const domContainer = document.querySelector('#root');
 if (uid == null)
     ReactDOM.render(<NotAuthError />, domContainer);
+else if (pid == null)
+    ReactDOM.render(<NoProjectError />, domContainer);
 else {
 
-    db.collection(uid)
+    db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog')
         .onSnapshot((snapshot) => {
             ReactDOM.render(<PB data={snapshot} />, domContainer, () => {
                 var inProgressItems = document.getElementById('grid1');
