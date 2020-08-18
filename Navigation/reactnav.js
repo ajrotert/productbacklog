@@ -22,6 +22,7 @@ class ArNav extends React.Component {
                     <li className="navitem pad" id="Home-Page"><a href="index.html">Home</a></li>
                     <li id="nav-logo"> <img src="Images/PBDLogo.png" className="logo-nav" id="logo-nav" /> </li>
                     <li className="navitem PBIDEV" id="Parent"><a href="#null">ProductBacklog.Dev</a></li>
+                    <li className="navitem" id="PR-Page"><a href="Projects.html">Projects</a></li>
                     <li className="navitem" id="PB-Page"><a href="ProductBacklog.html">Product Backlog</a></li>
                     <li className="navitem hamburgerBar" id="Drop-Down"><a href="#null" onClick={this.props.onClick}>&#9776;</a></li>
 
@@ -43,6 +44,12 @@ if (title.includes("Home"))
     document.getElementById("Home-Page").classList.add("active");
 else if (title.includes("Online")) {
     document.getElementById("PB-Page").classList.add("active");
+    document.getElementById("logo-nav").style.display = "none";
+    document.getElementById("nav-logo").style.display = "none";
+    document.getElementById("Home-Page").classList = "navitem";
+}
+else if (title.includes("Projects")) {
+    document.getElementById("PR-Page").classList.add("active");
     document.getElementById("logo-nav").style.display = "none";
     document.getElementById("nav-logo").style.display = "none";
     document.getElementById("Home-Page").classList = "navitem";
@@ -70,7 +77,7 @@ var sticky = navbar.offsetTop;
 function myFunction() {
     var title = document.title;
 
-    if (title.includes("Online")) {
+    if (title.includes("Online") || title.includes("Projects")) {
         if (window.pageYOffset >= sticky) {
             navbar.classList.add("sticky");
         } else {
