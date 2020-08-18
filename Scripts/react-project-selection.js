@@ -11,6 +11,9 @@ function addNewProjectDB(name, description) {
     });
 
 }
+function deletePbiDatabase(docId) {
+    return db.collection('users').doc(uid).collection('Projects').doc(docId).delete();
+};
 
 class ModalView extends React.Component {
     handler() {
@@ -85,18 +88,31 @@ class Projects extends React.Component {
         super(props);
     }
 
-    handler = () => {
-        console.log(`clicked ${this.props.id} ${this.props.name} ${this.props.description}`);
-        //Set sessionStorage params for UID, and ID
-        //Window href to ProductBacklog
-        //ProductBacklog will need refactoring   
+    handler = (e) => {
+        if (e.target.className.includes("close")) {
+            var confirms = window.confirm(`Delete: ${this.props.name}`);
+            if (confirms) {
+
+                ReactDOM.unmountComponentAtNode(domContainer);
+
+                deletePbiDatabase(this.props.id).then(() => {
+                });
+            }
+        }
+        else {
+            sessionStorage.setItem('uid', uid);
+            sessionStorage.setItem('pid', this.props.id);
+            window.location.href = 'ProductBacklog.html';
+        }
 
     }
 
     render() {
         return (
-            <div className="project_item" onClick={() => this.handler()}>
+            <div className="project_item" onClick={(e) => this.handler(e)}>
+                <span className="close">&times;</span>
                 <h1>{this.props.name}</h1>
+                <hr />
                 <h3>{this.props.description}</h3>
             </div>
         );

@@ -61,6 +61,7 @@ function loadPB() {
 function shareCodeEntered() {
     sessionStorage.setItem('uid', input.value);
     sessionStorage.setItem('readonly', true);
+    //Moving landing page to a project selection screen
     //window.location.href = 'ProductBacklog.html';
     window.location.href = 'Projects.html';
 };
