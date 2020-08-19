@@ -20,7 +20,7 @@ function updatePbiDatabase(docId, completed) {
         //Readonly
     }
 };   
-function deletePbiDatabase(docId) {
+function deleteProjectFromDatabase(docId) {
     if (!readonly) {
         return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).delete();
     }
@@ -204,7 +204,7 @@ class PBI extends React.Component {
 
                     ReactDOM.unmountComponentAtNode(domContainer);
 
-                    deletePbiDatabase(this.state.ID).then(() => {
+                    deleteProjectFromDatabase(this.state.ID).then(() => {
                     });
                 }
             }

@@ -1,24 +1,41 @@
 ﻿'use strict';
 var db = firebase.firestore();
 const uid = sessionStorage.getItem('uid');
-
+const readonly = (sessionStorage.getItem('readonly') == null ? true : sessionStorage.getItem('readonly') == 'true' ? true : false);
 
 function addNewProjectDB(name, description) {
-    db.collection('users').doc(uid).collection('Projects').doc().set({
-        name: name,
-        description: description,
-        timestamp: Date.now()
-    });
+    if (!readonly) {
+        db.collection('users').doc(uid).collection('Projects').doc().set({
+            name: name,
+            description: description,
+            timestamp: Date.now()
+        });
+    }
+    else {
+        //readonly
+    }
+    
 
 }
-function deletePbiDatabase(docId) {
-    return db.collection('users').doc(uid).collection('Projects').doc(docId).delete();
+function deleteProjectFromDatabase(docId) {
+    if (!readonly) {
+        return db.collection('users').doc(uid).collection('Projects').doc(docId).delete();
+    }
+    else {
+        //readonly
+    }
 };
 
 class ModalView extends React.Component {
     handler() {
-        var modal = document.getElementById("InputModal")
-        modal.style.display = "none";
+        if (!readonly) {
+            var modal = document.getElementById("InputModal")
+            modal.style.display = "none";
+        }
+        else {
+            //readonly
+        }
+        
     }
 
     addToDatabase() {
@@ -95,7 +112,7 @@ class Projects extends React.Component {
 
                 ReactDOM.unmountComponentAtNode(domContainer);
 
-                deletePbiDatabase(this.props.id).then(() => {
+                deleteProjectFromDatabase(this.props.id).then(() => {
                 });
             }
         }
@@ -153,7 +170,7 @@ class ProjectsList extends React.Component {
 }
 
 const domContainer = document.querySelector('#root');
-if (uid == null)
+if (uid == null || readonly)
     ReactDOM.render(<NotAuthError />, domContainer);
 else {
     db.collection('users').doc(uid).collection('Projects')
