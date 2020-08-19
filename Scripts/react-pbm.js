@@ -31,8 +31,8 @@ function deletePbiDatabase(docId) {
 function generateShareCodeFromDatabase(longShareCode) {
     //TODO:
     //Fix the query
-    var shareCodeId = 'Error'
-    db.collection('shares').doc(longShareCode).get()
+    /*var shareCodeId = 'Error'
+    db.collection('shares').where("share_code", "==", longShareCode).get()
         .then((doc) => {
             if (!doc.exists) {
                 db.collection('shares').add({
@@ -47,7 +47,30 @@ function generateShareCodeFromDatabase(longShareCode) {
                 shareCodeId = 'something';
                 window.alert(`Allow other users to view your product backlog.\n\nCode: ${shareCodeId}`);
             }
+        });*/
+    var foundInDatabase = false;
+        db.collection('shares').where("share_code", "==", longShareCode).limit(1)
+        .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {      //At Max, will contain one record
+                    window.alert(`Allow other users to view your product backlog.\n\nCode: ${doc.id}`);
+                    foundInDatabase = true;
+                    return;
+                });
+                if (!foundInDatabase) {
+                        db.collection('shares').add({
+                            share_code: longShareCode
+                        })
+                             .then((docRef) => {
+                               window.alert(`Allow other users to view your product backlog.\n\nCode: ${docRef.id}`);
+                            });
+                }
+            
+        })
+        .catch(function (error) {
+            console.log("Error getting documents: ", error);
         });
+
 }
 
 class NotAuthError extends React.Component {

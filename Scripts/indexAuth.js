@@ -57,14 +57,27 @@ function loadPB() {
         window.location.href = 'Projects.html';
     }
 };
+function getCodeFromDatabase(share_code) {
+    return firebase.firestore().collection('shares').doc(share_code).get();
+};
 
 function shareCodeEntered() {
-    uid = input.value.split('»')[0]
-    pid = input.value.split('»')[1]
-    sessionStorage.setItem('uid', uid);
-    sessionStorage.setItem('pid', pid);
-    sessionStorage.setItem('readonly', true);
-    window.location.href = 'ProductBacklog.html';
+    getCodeFromDatabase(input.value)
+        .then((doc) => {
+            if (doc.data() != null) {
+                uid = doc.data().share_code.split('»')[0]
+                pid = doc.data().share_code.split('»')[1]
+                sessionStorage.setItem('uid', uid);
+                sessionStorage.setItem('pid', pid);
+                sessionStorage.setItem('readonly', true);
+                window.location.href = 'ProductBacklog.html';
+            }
+            else {
+                document.getElementById('labelShareCode').innerText = "(Share code is invalid)";
+                document.getElementById('labelShareCode').style.color = 'red';
+            }
+            
+        });
 };
 
 var input = document.getElementById("inputShareCode");
