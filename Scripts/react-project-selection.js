@@ -188,3 +188,16 @@ window.onclick = function (event) {
         modal.style.display = "none";
     }
 }
+
+//Deselect any projects
+window.onload = function () {
+    this.sessionStorage.removeItem('pid');
+}
+
+//Prevent user from changing values
+window.addEventListener('storage', function (e) {
+    if (e.storageArea === sessionStorage) {
+        sessionStorage.setItem('uid', uid);
+        sessionStorage.setItem('readonly', readonly);
+    }
+});

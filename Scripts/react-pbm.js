@@ -28,31 +28,25 @@ function deleteProjectFromDatabase(docId) {
         //Readonly
     }
 };
+
+const copyToClipboard = str => {
+    console.log(str);
+    const el = document.createElement('textarea');
+    el.value = str;
+    document.body.appendChild(el);
+    el.select();
+    el.setSelectionRange(0, 99999);
+    document.execCommand('copy');
+    document.body.removeChild(el);
+};
+
 function generateShareCodeFromDatabase(longShareCode) {
-    //TODO:
-    //Fix the query
-    /*var shareCodeId = 'Error'
-    db.collection('shares').where("share_code", "==", longShareCode).get()
-        .then((doc) => {
-            if (!doc.exists) {
-                db.collection('shares').add({
-                    share_code: longShareCode
-                })
-                    .then((docRef) => {
-                        shareCodeId = docRef.id;
-                        window.alert(`Allow other users to view your product backlog.\n\nCode: ${shareCodeId}`);
-                    });
-            }
-            else {
-                shareCodeId = 'something';
-                window.alert(`Allow other users to view your product backlog.\n\nCode: ${shareCodeId}`);
-            }
-        });*/
     var foundInDatabase = false;
         db.collection('shares').where("share_code", "==", longShareCode).limit(1)
         .get()
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {      //At Max, will contain one record
+                    copyToClipboard(doc.id);
                     window.alert(`Allow other users to view your product backlog.\n\nCode: ${doc.id}`);
                     foundInDatabase = true;
                     return;
@@ -61,8 +55,9 @@ function generateShareCodeFromDatabase(longShareCode) {
                         db.collection('shares').add({
                             share_code: longShareCode
                         })
-                             .then((docRef) => {
-                               window.alert(`Allow other users to view your product backlog.\n\nCode: ${docRef.id}`);
+                            .then((docRef) => {
+                                copyToClipboard(docRef.id);
+                                window.alert(`Allow other users to view your product backlog.\n\nCode: ${docRef.id}`);
                             });
                 }
             
@@ -311,10 +306,13 @@ class PB extends React.Component {
 }
 
 const domContainer = document.querySelector('#root');
-if (uid == null)
+
+if (uid == null) {
     ReactDOM.render(<NotAuthError />, domContainer);
-else if (pid == null)
+}
+else if (pid == null) {
     ReactDOM.render(<NoProjectError />, domContainer);
+}
 else {
 
     db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog')
@@ -363,4 +361,13 @@ window.onclick = function (event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
-}
+};
+
+//Prevent user from changing values
+window.addEventListener('storage', function (e) {
+    if (e.storageArea === sessionStorage) {
+        sessionStorage.setItem('uid', uid);
+        sessionStorage.setItem('pid', pid);
+        sessionStorage.setItem('readonly', readonly);
+    }
+});

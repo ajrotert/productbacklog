@@ -97,3 +97,11 @@ window.onclose = (() => {
         // An error happened.
     });
 });
+
+//Remove any existing data
+window.onload = function () {
+    this.sessionStorage.removeItem('uid');
+    this.sessionStorage.removeItem('pid');
+    this.sessionStorage.removeItem('readonly');
+
+}
