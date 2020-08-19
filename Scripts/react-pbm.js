@@ -28,6 +28,27 @@ function deletePbiDatabase(docId) {
         //Readonly
     }
 };
+function generateShareCodeFromDatabase(longShareCode) {
+    //TODO:
+    //Fix the query
+    var shareCodeId = 'Error'
+    db.collection('shares').doc(longShareCode).get()
+        .then((doc) => {
+            if (!doc.exists) {
+                db.collection('shares').add({
+                    share_code: longShareCode
+                })
+                    .then((docRef) => {
+                        shareCodeId = docRef.id;
+                        window.alert(`Allow other users to view your product backlog.\n\nCode: ${shareCodeId}`);
+                    });
+            }
+            else {
+                shareCodeId = 'something';
+                window.alert(`Allow other users to view your product backlog.\n\nCode: ${shareCodeId}`);
+            }
+        });
+}
 
 class NotAuthError extends React.Component {
     render() {
@@ -226,7 +247,7 @@ class PB extends React.Component {
     }
     shareLink() {
         var shareCode = uid + '»' + pid
-        window.alert(`Allow other users to view your product backlog.\n\nCode: ${shareCode}`);
+        generateShareCodeFromDatabase(shareCode)
     }
 
     static getDerivedStateFromError(error) {
