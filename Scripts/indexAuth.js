@@ -62,28 +62,64 @@ function getCodeFromDatabase(share_code) {
 };
 
 function shareCodeEntered() {
-    getCodeFromDatabase(input.value)
-        .then((doc) => {
-            if (doc.data() != null) {
-                uid = doc.data().share_code.split('»')[0]
-                pid = doc.data().share_code.split('»')[1]
-                sessionStorage.setItem('uid', uid);
-                sessionStorage.setItem('pid', pid);
-                sessionStorage.setItem('readonly', true);
-                window.location.href = 'ProductBacklog.html';
-            }
-            else {
-                document.getElementById('labelShareCode').innerText = "(Share code is invalid)";
-                document.getElementById('labelShareCode').style.color = 'red';
-            }
-            
-        });
+    if (input.value != '') {
+        getCodeFromDatabase(input.value)
+            .then((doc) => {
+                if (doc.data() != null) {
+                    uid = doc.data().share_code.split('»')[0]
+                    pid = doc.data().share_code.split('»')[1]
+                    sessionStorage.setItem('uid', uid);
+                    sessionStorage.setItem('pid', pid);
+                    sessionStorage.setItem('readonly', true);
+                    window.location.href = 'ProductBacklog.html';
+                }
+                else {
+                    document.getElementById('labelShareCode').innerText = "(Share code is invalid)";
+                    document.getElementById('labelShareCode').style.color = 'red';
+                }
+
+            });
+    }
+    else {
+        document.getElementById('labelShareCode').innerText = "(Share code is invalid)";
+        document.getElementById('labelShareCode').style.color = 'red';
+    }
+    
 };
+
+function validateShareCode() {
+    var shareCodeIsValid = false;
+    if (input.value != '') {
+        document.getElementById('labelShareCode').style.display = 'inline-block';
+        console.log(input.value.length);
+        if (input.value.length == 20) {
+            getCodeFromDatabase(input.value)
+                .then((doc) => {
+                    if (doc.exists) {
+                        document.getElementById('labelShareCode').innerText = "(Share code is valid)";
+                        document.getElementById('labelShareCode').style.color = '#0066FF';
+                        document.getElementById('buttonShareCode').style.display = 'inline-block';
+                        document.getElementById('startup').style.display = 'none';
+                    }
+                });
+        }
+        
+    }
+
+    if (!shareCodeIsValid) {
+        document.getElementById('labelShareCode').innerText = "(Share code is invalid)";
+        document.getElementById('labelShareCode').style.color = 'red';
+        document.getElementById('buttonShareCode').style.display = 'none';
+        document.getElementById('startup').style.display = 'block';
+    }
+
+}
 
 var input = document.getElementById("inputShareCode");
 
 input.addEventListener("keyup", function (event) {
-    document.getElementById('labelShareCode').style.display = 'inline-block';
+
+    validateShareCode();
     if (event.keyCode === 13) {
         event.preventDefault();
         shareCodeEntered();

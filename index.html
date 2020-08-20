@@ -40,16 +40,21 @@
         <h5>Password: Testing</h5>
         <input id="inputShareCode" type="text" placeholder="Enter share code: " />
         <br />
-        <label id="labelShareCode">(Press Enter To Submit Code)</label>
+        <label id="labelShareCode">(Share code is valid)</label><br />
+        <a class="button" id="buttonShareCode" onclick="shareCodeEntered()">Go to Product Backlog</a>
         <br />
         <br />
     </center>
 
-    <div id="firebaseui-auth-container"></div>
+    <center>
+        <div id="startup">
+            <div id="firebaseui-auth-container"></div>
+            <div class="container" id="pb-button">
+                <a class="button" onclick="loadPB()">Go to Product Backlog</a>
+            </div>
+        </div>
 
-    <div class="container" id="pb-button">
-        <a class="button" onclick="loadPB()">Go to Product Backlog</a>
-    </div>
+    </center>
 
     <main id="index-main" class="parallax1 margin-top">
         <div class="index-container2">

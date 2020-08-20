@@ -47,15 +47,13 @@ h2.index-user{
 .resize {
     width: 100%;
 }
+
 .container {
     display: block;
     text-align: center;
     display: none;
 }
-.container-show {
-    display: block;
-    text-align: center;
-}
+
 .button {
     margin-top: 5%;
     margin-bottom: 5%;
@@ -82,6 +80,9 @@ h2.index-user{
 #labelShareCode {
     font-size: 110%;
     color: #0066FF;
+    display: none;
+}
+#buttonShareCode{
     display: none;
 }
 /*********************** Parallex Layout ***************************/
