@@ -98,7 +98,8 @@ class ModalPbiView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            shadowColor: "box_shadow_blue"
+            shadowColor: "box_shadow_blue",
+            placeholderText: "Story"
         };
     }
 
@@ -110,6 +111,7 @@ class ModalPbiView extends React.Component {
     handlerStory = () => {
         var story = document.getElementById('story-selector').value == 'story';
         this.setState({ shadowColor: story ? "box_shadow_blue" : "box_shadow_red" });
+        this.setState({ placeholderText: story ? "Story" : "Defect" });
     }
 
     addToDatabase() {
@@ -153,10 +155,10 @@ class ModalPbiView extends React.Component {
                 <div className="modal-content">
                     <div className={"samplePBI " + this.state.shadowColor}>
                         <span className="close" onClick={this.handler}>&times;</span>
-                        <input className="heading" id="title" type="textbox" name="title" placeholder="Enter Story Title" required/>
+                        <input className="heading" id="title" type="textbox" name="title" placeholder={"Enter " + this.state.placeholderText + " Title"} required/>
                         <hr/>
                         <br />
-                        <textarea id="description" name="description" placeholder="Enter Story Description" required/>
+                        <textarea id="description" name="description" placeholder={"Enter " + this.state.placeholderText + " Description"} required/>
                         <br />
                         <br />
                         <select id="story-selector" onChange={() => this.handlerStory()}>
