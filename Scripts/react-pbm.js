@@ -30,7 +30,6 @@ function deleteProjectFromDatabase(docId) {
 };
 
 const copyToClipboard = str => {
-    console.log(str);
     const el = document.createElement('textarea');
     el.value = str;
     document.body.appendChild(el);
@@ -47,7 +46,9 @@ function generateShareCodeFromDatabase(longShareCode) {
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {      //At Max, will contain one record
                     copyToClipboard(doc.id);
-                    window.alert(`Allow other users to view your product backlog.\n\nCode: ${doc.id}`);
+                    ReactDOM.render(<ModalShareView share_code={doc.id} />, document.querySelector('#rootShareModal'));
+                    document.getElementById("ShareModal").style.display = 'block';
+
                     foundInDatabase = true;
                     return;
                 });
@@ -57,7 +58,8 @@ function generateShareCodeFromDatabase(longShareCode) {
                         })
                             .then((docRef) => {
                                 copyToClipboard(docRef.id);
-                                window.alert(`Allow other users to view your product backlog.\n\nCode: ${docRef.id}`);
+                                ReactDOM.render(<ModalShareView share_code={docRef.id} />, document.querySelector('#rootShareModal'));
+                                document.getElementById("ShareModal").style.display = 'block';
                             });
                 }
             
@@ -92,7 +94,7 @@ class NoProjectError extends React.Component {
 
 const debug = false;
 
-class ModalView extends React.Component {
+class ModalPbiView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -176,6 +178,30 @@ class ModalView extends React.Component {
                     <center><a className="button" onClick={this.addToDatabase}>Submit</a></center>
                 </div>
             </div>
+            );
+    }
+}
+
+class ModalShareView extends React.Component {
+    handler = () => {
+        ReactDOM.unmountComponentAtNode(document.querySelector("#rootShareModal"));
+    }
+
+    render() {
+        return (
+            <div id="ShareModal" className="modal">
+                <div className="modal-content">
+                    <div className="samplePBI extraPadding">
+                        <span className="close" onClick={() => this.handler()}>&times;</span>
+                            <h1 className="heading">Allow other users to view your product backlog.</h1>
+                            <hr />
+                            <br />
+                            <h3 className="heading">Code: {this.props.share_code}</h3>
+                        </div>
+                </div>
+
+            </div>
+
             );
     }
 }
@@ -352,7 +378,7 @@ else {
             
 
         })
-    ReactDOM.render(<ModalView />, document.querySelector('#rootModal'));
+    ReactDOM.render(<ModalPbiView />, document.querySelector('#rootModal'));
 }
 
 // When the user clicks anywhere outside of the modal, close it

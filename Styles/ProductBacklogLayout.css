@@ -222,8 +222,11 @@ h1.pbm {
     font-size: 125%;
     font-weight: 900;
 }
+.extraPadding{
+    padding-top: 3em;
+    padding-bottom: 3em;
+}
 /*********************** Parallax Layout ***************************/
-
 .parallax-container {
     min-height: 15vh;
     background-image: url("../Images/ServersImage.png");
@@ -279,7 +282,7 @@ h1.pbm {
         font-size: 95%;
     }
 
-    .samplePBI > input.heading {
+    .heading {
         font-size: 125%;
     }
 
