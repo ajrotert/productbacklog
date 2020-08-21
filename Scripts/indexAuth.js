@@ -118,13 +118,14 @@ function validateShareCode() {
 var input = document.getElementById("inputShareCode");
 
 input.addEventListener("keyup", function (event) {
-
-    validateShareCode();
     if (event.keyCode === 13) {
         event.preventDefault();
         shareCodeEntered();
     }
 });
+input.oninput = function validator() {
+    validateShareCode();
+};
 
 window.onclose = (() => {
     firebase.auth().signOut().then(function () {
