@@ -141,3 +141,14 @@ window.onload = function () {
     this.sessionStorage.removeItem('readonly');
 
 }
+
+function updateMessage(event) {
+    if (navigator.onLine) {
+        document.getElementById('offline').style.display = 'none';
+    }
+    else {
+        document.getElementById('offline').style.display = 'inline-block';
+    }
+}
+window.addEventListener('online', updateMessage);
+window.addEventListener('offline', updateMessage);

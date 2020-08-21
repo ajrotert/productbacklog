@@ -47,6 +47,12 @@ hr.nav {
     position: absolute;
     left: calc(50vw - 25px);
 }
+#offline {
+    font-size: 200%;
+    color: red;
+    font-weight: 900;
+    display: none;
+}
 /********************************** Side Navagation Items **********************************/
 ul.sidenav {
     list-style-type: none;
