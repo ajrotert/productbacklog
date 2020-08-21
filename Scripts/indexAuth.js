@@ -91,7 +91,6 @@ function validateShareCode() {
     var shareCodeIsValid = false;
     if (input.value != '') {
         document.getElementById('labelShareCode').style.display = 'inline-block';
-        console.log(input.value.length);
         if (input.value.length == 20) {
             getCodeFromDatabase(input.value)
                 .then((doc) => {

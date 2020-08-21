@@ -170,13 +170,15 @@ class ProjectsList extends React.Component {
 }
 
 const domContainer = document.querySelector('#root');
-if (uid == null || readonly)
+if (uid == null || readonly) {
     ReactDOM.render(<NotAuthError />, domContainer);
+    document.getElementById('loading-gif').style.display = 'none';
+}
 else {
     db.collection('users').doc(uid).collection('Projects')
         .onSnapshot((snapshot) => {
-            ReactDOM.render(<ProjectsList data={snapshot} />, domContainer, () => {} );
-
+            ReactDOM.render(<ProjectsList data={snapshot} />, domContainer, () => { });
+            document.getElementById('loading-gif').style.display = 'none';
         });
     ReactDOM.render(<ModalView />, document.querySelector('#rootModal'));
 }

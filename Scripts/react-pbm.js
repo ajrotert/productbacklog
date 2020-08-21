@@ -337,9 +337,11 @@ const domContainer = document.querySelector('#root');
 
 if (uid == null) {
     ReactDOM.render(<NotAuthError />, domContainer);
+    document.getElementById('loading-gif').style.display = 'none';
 }
 else if (pid == null) {
     ReactDOM.render(<NoProjectError />, domContainer);
+    document.getElementById('loading-gif').style.display = 'none';
 }
 else {
 
@@ -377,7 +379,7 @@ else {
                 }
             });
 
-            
+            document.getElementById('loading-gif').style.display = 'none';
 
         })
     ReactDOM.render(<ModalPbiView />, document.querySelector('#rootModal'));

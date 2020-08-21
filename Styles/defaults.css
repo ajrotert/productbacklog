@@ -42,6 +42,11 @@ hr.nav {
     bottom: 150px;
     left: calc(50vw - 25px);
 }
+#loading-gif {
+    width: 50px;
+    position: absolute;
+    left: calc(50vw - 25px);
+}
 /********************************** Side Navagation Items **********************************/
 ul.sidenav {
     list-style-type: none;

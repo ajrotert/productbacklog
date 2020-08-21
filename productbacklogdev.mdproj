@@ -29,6 +29,7 @@
     <None Include="Projects.html" />
     <None Include="Styles\ProjectLayout.css" />
     <None Include="Scripts\react-project-selection.js" />
+    <None Include="Images\loading.gif" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
