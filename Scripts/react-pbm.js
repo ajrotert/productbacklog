@@ -39,6 +39,16 @@ const copyToClipboard = str => {
     document.body.removeChild(el);
 };
 
+function generatePbiModalPopup(shadowColor = null) {
+    if (!readonly) {
+        ReactDOM.render(<ModalPbiView shadow={shadowColor} placeholderValue={shadowColor == null ? null : "Defect"} />, document.querySelector('#rootModal'));
+
+    }
+    else {
+        //Readonly
+    }
+}
+
 function generateShareCodeFromDatabase(longShareCode) {
     var foundInDatabase = false;
         db.collection('shares').where("share_code", "==", longShareCode).limit(1)
@@ -46,8 +56,7 @@ function generateShareCodeFromDatabase(longShareCode) {
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {      //At Max, will contain one record
                     copyToClipboard(doc.id);
-                    ReactDOM.render(<ModalShareView share_code={doc.id} />, document.querySelector('#rootShareModal'));
-                    document.getElementById("ShareModal").style.display = 'block';
+                    ReactDOM.render(<ModalShareView share_code={doc.id} />, document.querySelector('#rootModal'));
 
                     foundInDatabase = true;
                     return;
@@ -58,8 +67,7 @@ function generateShareCodeFromDatabase(longShareCode) {
                         })
                             .then((docRef) => {
                                 copyToClipboard(docRef.id);
-                                ReactDOM.render(<ModalShareView share_code={docRef.id} />, document.querySelector('#rootShareModal'));
-                                document.getElementById("ShareModal").style.display = 'block';
+                                ReactDOM.render(<ModalShareView share_code={docRef.id} />, document.querySelector('#rootModal'));
                             });
                 }
             
@@ -98,14 +106,13 @@ class ModalPbiView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            shadowColor: "box_shadow_blue",
-            placeholderText: "Story"
+            shadowColor: props.shadow == null ? "box_shadow_blue" : props.shadow,
+            placeholderText: props.placeholderValue == null ? "Story" : props.placeholderValue
         };
     }
 
     handler() {
-        var modal = document.getElementById("InputModal")
-        modal.style.display = "none";
+        ReactDOM.unmountComponentAtNode(document.querySelector("#rootModal"));
     }
 
     handlerStory = () => {
@@ -131,7 +138,7 @@ class ModalPbiView extends React.Component {
             });
             titleNode.style.border = "1px solid black";
             descriptionNode.style.border = "1px solid black";
-            document.getElementById("InputModal").style.display = "none";
+            ReactDOM.unmountComponentAtNode(document.querySelector("#rootModal"));
         }
         else {
             if (title == "") {
@@ -153,8 +160,8 @@ class ModalPbiView extends React.Component {
         return (
             <div id="InputModal" className="modal">
                 <div className="modal-content">
-                    <div className={"samplePBI " + this.state.shadowColor}>
-                        <span className="close" onClick={this.handler}>&times;</span>
+                    <div className={"samplePBI " + this.state.shadowColor} id="parent-container">
+                        <span className="button_icons" onClick={this.handler}>&times;</span>
                         <input className="heading" id="title" type="textbox" name="title" placeholder={"Enter " + this.state.placeholderText + " Title"} required/>
                         <hr/>
                         <br />
@@ -171,8 +178,8 @@ class ModalPbiView extends React.Component {
                         <label htmlFor="sample_checked" disabled> Item Completed</label><br />
                         <br />
                         <div>
-                            <p className="small_info">Timestamp: Not yet generated.</p>
-                            <p className="small_info">ID: Not yet generated.</p>
+                            <p className="small_info" id="modalTimestamp">Timestamp: Not yet generated.</p>
+                            <p className="small_info" id="modalID">ID: Not yet generated.</p>
                         </div>
                     </div>
                     <br />
@@ -180,13 +187,13 @@ class ModalPbiView extends React.Component {
                     <center><a className="button" onClick={this.addToDatabase}>Submit</a></center>
                 </div>
             </div>
-            );
+        );
     }
 }
 
 class ModalShareView extends React.Component {
     handler = () => {
-        ReactDOM.unmountComponentAtNode(document.querySelector("#rootShareModal"));
+        ReactDOM.unmountComponentAtNode(document.querySelector("#rootModal"));
     }
 
     render() {
@@ -194,7 +201,7 @@ class ModalShareView extends React.Component {
             <div id="ShareModal" className="modal">
                 <div className="modal-content">
                     <div className="samplePBI extraPadding">
-                        <span className="close" onClick={() => this.handler()}>&times;</span>
+                        <span className="button_icons" onClick={() => this.handler()}>&times;</span>
                             <h1 className="heading">Allow other users to view your product backlog.</h1>
                             <hr />
                             <br />
@@ -221,7 +228,7 @@ class PBI extends React.Component {
     updateHandler = (e) => {
         if (!readonly) {
 
-            if (e.target.className.includes("close")) {
+            if (e.target.id == ("close")) {
                 var confirms = window.confirm(`Delete: ${this.props.title}`);
                 if (confirms) {
 
@@ -230,6 +237,28 @@ class PBI extends React.Component {
                     deleteProjectFromDatabase(this.state.ID).then(() => {
                     });
                 }
+            } 
+            else if (e.target.id == ("edit")) {
+                var data = {
+                    id: this.state.ID,
+                    title: this.props.title,
+                    description: this.props.description,
+                    completed: this.state.completed,
+                    timestamp: this.props.timestamp,
+                    isStory: this.props.isStory
+                };
+                
+                generatePbiModalPopup(this.props.isStory ? null : "box_shadow_red");
+                document.getElementById('title').value = this.props.title;
+                document.getElementById('description').value = this.props.description;
+                document.getElementById('story-selector').selectedIndex = this.props.isStory ? 0 : 1;
+                document.getElementById('sample_checked').checked = this.state.completed;
+                document.getElementById('modalID').innerText = this.state.ID;
+                document.getElementById('modalTimestamp').innerText = this.props.timestamp;
+
+            }
+            else if (e.target.id == ("hide")) {
+
             }
             else {
                 getPbiDatabase(this.state.ID).then((doc) => {
@@ -257,7 +286,10 @@ class PBI extends React.Component {
     render() {
         return (
             <div className={this.state.shadowColor} id={this.state.id} onClick={(e) => this.updateHandler(e)}>
-                <span className="close" >&times;</span> 
+                <span className="button_icons" id="close">&times;</span>
+                <span className="button_icons" id="edit" >✎</span>
+                <span className="button_icons" id="hide" >☌</span>
+
                 <h1>{this.props.title}</h1>
                 <hr />
                 <p>Description: {this.props.description}</p>
@@ -282,13 +314,7 @@ class PB extends React.Component {
     }
 
     handler() {
-        if (!readonly) {
-            var modal = document.getElementById("InputModal");
-            modal.style.display = "block";
-        }
-        else {
-            //Readonly
-        }
+        generatePbiModalPopup();
         
     }
     shareLink() {
@@ -382,16 +408,7 @@ else {
             document.getElementById('loading-gif').style.display = 'none';
 
         })
-    ReactDOM.render(<ModalPbiView />, document.querySelector('#rootModal'));
 }
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function (event) {
-    var modal = document.getElementById("InputModal")
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-};
 
 //Prevent user from changing values
 window.addEventListener('storage', function (e) {

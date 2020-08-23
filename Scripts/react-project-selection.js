@@ -26,16 +26,19 @@ function deleteProjectFromDatabase(docId) {
     }
 };
 
+function generatePbiModalPopup() {
+    if (!readonly) {
+        ReactDOM.render(<ModalView />, document.querySelector('#rootModal'));
+
+    }
+    else {
+        //Readonly
+    }
+}
+
 class ModalView extends React.Component {
     handler() {
-        if (!readonly) {
-            var modal = document.getElementById("InputModal")
-            modal.style.display = "none";
-        }
-        else {
-            //readonly
-        }
-        
+        ReactDOM.unmountComponentAtNode(document.querySelector("#rootModal"));
     }
 
     addToDatabase() {
@@ -48,7 +51,7 @@ class ModalView extends React.Component {
             addNewProjectDB(name, description);
             nameNode.style.border = "1px solid black";
             descriptionNode.style.border = "1px solid black";
-            document.getElementById("InputModal").style.display = "none";
+            ReactDOM.unmountComponentAtNode(document.querySelector("#rootModal"));
         }
         else {
             if (name == "") {
@@ -71,7 +74,7 @@ class ModalView extends React.Component {
             <div id="InputModal" className="modal">
                 <div className="modal-content">
                     <div className="samplePBI">
-                        <span className="close" onClick={this.handler}>&times;</span>
+                        <span className="button_icons" onClick={this.handler}>&times;</span>
                         <input className="heading" id="name" type="textbox" name="name" placeholder="Enter Project Name" required />
                         <hr />
                         <br />
@@ -106,7 +109,7 @@ class Projects extends React.Component {
     }
 
     handler = (e) => {
-        if (e.target.className.includes("close")) {
+        if (e.target.className.includes("button_icons")) {
             var confirms = window.confirm(`Delete: ${this.props.name}`);
             if (confirms) {
 
@@ -127,7 +130,7 @@ class Projects extends React.Component {
     render() {
         return (
             <div className="project_item" onClick={(e) => this.handler(e)}>
-                <span className="close">&times;</span>
+                <span className="button_icons">&times;</span>
                 <h1>{this.props.name}</h1>
                 <hr />
                 <h3>{this.props.description}</h3>
@@ -140,8 +143,7 @@ class Projects extends React.Component {
 class ProjectsList extends React.Component {
 
     handler() {
-        var modal = document.getElementById("InputModal");
-        modal.style.display = "block";
+        generatePbiModalPopup();
     }
 
     render() {
@@ -180,15 +182,6 @@ else {
             ReactDOM.render(<ProjectsList data={snapshot} />, domContainer, () => { });
             document.getElementById('loading-gif').style.display = 'none';
         });
-    ReactDOM.render(<ModalView />, document.querySelector('#rootModal'));
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function (event) {
-    var modal = document.getElementById("InputModal")
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
 }
 
 //Deselect any projects

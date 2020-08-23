@@ -95,7 +95,7 @@ h1.pbm {
 }
 /********************************** React Modal Items **********************************/
 .modal {
-    display: none;
+    display: block;
     position: fixed;
     z-index: 1;
     padding-top: 25vh;
@@ -119,15 +119,15 @@ h1.pbm {
     box-shadow: 0px 0px 100px 10px rgba(0, 0, 0, .5);
 }
 
-.close {
+.button_icons {
     color: #aaaaaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
 }
 
-    .close:hover,
-    .close:focus {
+    .button_icons:hover,
+    .button_icons:focus {
         color: #000;
         text-decoration: none;
         cursor: pointer;
