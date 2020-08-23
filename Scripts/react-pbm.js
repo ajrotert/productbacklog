@@ -128,14 +128,28 @@ class ModalPbiView extends React.Component {
         var description = descriptionNode.value;
         var story = document.getElementById('story-selector').value == 'story';
         if (title != "" && description != "" && uid != null) {
+            var docId = document.getElementById('modalID').innerText;
+            if (docId.includes('Not yet generated')) {
+                db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc().set({
+                    title: title,
+                    description: description,
+                    completed: false,
+                    timestamp: Date.now(),
+                    isStory: story
+                });
+            }
+            else {
+                db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).set({
+                    title: title,
+                    description: description,
+                    completed: document.getElementById('sample_checked').checked,
+                    timestamp: document.getElementById('modalTimestamp').innerText,
+                    isStory: story
+                });
+            }
 
-            db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc().set({
-                title: title,
-                description: description,
-                completed: false,
-                timestamp: Date.now(),
-                isStory: story
-            });
+            
+
             titleNode.style.border = "1px solid black";
             descriptionNode.style.border = "1px solid black";
             ReactDOM.unmountComponentAtNode(document.querySelector("#rootModal"));
