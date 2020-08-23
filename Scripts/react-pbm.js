@@ -296,13 +296,13 @@ class PBI extends React.Component {
         }
 
     }
-
+    //<span className="button_icons" id="hide" >☌</span>
     render() {
         return (
             <div className={this.state.shadowColor} id={this.state.id} onClick={(e) => this.updateHandler(e)}>
                 <span className="button_icons" id="close">&times;</span>
                 <span className="button_icons" id="edit" >✎</span>
-                <span className="button_icons" id="hide" >☌</span>
+                
 
                 <h1>{this.props.title}</h1>
                 <hr />
