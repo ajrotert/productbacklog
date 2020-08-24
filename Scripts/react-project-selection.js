@@ -3,13 +3,24 @@ var db = firebase.firestore();
 const uid = sessionStorage.getItem('uid');
 const readonly = (sessionStorage.getItem('readonly') == null ? true : sessionStorage.getItem('readonly') == 'true' ? true : false);
 
-function addNewProjectDB(name, description) {
+function addNewProjectDB(name, description, id, timestamp) {
     if (!readonly) {
-        db.collection('users').doc(uid).collection('Projects').doc().set({
-            name: name,
-            description: description,
-            timestamp: Date.now()
-        });
+
+        if (id == null) {
+            db.collection('users').doc(uid).collection('Projects').doc().set({
+                name: name,
+                description: description,
+                timestamp: Date.now()
+            });
+        }
+        else {
+            db.collection('users').doc(uid).collection('Projects').doc(id).set({
+                name: name,
+                description: description,
+                timestamp: timestamp
+            });
+        }
+        
     }
     else {
         //readonly
@@ -26,9 +37,9 @@ function deleteProjectFromDatabase(docId) {
     }
 };
 
-function generatePbiModalPopup() {
+function generatePbiModalPopup(id = null, timestamp = null) {
     if (!readonly) {
-        ReactDOM.render(<ModalView />, document.querySelector('#rootModal'));
+        ReactDOM.render(<ModalView id={id} timestamp={timestamp}/>, document.querySelector('#rootModal'));
 
     }
     else {
@@ -36,19 +47,20 @@ function generatePbiModalPopup() {
     }
 }
 
+//Optional id, timestamp
 class ModalView extends React.Component {
     handler() {
         ReactDOM.unmountComponentAtNode(document.querySelector("#rootModal"));
     }
 
-    addToDatabase() {
+    addToDatabase = () => {
         var nameNode = document.getElementById('name');
         var descriptionNode = document.getElementById('description');
         var name = nameNode.value;
         var description = descriptionNode.value;
         if (title != "" && description != "" && uid != null) {
 
-            addNewProjectDB(name, description);
+            addNewProjectDB(name, description, this.props.id, this.props.timestamp);
             nameNode.style.border = "1px solid black";
             descriptionNode.style.border = "1px solid black";
             ReactDOM.unmountComponentAtNode(document.querySelector("#rootModal"));
@@ -74,7 +86,7 @@ class ModalView extends React.Component {
             <div id="InputModal" className="modal">
                 <div className="modal-content">
                     <div className="samplePBI">
-                        <span className="button_icons" onClick={this.handler}>&times;</span>
+                        <span className="button_icons" onClick={() => this.addToDatabase()}>&times;</span>
                         <input className="heading" id="name" type="textbox" name="name" placeholder="Enter Project Name" required />
                         <hr />
                         <br />
@@ -102,14 +114,14 @@ class NotAuthError extends React.Component {
 
 const debug = false;
 
-//id, name, description
+//id, name, description, timestamp
 class Projects extends React.Component {
     constructor(props) {
         super(props);
     }
 
     handler = (e) => {
-        if (e.target.className.includes("button_icons")) {
+        if (e.target.id == ("close")) {
             var confirms = window.confirm(`Delete: ${this.props.name}`);
             if (confirms) {
 
@@ -118,6 +130,11 @@ class Projects extends React.Component {
                 deleteProjectFromDatabase(this.props.id).then(() => {
                 });
             }
+        }
+        else if (e.target.id == ("edit")) {
+            generatePbiModalPopup(this.props.id, this.props.timestamp);
+            document.getElementById('name').value = this.props.name;
+            document.getElementById('description').value = this.props.description;
         }
         else {
             sessionStorage.setItem('uid', uid);
@@ -130,7 +147,9 @@ class Projects extends React.Component {
     render() {
         return (
             <div className="project_item" onClick={(e) => this.handler(e)}>
-                <span className="button_icons">&times;</span>
+                <span className="button_icons" id="close">&times;</span>
+                <span className="button_icons" id="edit" >✎</span>
+
                 <h1>{this.props.name}</h1>
                 <hr />
                 <h3>{this.props.description}</h3>
@@ -156,7 +175,7 @@ class ProjectsList extends React.Component {
         const projectsArray = orderedData.map((object, index) => {
             return (
                 <div key={object.id} >
-                    <Projects id={object.id} name={object.data().name} description={object.data().description} />
+                    <Projects id={object.id} name={object.data().name} description={object.data().description} timestamp={object.data().timestamp}/>
                 </div>
             );
         });

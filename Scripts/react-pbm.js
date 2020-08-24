@@ -253,14 +253,6 @@ class PBI extends React.Component {
                 }
             } 
             else if (e.target.id == ("edit")) {
-                var data = {
-                    id: this.state.ID,
-                    title: this.props.title,
-                    description: this.props.description,
-                    completed: this.state.completed,
-                    timestamp: this.props.timestamp,
-                    isStory: this.props.isStory
-                };
                 
                 generatePbiModalPopup(this.props.isStory ? null : "box_shadow_red");
                 document.getElementById('title').value = this.props.title;
