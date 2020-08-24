@@ -123,7 +123,6 @@ h1.pbm {
 #shareLink {
     font-size: 150%;
     text-align: justify;
-    margin-bottom: 1em;
 }
 
 #shareLink:link {
@@ -263,6 +262,9 @@ h1.pbm {
     }
     .parallax-container {
         background-image: url("../Images/ServersImageWideSmall.png");
+    }
+    #shareLink {
+        font-size: 95%;
     }
 }
 

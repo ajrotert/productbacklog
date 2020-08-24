@@ -139,6 +139,7 @@ class Projects extends React.Component {
         else {
             sessionStorage.setItem('uid', uid);
             sessionStorage.setItem('pid', this.props.id);
+            sessionStorage.setItem('project_name', this.props.name);
             window.location.href = 'ProductBacklog.html';
         }
 

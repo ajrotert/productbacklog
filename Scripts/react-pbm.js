@@ -3,6 +3,7 @@ var db = firebase.firestore();
 const uid = sessionStorage.getItem('uid');  //User ID
 const pid = sessionStorage.getItem('pid');  //Project ID
 const readonly = (sessionStorage.getItem('readonly') == null ? true : sessionStorage.getItem('readonly') == 'true' ? true : false);
+const project_name = sessionStorage.getItem('project_name');
 
 function getPbiDatabase(docId) {
     if (!readonly) {
@@ -349,7 +350,10 @@ class PB extends React.Component {
 
         return (
             <div className="grid-container">
-                <div><a id="shareLink" href="#null" onClick={this.shareLink}>Get Shareable Readonly Code</a></div>
+                <div>
+                    <h1 className="pages">{project_name}</h1>
+                    <a id="shareLink" href="#null" onClick={this.shareLink}>Get Shareable Readonly Code</a>
+                </div>
                 <div id="grid1" className="grid_border_right">
                     <h1 className="grid_border_bottom">Backlog</h1>
                     <div>

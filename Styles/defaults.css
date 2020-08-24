@@ -26,6 +26,12 @@ body {
     background-color: #DCDCDC;
 }
 
+h1.pages {
+    color: #022E6D;
+    font-size: 300%;
+    text-align: center;
+}
+
 hr.nav {
     display: block;
     margin-top: 0.5em;
@@ -114,6 +120,10 @@ ul.effect {
 
     p{
         font-size: 87.5%;
+    }
+
+    h1.pages {
+        font-size: 175%;
     }
 }
 @media screen and (max-width: 415px) {
