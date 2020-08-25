@@ -6,11 +6,22 @@ function updateOnlineMessage() {
         document.getElementById('offline').style.display = 'none';
         if (!online) {
             online = true;
-            location.reload();
+            firebase.firestore().enableNetwork()
+                .then(function () {
+
+                    setTimeout(function () {
+                        var confirms = window.confirm('Refresh the page to restore all functionality.');
+                        if (confirms) {
+                            location.reload();
+                        }
+                    }, 2000);
+                    
+                });
         }
     }
     else {
         document.getElementById('offline').style.display = 'inline-block';
+        document.getElementById('loading-gif').style.display = 'none';
         online = false;
     }
 }
