@@ -484,14 +484,3 @@ window.addEventListener('storage', function (e) {
         sessionStorage.setItem('readonly', readonly);
     }
 });
-
-function updateMessage(event) {
-    if (navigator.onLine) {
-        document.getElementById('offline').style.display = 'none';
-    }
-    else {
-        document.getElementById('offline').style.display = 'inline-block';
-    }
-}
-window.addEventListener('online', updateMessage);
-window.addEventListener('offline', updateMessage);
