@@ -4,6 +4,8 @@ const uid = sessionStorage.getItem('uid');  //User ID
 const pid = sessionStorage.getItem('pid');  //Project ID
 const readonly = (sessionStorage.getItem('readonly') == null ? true : sessionStorage.getItem('readonly') == 'true' ? true : false);
 const project_name = sessionStorage.getItem('project_name');
+const hiddenText = "Show hidden items";
+const showText = "Hide hidden items";
 
 function getPbiDatabase(docId) {
     if (!readonly) {
@@ -20,7 +22,15 @@ function updatePbiDatabase(docId, completed) {
     else {
         //Readonly
     }
-};   
+};
+function hidePbiDatabase(docId, hidden) {
+    if (!readonly) {
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).update({ hidden: hidden });
+    }
+    else {
+        //Readonly
+    }
+}; 
 function deleteProjectFromDatabase(docId) {
     if (!readonly) {
         return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).delete();
@@ -233,10 +243,13 @@ class ModalShareView extends React.Component {
 class PBI extends React.Component {
     constructor(props) {
         super(props);
+        var hiddenState = this.props.hidden == null ? false : this.props.hidden;
+
         this.state = {
             shadowColor: "PBI " + (this.props.completed ? "box_shadow_green" : this.props.isStory ? "box_shadow_blue" : "box_shadow_red"),
             completed: this.props.completed,
-            ID: this.props.id
+            ID: this.props.id,
+            hide: hiddenState
         }
     }
 
@@ -265,7 +278,16 @@ class PBI extends React.Component {
 
             }
             else if (e.target.id == ("hide")) {
-
+                if ((!this.props.hiddenPB && this.state.hide) || this.props.hiddenPB) {
+                    hidePbiDatabase(this.state.ID, !this.state.hide)
+                        .then(() => {
+                            this.setState({ hide: !this.state.hide });
+                        })
+                }
+                else {
+                    window.alert("Cannot hide product backlog items when: \"" + hiddenText + "\" is selected.");
+                }
+                
             }
             else {
                 getPbiDatabase(this.state.ID).then((doc) => {
@@ -289,13 +311,12 @@ class PBI extends React.Component {
         }
 
     }
-    //<span className="button_icons" id="hide" >☌</span>
     render() {
         return (
-            <div className={this.state.shadowColor} id={this.state.id} onClick={(e) => this.updateHandler(e)}>
+            <div className={this.state.shadowColor + (this.state.hide ? " hide" : "")} id={this.state.id} onClick={(e) => this.updateHandler(e)}>
                 <span className="button_icons" id="close">&times;</span>
                 <span className="button_icons" id="edit" >✎</span>
-                
+                <span className="button_icons" id="hide" >☌</span>
 
                 <h1>{this.props.title}</h1>
                 <hr />
@@ -303,6 +324,7 @@ class PBI extends React.Component {
                 <h3>{this.props.isStory ? "Story" : "Defect"}</h3>
                 <input type="checkbox" id={"done" + this.state.ID} name={"done" + this.state.ID} checked={this.state.completed} value="none" disabled />
                 <label htmlFor={"done" + this.state.ID} disabled> Item Completed</label><br />
+                <p className="small_info"> {this.state.hide ? "Hidden" : ""} </p>
                 <p className="small_info">Timestamp: {this.props.timestamp} </p>
                 <p className="small_info">ID: {this.state.ID}</p>
             </div>
@@ -312,22 +334,46 @@ class PBI extends React.Component {
 class PB extends React.Component {
     constructor(props) {
         super(props);
+        this.state={
+            hidePbiItems: true
+        }
     }
 
-    renderPBI(id, title, description, completed, timestamp, isStory) {
+    renderPBI(id, title, description, completed, timestamp, isStory, hidden) {
         return (
-            <PBI id={id} title={title} description={description} completed={completed} timestamp={timestamp} isStory={isStory}/>
+            <PBI id={id} title={title} description={description} completed={completed} timestamp={timestamp} isStory={isStory} hidden={hidden} hiddenPB={this.state.hidePbiItems} />
             );
-    }
+    };
 
     handler() {
         generatePbiModalPopup();
         
-    }
+    };
+
     shareLink() {
         var shareCode = uid + '»' + pid
         generateShareCodeFromDatabase(shareCode)
-    }
+    };
+
+    handleHiddenItems = (event) => {
+        var show = event.target.innerText == hiddenText;
+        this.setState({ hidePbiItems: !this.state.hidePbiItems });
+
+        if (show) {
+            event.target.innerText = showText;
+            var hideItems = document.getElementsByClassName('hide');
+            for (var a = 0; a < hideItems.length; a++) {
+                hideItems[a].style.display = 'block';
+            };
+        }
+        else {
+            event.target.innerText = hiddenText;
+            var hideItems = document.getElementsByClassName('hide');
+            for (var a = 0; a < hideItems.length; a++) {
+                hideItems[a].style.display = 'none';
+            };
+        }
+    };
 
     static getDerivedStateFromError(error) {
         console.log(`Error ${error}`);
@@ -344,7 +390,7 @@ class PB extends React.Component {
 
         const PBIContainer = orderedData.map((object, index) => {
             return (
-                <div key={object.id} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed, object.data().timestamp, object.data().isStory)}</div>
+                <div key={object.id} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed, object.data().timestamp, object.data().isStory, object.data().hidden)}</div>
                 );
         });
 
@@ -353,6 +399,9 @@ class PB extends React.Component {
                 <div>
                     <h1 className="pages">{project_name}</h1>
                     <a id="shareLink" href="#null" onClick={this.shareLink}>Get Shareable Readonly Code</a>
+                </div>
+                <div className="status">
+                    <a id="hideShowLink" href="#null" onClick={(e) => this.handleHiddenItems(e)}>{hiddenText}</a>
                 </div>
                 <div id="grid1" className="grid_border_right">
                     <h1 className="grid_border_bottom">Backlog</h1>

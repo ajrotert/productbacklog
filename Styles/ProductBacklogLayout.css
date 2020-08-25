@@ -144,6 +144,40 @@ h1.pbm {
     text-decoration: underline;
     color: #0066ff;
 }
+.hide{
+    display: none;
+}
+/********************************** React Status Items **********************************/
+
+.status{
+    display: block;
+    text-align: right;
+}
+.status > a{
+    font-size: 100%;
+    text-align: right;
+    position: relative;
+    display: inline-block;
+}
+
+    .status > a:link {
+        text-decoration: none;
+        color: #0066ff;
+    }
+
+    .status > a:visited {
+        text-decoration: none;
+        color: #0066ff;
+    }
+
+    .status > a:hover {
+        text-decoration: underline;
+        color: #0066ff;
+    }
+    .status > a:active {
+        text-decoration: underline;
+        color: #0066ff;
+    }
 
 /********************************** React Modal Items **********************************/
 .modal {
