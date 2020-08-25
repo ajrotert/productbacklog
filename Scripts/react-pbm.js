@@ -4,8 +4,8 @@ const uid = sessionStorage.getItem('uid');  //User ID
 const pid = sessionStorage.getItem('pid');  //Project ID
 const readonly = (sessionStorage.getItem('readonly') == null ? true : sessionStorage.getItem('readonly') == 'true' ? true : false);
 const project_name = sessionStorage.getItem('project_name');
-const hiddenText = "Show hidden items";
-const showText = "Hide hidden items";
+const hiddenText = "View hidden items";
+const showText = "Stop viewing hidden items";
 
 function getPbiDatabase(docId) {
     if (!readonly) {
