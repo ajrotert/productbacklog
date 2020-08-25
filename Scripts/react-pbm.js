@@ -279,10 +279,17 @@ class PBI extends React.Component {
             }
             else if (e.target.id == ("hide")) {
                 if ((!this.props.hiddenPB && this.state.hide) || this.props.hiddenPB) {
-                    hidePbiDatabase(this.state.ID, !this.state.hide)
-                        .then(() => {
-                            this.setState({ hide: !this.state.hide });
-                        })
+                    var confirms = true;
+                    if (!this.state.hide) {
+                        confirms = window.confirm(`Hide: ${this.props.title}?`);
+                    }
+                    if (confirms) {
+                        hidePbiDatabase(this.state.ID, !this.state.hide)
+                            .then(() => {
+                                this.setState({ hide: !this.state.hide });
+                            })
+                    }
+                   
                 }
                 else {
                     window.alert("Cannot hide product backlog items when: \"" + hiddenText + "\" is selected.");
