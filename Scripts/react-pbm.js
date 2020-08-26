@@ -400,16 +400,34 @@ class PB extends React.Component {
     }
 
     render() {
+        var inProgressStory = 0;
+        var inProgressDefect = 0;
+        var completedStory = 0;
+        var completedDefect = 0;
+
         function compare(object1, object2) {
             return object1 > object2 ? 1 : -1;
         };
         const orderedData = this.props.data.docs.sort((object1, object2) => compare(object1.data().timestamp, object2.data().timestamp));
 
         const PBIContainer = orderedData.map((object, index) => {
+            if (object.data().completed && object.data().isStory) {
+                completedStory++;
+            }
+            else if (object.data().completed && !object.data().isStory) {
+                completedDefect++;
+            }
+            else if (!object.data().completed && object.data().isStory) {
+                inProgressStory++;
+            }
+            else if (!object.data().completed && !object.data().isStory) {
+                inProgressDefect++;
+            }
             return (
                 <div key={object.id} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed, object.data().timestamp, object.data().isStory, object.data().hidden)}</div>
                 );
         });
+       
 
         return (
             <div className="grid-container">
@@ -418,7 +436,14 @@ class PB extends React.Component {
                     <a id="shareLink" href="#null" onClick={this.shareLink}>Get Shareable Readonly Code</a>
                 </div>
                 <div className="status">
+                    <hr />
+                    <p className="bolder padding-right">In Progress: </p>
+                    <p padding-right>Defects: <span className="status-defect">{inProgressDefect}</span> Stories: <span className="status-story">{inProgressStory} </span></p>
+                    <p className="bolder padding-right padding-left">Completed:</p>
+                    <p>Defects: <span className="status-completed">{completedDefect}</span> Stories: <span className="status-completed">{completedStory}</span> </p>
+                    <br />
                     <a id="hideShowLink" href="#null" onClick={(e) => this.handleHiddenItems(e)}>{hiddenText}</a>
+                    <hr />
                 </div>
                 <div id="grid1" className="grid_border_right">
                     <h1 className="grid_border_bottom">Backlog</h1>

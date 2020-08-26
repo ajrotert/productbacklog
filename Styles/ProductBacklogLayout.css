@@ -151,13 +151,21 @@ h1.pbm {
 
 .status{
     display: block;
-    text-align: right;
+    text-align: center;
 }
 .status > a{
     font-size: 100%;
-    text-align: right;
+    text-align: center;
     position: relative;
     display: inline-block;
+    float: right;
+}
+.status > hr{
+    clear:both;
+}
+
+.status > p{
+    float: left;
 }
 
     .status > a:link {
@@ -178,7 +186,27 @@ h1.pbm {
         text-decoration: underline;
         color: #0066ff;
     }
-
+.status > .bolder{
+    font-weight: bolder;
+}
+    .status > .padding-right {
+        padding-right: 0.75em;
+    }
+    .status > .padding-left {
+        padding-left: 0.75em;
+    }
+.status-defect {
+    color: #ff3333;
+    text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
+}
+.status-story {
+    color: #0066FF;
+    text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
+}
+.status-completed {
+    color: #36FF54;
+    text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
+}
 /********************************** React Modal Items **********************************/
 .modal {
     display: block;
