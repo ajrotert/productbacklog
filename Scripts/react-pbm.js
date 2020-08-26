@@ -88,6 +88,20 @@ function generateShareCodeFromDatabase(longShareCode) {
         });
 
 }
+function updateHiddenAttributes(show) {
+    if (show) {
+        var hideItems = document.getElementsByClassName('hide');
+        for (var a = 0; a < hideItems.length; a++) {
+            hideItems[a].style.display = 'block';
+        };
+    }
+    else {
+        var hideItems = document.getElementsByClassName('hide');
+        for (var a = 0; a < hideItems.length; a++) {
+            hideItems[a].style.display = 'none';
+        };
+    }
+}
 
 class NotAuthError extends React.Component {
     render() {
@@ -287,7 +301,9 @@ class PBI extends React.Component {
                         hidePbiDatabase(this.state.ID, !this.state.hide)
                             .then(() => {
                                 this.setState({ hide: !this.state.hide });
+                                updateHiddenAttributes(!this.props.hiddenPB);
                             })
+                        //Update hidden labels.
                     }
                    
                 }
@@ -365,21 +381,15 @@ class PB extends React.Component {
     handleHiddenItems = (event) => {
         var show = event.target.innerText == hiddenText;
         this.setState({ hidePbiItems: !this.state.hidePbiItems });
-
+        updateHiddenAttributes(show);
         if (show) {
             event.target.innerText = showText;
-            var hideItems = document.getElementsByClassName('hide');
-            for (var a = 0; a < hideItems.length; a++) {
-                hideItems[a].style.display = 'block';
-            };
         }
         else {
             event.target.innerText = hiddenText;
-            var hideItems = document.getElementsByClassName('hide');
-            for (var a = 0; a < hideItems.length; a++) {
-                hideItems[a].style.display = 'none';
-            };
         }
+
+        
     };
 
     static getDerivedStateFromError(error) {
