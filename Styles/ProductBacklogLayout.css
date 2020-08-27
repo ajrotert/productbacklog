@@ -209,7 +209,28 @@ h1.pbm {
 #hideShowLink {
     clear: left;
 }
+/********************************** React button icon Items **********************************/
+
+.button_icons {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+    .button_icons:hover,
+    .button_icons:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+.clears {
+    clear: both;
+}
+
 /********************************** React Modal Items **********************************/
+
 .modal {
     display: block;
     position: fixed;
@@ -235,27 +256,16 @@ h1.pbm {
     box-shadow: 0px 0px 100px 10px rgba(0, 0, 0, .5);
 }
 
-.button_icons {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-    .button_icons:hover,
-    .button_icons:focus {
-        color: #000;
-        text-decoration: none;
-        cursor: pointer;
-    }
 .samplePBI {
     background-color: #848482
 }
+
 .samplePBI > label {
     color: black;
     font-size: 125%;
     font-weight: 900;
 }
+
 .samplePBI > input.heading {
     background-color: #848482;
     color: black;
@@ -330,6 +340,24 @@ h1.pbm {
     #shareLink {
         font-size: 95%;
     }
+
+    .samplePBI > label {
+        font-size: 100%;
+    }
+
+    .samplePBI > input.heading {
+        font-size: 150%;
+    }
+
+    .samplePBI > textarea {
+        font-size: 100%;
+        width: 98%;
+    }
+
+    .samplePBI > select {
+        font-size: 100%;
+    }
+
 }
 
 @media screen and (max-width: 750px) {
@@ -345,27 +373,38 @@ h1.pbm {
     .PBI > h3 {
         font-size: 0.90em;
     }
-    .samplePBI > label {
-        font-size: 95%;
-    }
 
     .heading {
         font-size: 125%;
     }
 
+    .samplePBI > label {
+        font-size: 85%;
+    }
+
+    .samplePBI > input.heading {
+        font-size: 135%;
+    }
+
     .samplePBI > textarea {
-        font-size: 100%;
-        width: 96%;
+        font-size: 85%;
+        width: 94%;
     }
+
     .samplePBI > select {
-        font-size: 95%;
+        font-size: 85%;
     }
+
+
     h1.pbm {
         font-size: 200%;
         color: #131313;
     }
     .parallax-container {
         background-image: none;
+    }
+    .small_info {
+        font-size: 12px;
     }
 }
 
@@ -388,9 +427,6 @@ h1.pbm {
     .PBI > label{
         font-size: .65em;
     }
-    .samplePBI > textarea{
-        width: 90%;
-    }
     .small_info {
         font-size: 10px;
     }
@@ -400,6 +436,22 @@ h1.pbm {
     }
     .parallax-container {
         background-image: none;
+    }
+    .samplePBI > label {
+        font-size: 65%;
+    }
+
+    .samplePBI > input.heading {
+        font-size: 115%;
+    }
+
+    .samplePBI > textarea {
+        font-size: 65%;
+        width: 90%;
+    }
+
+    .samplePBI > select {
+        font-size: 65%;
     }
 }
 
@@ -431,5 +483,21 @@ h1.pbm {
     }
     .parallax-container {
         background-image: none;
+    }
+    .samplePBI > label {
+        font-size: 55%;
+    }
+
+    .samplePBI > input.heading {
+        font-size: 100%;
+    }
+
+    .samplePBI > textarea {
+        font-size: 55%;
+        width: 85%;
+    }
+
+    .samplePBI > select {
+        font-size: 55%;
     }
 }

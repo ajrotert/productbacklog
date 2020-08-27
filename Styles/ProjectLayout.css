@@ -93,6 +93,27 @@ h1.pbm {
     top: 10%;
     width: 100%;
 }
+
+/********************************** React button icon Items **********************************/
+
+.button_icons {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+    .button_icons:hover,
+    .button_icons:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+.clears {
+    clear: both;
+}
+
 /********************************** React Modal Items **********************************/
 .modal {
     display: block;
@@ -118,20 +139,6 @@ h1.pbm {
     background-color: rgba(0,0,0,0.7);
     box-shadow: 0px 0px 100px 10px rgba(0, 0, 0, .5);
 }
-
-.button_icons {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-    .button_icons:hover,
-    .button_icons:focus {
-        color: #000;
-        text-decoration: none;
-        cursor: pointer;
-    }
 
 .samplePBI {
     background-color: #848482

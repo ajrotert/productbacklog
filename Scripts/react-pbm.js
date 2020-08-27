@@ -341,7 +341,7 @@ class PBI extends React.Component {
                 <span className="button_icons" id="close">&times;</span>
                 <span className="button_icons" id="edit" >✎</span>
                 <span className="button_icons" id="hide" >☌</span>
-
+                <br className="clears" />
                 <h1>{this.props.title}</h1>
                 <hr />
                 <p>Description: {this.props.description}</p>
