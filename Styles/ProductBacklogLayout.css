@@ -147,19 +147,22 @@ h1.pbm {
 .hide{
     display: none;
 }
+.hide-const {
+    display: none;
+}
 /********************************** React Status Items **********************************/
 
 .status{
     display: block;
     text-align: left;
 }
-    .status > h3 {
-        margin: 0;
-        padding: 0;
-        clear: both;
-        font-size: 110%;
-        color: #022E6D;
-    }
+#stats-display > h3 {
+    margin: 0;
+    padding: 0;
+    clear: both;
+    font-size: 110%;
+    color: #022E6D;
+}
 .status > a{
     font-size: 100%;
     text-align: center;
@@ -170,13 +173,13 @@ h1.pbm {
 .status > hr{
     clear:both;
 }
-    .status > p {
-        float: left;
-        padding: 0;
-        margin: 0;
-        padding-bottom: 1em;
-        padding-left: 1em;
-    }
+#stats-display > p {
+    float: left;
+    padding: 0;
+    margin: 0;
+    padding-bottom: 1em;
+    padding-left: 1em;
+}
 
     .status > a:link {
         text-decoration: none;
@@ -199,10 +202,10 @@ h1.pbm {
 .bolder{
     font-weight: bolder;
 }
-    .status > .padding-right {
+    .padding-right {
         padding-right: 1em;
     }
-    .status > .padding-left {
+    .padding-left {
         padding-left: 1em;
     }
 .status-defect {
@@ -220,8 +223,10 @@ h1.pbm {
 #hideShowLink {
     clear: left;
 }
+#carrot{
+    clear: both;
+}
 /********************************** React button icon Items **********************************/
-
 .button_icons {
     color: #aaaaaa;
     float: right;

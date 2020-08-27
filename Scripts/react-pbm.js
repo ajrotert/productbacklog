@@ -256,22 +256,70 @@ class ModalShareView extends React.Component {
 }
 //<p className="padding-right"><span className="bolder">In Progress: </span> Defects: <span className="status-defect">{this.props.inProgressDefect}</span> Stories: <span className="status-story">{this.props.inProgressStory} </span></p>
 //<p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.completedDefect}</span> Stories: <span className="status-completed">{this.props.completedStory}</span> </p>
-
+//id="pt4-projects-carrot" onClick="toggleContent(event)"
 class Stats extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            carrot: '\u2571\u2572'
+        };
+    }
+    toggleContent = (event) => {
+        var intervalID;
+        var ids = document.getElementById("stats-display");
+        const pointsUp = '\u2571\u2572';
+        const pointsDown = '\u2572\u2571';
+        if (event.target.id != 'hideShowLink') {
+            if (ids.classList.contains('hide-const')) {
+                ids.classList.remove('hide-const');
+                ids.style.opacity = 0;
+                this.setState({ carrot: pointsUp });
+                intervalID = setInterval(buildOpacity, 15, ids);
+            }
+            else {
+                ids.style.opacity = 1;
+                intervalID = setInterval(dropOpacity, 15, ids);
+                this.setState({ carrot: pointsDown });
+            }
+        }
+
+        function buildOpacity(node) {
+            var opacity = parseFloat(node.style.opacity) + .05;
+            node.style.opacity = opacity;
+            if (node.style.opacity >= 1.0) {
+                clearInterval(intervalID);
+            }
+        };
+        function dropOpacity(node) {
+            var opacity = parseFloat(node.style.opacity) - .05;
+            node.style.opacity = opacity;
+            if (node.style.opacity <= 0) {
+                clearInterval(intervalID);
+                node.classList.add('hide-const');
+
+            }
+        };
+    }
+
+    
+
     render() {
-        return (
-            <div className="status">
-                <hr />
-                <h3>Visible:</h3>
+    return (
+        <div className="status" onClick={(e) => this.toggleContent(event)}>
+            <hr />
+            <div id="stats-display">
+                <h3>Visible Backlog Items:</h3>
                 <p className="padding-right"><span className="bolder">In Progress: </span> Defects: <span className="status-defect">{this.props.stats.visible.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.visible.inProgressStory} </span></p>
                 <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.visible.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.visible.completedStory}</span> </p>
-                <h3>Hidden:</h3>
+                <h3>Hidden Backlog Items:</h3>
                 <p className="padding-right"><span className="bolder">In Progress: </span> Defects: <span className="status-defect">{this.props.stats.hidden.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.hidden.inProgressStory} </span></p>
                 <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.hidden.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.hidden.completedStory}</span> </p>
-                <h3>Total:</h3>
+                <h3>Total Backlog Items:</h3>
                 <p className="padding-right"><span className="bolder">In Progress: </span> Defects: <span className="status-defect">{this.props.stats.total.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.total.inProgressStory} </span></p>
                 <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.total.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.total.completedStory}</span> </p>
+            </div>
                 <a id="hideShowLink" href="#null" onClick={this.props.action} >{hiddenText}</a>
+                <div id="carrot"> <center> <span>{this.state.carrot}</span> </center></div>
                 <hr />
             </div>
             );
