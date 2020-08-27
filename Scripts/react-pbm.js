@@ -254,6 +254,29 @@ class ModalShareView extends React.Component {
             );
     }
 }
+//<p className="padding-right"><span className="bolder">In Progress: </span> Defects: <span className="status-defect">{this.props.inProgressDefect}</span> Stories: <span className="status-story">{this.props.inProgressStory} </span></p>
+//<p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.completedDefect}</span> Stories: <span className="status-completed">{this.props.completedStory}</span> </p>
+
+class Stats extends React.Component {
+    render() {
+        return (
+            <div className="status">
+                <hr />
+                <h3>Visible:</h3>
+                <p className="padding-right"><span className="bolder">In Progress: </span> Defects: <span className="status-defect">{this.props.stats.visible.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.visible.inProgressStory} </span></p>
+                <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.visible.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.visible.completedStory}</span> </p>
+                <h3>Hidden:</h3>
+                <p className="padding-right"><span className="bolder">In Progress: </span> Defects: <span className="status-defect">{this.props.stats.hidden.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.hidden.inProgressStory} </span></p>
+                <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.hidden.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.hidden.completedStory}</span> </p>
+                <h3>Total:</h3>
+                <p className="padding-right"><span className="bolder">In Progress: </span> Defects: <span className="status-defect">{this.props.stats.total.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.total.inProgressStory} </span></p>
+                <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.total.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.total.completedStory}</span> </p>
+                <a id="hideShowLink" href="#null" onClick={this.props.action} >{hiddenText}</a>
+                <hr />
+            </div>
+            );
+    }
+}
 
 class PBI extends React.Component {
     constructor(props) {
@@ -361,6 +384,7 @@ class PB extends React.Component {
         this.state={
             hidePbiItems: true
         }
+        this.handleHiddenItems = this.handleHiddenItems.bind(this);
     }
 
     renderPBI(id, title, description, completed, timestamp, isStory, hidden) {
@@ -399,12 +423,34 @@ class PB extends React.Component {
         //location.href = 'ProductBacklog.html';
         return { hasError: true };
     }
-
+    
     render() {
-        var inProgressStory = 0;
-        var inProgressDefect = 0;
-        var completedStory = 0;
-        var completedDefect = 0;
+        var statsGroup = {
+            visible: new Object(),
+            hidden: new Object(),
+            total: new Object()
+        };
+        var objectInitializer = { //Not used, need to figure out how to dereference
+            inProgressStory: 0,
+            inProgressDefect: 0,
+            completedStory: 0,
+            completedDefect: 0
+        };
+        statsGroup.visible.inProgressStory = 0;
+        statsGroup.visible.inProgressDefect = 0;
+        statsGroup.visible.completedStory = 0;
+        statsGroup.visible.completedDefect = 0;
+
+        statsGroup.hidden.inProgressStory = 0;
+        statsGroup.hidden.inProgressDefect = 0;
+        statsGroup.hidden.completedStory = 0;
+        statsGroup.hidden.completedDefect = 0;
+
+        statsGroup.total.inProgressStory = 0;
+        statsGroup.total.inProgressDefect = 0;
+        statsGroup.total.completedStory = 0;
+        statsGroup.total.completedDefect = 0;
+
 
         function compare(object1, object2) {
             return object1 > object2 ? 1 : -1;
@@ -413,22 +459,45 @@ class PB extends React.Component {
 
         const PBIContainer = orderedData.map((object, index) => {
             if (object.data().completed && object.data().isStory) {
-                completedStory++;
+                if (object.data().hidden != null && object.data().hidden) {
+                    statsGroup.hidden.completedStory++;
+                }
+                else {
+                    statsGroup.visible.completedStory++;
+                }
+                statsGroup.total.completedStory++;
             }
             else if (object.data().completed && !object.data().isStory) {
-                completedDefect++;
+                if (object.data().hidden != null && object.data().hidden) {
+                    statsGroup.hidden.completedDefect++;
+                }
+                else {
+                    statsGroup.visible.completedDefect++;
+                }
+                statsGroup.total.completedDefect++;
             }
             else if (!object.data().completed && object.data().isStory) {
-                inProgressStory++;
+                if (object.data().hidden != null && object.data().hidden) {
+                    statsGroup.hidden.inProgressStory++;
+                }
+                else {
+                    statsGroup.visible.inProgressStory++;
+                }
+                statsGroup.total.inProgressStory++;
             }
             else if (!object.data().completed && !object.data().isStory) {
-                inProgressDefect++;
+                if (object.data().hidden != null && object.data().hidden) {
+                    statsGroup.hidden.inProgressDefect++;
+                }
+                else {
+                    statsGroup.visible.inProgressDefect++;
+                }
+                statsGroup.total.inProgressDefect++;
             }
             return (
                 <div key={object.id} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed, object.data().timestamp, object.data().isStory, object.data().hidden)}</div>
                 );
         });
-       
 
         return (
             <div className="grid-container">
@@ -436,14 +505,9 @@ class PB extends React.Component {
                     <h1 className="pages">{project_name}</h1>
                     <a id="shareLink" href="#null" onClick={this.shareLink}>Get Shareable Readonly Code</a>
                 </div>
-                <div className="status">
-                    <hr />
-                    <p className="padding-right"><span className="bolder">In Progress: </span> Defects: <span className="status-defect">{inProgressDefect}</span> Stories: <span className="status-story">{inProgressStory} </span></p>
-                    <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{completedDefect}</span> Stories: <span className="status-completed">{completedStory}</span> </p>
-                    <br />
-                    <a id="hideShowLink" href="#null" onClick={(e) => this.handleHiddenItems(e)}>{hiddenText}</a>
-                    <hr />
-                </div>
+
+                <Stats stats={statsGroup} action={this.handleHiddenItems} />
+
                 <div id="grid1" className="grid_border_right">
                     <h1 className="grid_border_bottom">Backlog</h1>
                     <div>

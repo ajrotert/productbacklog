@@ -151,8 +151,15 @@ h1.pbm {
 
 .status{
     display: block;
-    text-align: center;
+    text-align: left;
 }
+    .status > h3 {
+        margin: 0;
+        padding: 0;
+        clear: both;
+        font-size: 110%;
+        color: #022E6D;
+    }
 .status > a{
     font-size: 100%;
     text-align: center;
@@ -165,6 +172,10 @@ h1.pbm {
 }
     .status > p {
         float: left;
+        padding: 0;
+        margin: 0;
+        padding-bottom: 1em;
+        padding-left: 1em;
     }
 
     .status > a:link {
