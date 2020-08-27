@@ -290,6 +290,7 @@ class Stats extends React.Component {
                 clearInterval(intervalID);
             }
         };
+
         function dropOpacity(node) {
             var opacity = parseFloat(node.style.opacity) - .05;
             node.style.opacity = opacity;
