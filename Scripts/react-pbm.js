@@ -438,10 +438,8 @@ class PB extends React.Component {
                 </div>
                 <div className="status">
                     <hr />
-                    <p className="bolder padding-right">In Progress: </p>
-                    <p padding-right>Defects: <span className="status-defect">{inProgressDefect}</span> Stories: <span className="status-story">{inProgressStory} </span></p>
-                    <p className="bolder padding-right padding-left">Completed:</p>
-                    <p>Defects: <span className="status-completed">{completedDefect}</span> Stories: <span className="status-completed">{completedStory}</span> </p>
+                    <p className="padding-right"><span className="bolder">In Progress: </span> Defects: <span className="status-defect">{inProgressDefect}</span> Stories: <span className="status-story">{inProgressStory} </span></p>
+                    <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{completedDefect}</span> Stories: <span className="status-completed">{completedStory}</span> </p>
                     <br />
                     <a id="hideShowLink" href="#null" onClick={(e) => this.handleHiddenItems(e)}>{hiddenText}</a>
                     <hr />
