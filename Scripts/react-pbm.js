@@ -50,9 +50,9 @@ const copyToClipboard = str => {
     document.body.removeChild(el);
 };
 
-function generatePbiModalPopup(shadowColor = null) {
+function generatePbiModalPopup(shadowColor = null, hide = false) {
     if (!readonly) {
-        ReactDOM.render(<ModalPbiView shadow={shadowColor} placeholderValue={shadowColor == null ? null : "Defect"} />, document.querySelector('#rootModal'));
+        ReactDOM.render(<ModalPbiView shadow={shadowColor} placeholderValue={shadowColor == null ? null : "Defect"} hide={hide} />, document.querySelector('#rootModal'));
 
     }
     else {
@@ -217,6 +217,7 @@ class ModalPbiView extends React.Component {
                         <label htmlFor="sample_checked" disabled> Item Completed</label><br />
                         <br />
                         <div>
+                            <p className={"small_info" + (!this.props.hide ? " hide" : "")} id="modalHidden">Hidden</p>
                             <p className="small_info" id="modalTimestamp">Timestamp: Not yet generated.</p>
                             <p className="small_info" id="modalID">ID: Not yet generated.</p>
                         </div>
@@ -281,8 +282,8 @@ class PBI extends React.Component {
                 }
             } 
             else if (e.target.id == ("edit")) {
-                
-                generatePbiModalPopup(this.props.isStory ? null : "box_shadow_red");
+
+                generatePbiModalPopup(this.props.isStory ? null : "box_shadow_red", this.state.hide);
                 document.getElementById('title').value = this.props.title;
                 document.getElementById('description').value = this.props.description;
                 document.getElementById('story-selector').selectedIndex = this.props.isStory ? 0 : 1;
