@@ -630,6 +630,10 @@ else {
 
         })
 }
+//Deselect any projects
+window.onload = function () {
+    this.sessionStorage.removeItem('bid');
+}
 
 //Prevent user from changing values
 window.addEventListener('storage', function (e) {

@@ -10,7 +10,7 @@ const showText = "Stop viewing hidden items";
 
 function getPbiDatabase(docId) {
     if (!readonly) {
-        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc('bid').collection('task_backlog').doc(docId).get();
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).get();
     }
     else {
         //Readonly
@@ -18,7 +18,7 @@ function getPbiDatabase(docId) {
 };
 function updatePbiDatabase(docId, completed) {
     if (!readonly) {
-        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc('bid').collection('task_backlog').doc(docId).update({ completed: completed });
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).update({ completed: completed });
     }
     else {
         //Readonly
@@ -26,7 +26,7 @@ function updatePbiDatabase(docId, completed) {
 };
 function hidePbiDatabase(docId, hidden) {
     if (!readonly) {
-        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc('bid').collection('task_backlog').doc(docId).update({ hidden: hidden });
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).update({ hidden: hidden });
     }
     else {
         //Readonly
@@ -34,7 +34,7 @@ function hidePbiDatabase(docId, hidden) {
 };
 function deleteProjectFromDatabase(docId) {
     if (!readonly) {
-        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc('bid').collection('task_backlog').doc(docId).delete();
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).delete();
     }
     else {
         //Readonly
@@ -142,25 +142,16 @@ class NoBacklogItemError extends React.Component {
 
 const debug = false;
 
-//TODO: refactor : Remove Shadow, placeholderValue
 //Properties: hide
 class ModalPbiView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            shadowColor: props.shadow == null ? "box_shadow_blue" : props.shadow,
-            placeholderText: props.placeholderValue == null ? "Story" : props.placeholderValue
         };
     }
 
     handler() {
         ReactDOM.unmountComponentAtNode(document.querySelector("#rootModal"));
-    }
-
-    handlerStory = () => {
-        var story = document.getElementById('story-selector').value == 'story';
-        this.setState({ shadowColor: story ? "box_shadow_blue" : "box_shadow_red" });
-        this.setState({ placeholderText: story ? "Story" : "Defect" });
     }
 
     addToDatabase() {
@@ -171,7 +162,7 @@ class ModalPbiView extends React.Component {
         if (title != "" && description != "" && uid != null) {
             var docId = document.getElementById('modalID').innerText;
             if (docId.includes('Not yet generated')) {
-                db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc().set({
+                db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc().set({
                     title: title,
                     description: description,
                     completed: false,
@@ -179,15 +170,13 @@ class ModalPbiView extends React.Component {
                 });
             }
             else {
-                db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).set({
+                db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).set({
                     title: title,
                     description: description,
                     completed: document.getElementById('sample_checked').checked,
                     timestamp: document.getElementById('modalTimestamp').innerText,
                 });
             }
-
-
 
             titleNode.style.border = "1px solid black";
             descriptionNode.style.border = "1px solid black";
@@ -213,18 +202,15 @@ class ModalPbiView extends React.Component {
         return (
             <div id="InputModal" className="modal">
                 <div className="modal-content">
-                    <div className={"samplePBI " + this.state.shadowColor} id="parent-container">
+                    <div className={"samplePBI " + "box_shadow_blue"} id="parent-container">
                         <span className="button_icons" onClick={this.handler}>&times;</span>
-                        <input className="heading" id="title" type="textbox" name="title" placeholder={"Enter " + this.state.placeholderText + " Title"} required />
+                        <input className="heading" id="title" type="textbox" name="title" placeholder={"Enter Task Title"} required />
                         <hr />
                         <br />
-                        <textarea id="description" name="description" placeholder={"Enter " + this.state.placeholderText + " Description"} required />
+                        <textarea id="description" name="description" placeholder={"Enter Task Description"} required />
                         <br />
                         <br />
-                        <select id="story-selector" onChange={() => this.handlerStory()}>
-                            <option value="story">Story</option>
-                            <option value="defect">Defect</option>
-                        </select>
+                        <h1>Task</h1>
                         <br />
                         <br />
                         <input type="checkbox" id="sample_checked" name="sample_checked" checked={false} value="none" disabled />
@@ -415,14 +401,7 @@ class PBI extends React.Component {
 
                 });
             }
-            else {
-                //Present task view
-                sessionStorage.setItem('uid', uid);
-                sessionStorage.setItem('pid', pid);
-                sessionStorage.setItem('bid', this.state.ID);
-                sessionStorage.setItem('project_name', this.props.title);
-                window.location.href = 'Tasks.html';
-            }
+
         }
         else {
             //Readonly
@@ -625,10 +604,6 @@ else {
             document.getElementById('loading-gif').style.display = 'none';
 
         })
-}
-//Deselect any projects
-window.onload = function () {
-    this.sessionStorage.removeItem('bid');
 }
 
 //Prevent user from changing values
