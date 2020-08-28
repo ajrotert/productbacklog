@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="Platform to showcase Andrew Rotert's published software, personal projects, and resume. Andrew has seven published apps, across iOS and Android platforms. Visit the website to learn more.">
+    <meta name="keywords" content="developer, Andrew Rotert, software, DSU, dakota state university, android, published, engineering, iOS, projects, development, web, personal, website">
+    <meta name="author" content="Andrew Rotert">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-analytics.js"></script>
+
+    <title>Product Backlog | Tasks Viewer</title>
+    <!-- <link rel="icon" type="image/x-icon" href="Images/DevLogo.ico" />-->
+
+    <link rel="stylesheet" href="Styles/normalize.css" />
+    <link rel="stylesheet" href="Styles/defaults.css" />
+    <link rel="stylesheet" href="Styles/ProductBacklogLayout.css" />
+</head>
+<body>
+    <center><img src="Images/productbacklogdev.png" class="logo" alt="Logo" /></center>
+
+    <hr class="nav" />
+    <nav id="nav-placeholder"></nav>
+    <hr class="nav" />
+
+    <div class="parallax-container">
+        <div class="inner-parallax-container">
+            <h1 class="pbm">Product Backlog Management Software</h1>
+        </div>
+    </div>
+
+    <center>
+        <div id="offline">
+            <h1>OFFLINE: Please Refresh.</h1>
+            <h3>(Data will be saved offline.)</h3>
+        </div>
+    </center>
+
+    <img id="loading-gif" src="Images/loading.gif" />
+
+    <div id="rootModal"></div>
+    <div id="root"></div>
+
+    <br /><br />
+
+
+    <footer>
+        <div class="right_position">
+            <img src="Images/ARLogo.png" height="150" alt="Andrew Rotert Development Logo" />
+            <br />
+            <p class="bottom_position">&copy; Copyright 2019-2020 Andrew Rotert</p>
+        </div>
+
+    </footer>
+
+    <script src="Scripts/connection.js"></script>
+    <script src="Scripts/online-connection.js"></script>
+
+    <!-- Load React. -->
+    <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>
+
+    <!--
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    -->
+    <!-- Load our React component. -->
+    <script type="text/babel" src="Scripts/react-tasks.js">
+    </script>
+    <script type="text/babel" src="Navigation/reactnav.js">
+    </script>
+</body>
+</html>

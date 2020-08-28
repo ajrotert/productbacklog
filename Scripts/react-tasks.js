@@ -2,14 +2,15 @@
 var db = firebase.firestore();
 const uid = sessionStorage.getItem('uid');  //User ID
 const pid = sessionStorage.getItem('pid');  //Project ID
+const bid = sessionStorage.getItem('bid');  //Backlog ID
 const readonly = (sessionStorage.getItem('readonly') == null ? true : sessionStorage.getItem('readonly') == 'true' ? true : false);
-const project_name = sessionStorage.getItem('project_name');
+const backlog_title = sessionStorage.getItem('backlog_title');
 const hiddenText = "View hidden items";
 const showText = "Stop viewing hidden items";
 
 function getPbiDatabase(docId) {
     if (!readonly) {
-        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).get();
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc('bid').collection('task_backlog').doc(docId).get();
     }
     else {
         //Readonly
@@ -17,7 +18,7 @@ function getPbiDatabase(docId) {
 };
 function updatePbiDatabase(docId, completed) {
     if (!readonly) {
-        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).update({ completed: completed });
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc('bid').collection('task_backlog').doc(docId).update({ completed: completed });
     }
     else {
         //Readonly
@@ -25,15 +26,15 @@ function updatePbiDatabase(docId, completed) {
 };
 function hidePbiDatabase(docId, hidden) {
     if (!readonly) {
-        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).update({ hidden: hidden });
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc('bid').collection('task_backlog').doc(docId).update({ hidden: hidden });
     }
     else {
         //Readonly
     }
-}; 
+};
 function deleteProjectFromDatabase(docId) {
     if (!readonly) {
-        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).delete();
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc('bid').collection('task_backlog').doc(docId).delete();
     }
     else {
         //Readonly
@@ -50,9 +51,9 @@ const copyToClipboard = str => {
     document.body.removeChild(el);
 };
 
-function generatePbiModalPopup(shadowColor = null, hide = false) {
+function generatePbiModalPopup(hide = false) {
     if (!readonly) {
-        ReactDOM.render(<ModalPbiView shadow={shadowColor} placeholderValue={shadowColor == null ? null : "Defect"} hide={hide} />, document.querySelector('#rootModal'));
+        ReactDOM.render(<ModalPbiView hide={hide} />, document.querySelector('#rootModal'));
 
     }
     else {
@@ -62,26 +63,26 @@ function generatePbiModalPopup(shadowColor = null, hide = false) {
 
 function generateShareCodeFromDatabase(longShareCode) {
     var foundInDatabase = false;
-        db.collection('shares').where("share_code", "==", longShareCode).limit(1)
+    db.collection('shares').where("share_code", "==", longShareCode).limit(1)
         .get()
-            .then(function (querySnapshot) {
-                querySnapshot.forEach(function (doc) {      //At Max, will contain one record
-                    copyToClipboard(doc.id);
-                    ReactDOM.render(<ModalShareView share_code={doc.id} />, document.querySelector('#rootModal'));
+        .then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {      //At Max, will contain one record
+                copyToClipboard(doc.id);
+                ReactDOM.render(<ModalShareView share_code={doc.id} />, document.querySelector('#rootModal'));
 
-                    foundInDatabase = true;
-                    return;
-                });
-                if (!foundInDatabase) {
-                        db.collection('shares').add({
-                            share_code: longShareCode
-                        })
-                            .then((docRef) => {
-                                copyToClipboard(docRef.id);
-                                ReactDOM.render(<ModalShareView share_code={docRef.id} />, document.querySelector('#rootModal'));
-                            });
-                }
-            
+                foundInDatabase = true;
+                return;
+            });
+            if (!foundInDatabase) {
+                db.collection('shares').add({
+                    share_code: longShareCode
+                })
+                    .then((docRef) => {
+                        copyToClipboard(docRef.id);
+                        ReactDOM.render(<ModalShareView share_code={docRef.id} />, document.querySelector('#rootModal'));
+                    });
+            }
+
         })
         .catch(function (error) {
             console.log("Error getting documents: ", error);
@@ -103,6 +104,7 @@ function updateHiddenAttributes(show) {
     }
 }
 
+//Properties: 
 class NotAuthError extends React.Component {
     render() {
         return (
@@ -114,6 +116,7 @@ class NotAuthError extends React.Component {
     }
 }
 
+//Properties: 
 class NoProjectError extends React.Component {
     render() {
         return (
@@ -125,8 +128,22 @@ class NoProjectError extends React.Component {
     }
 }
 
+//Properties: 
+class NoBacklogItemError extends React.Component {
+    render() {
+        return (
+            <div>
+                <h1 className="redError">No Backlog Item.</h1>
+                <a href="ProductBacklog.html" className="signInLink">Select a Product Backlog Item.</a>
+            </div>
+        );
+    }
+}
+
 const debug = false;
 
+//TODO: refactor : Remove Shadow, placeholderValue
+//Properties: hide
 class ModalPbiView extends React.Component {
     constructor(props) {
         super(props);
@@ -151,7 +168,6 @@ class ModalPbiView extends React.Component {
         var descriptionNode = document.getElementById('description');
         var title = titleNode.value;
         var description = descriptionNode.value;
-        var story = document.getElementById('story-selector').value == 'story';
         if (title != "" && description != "" && uid != null) {
             var docId = document.getElementById('modalID').innerText;
             if (docId.includes('Not yet generated')) {
@@ -160,7 +176,6 @@ class ModalPbiView extends React.Component {
                     description: description,
                     completed: false,
                     timestamp: Date.now(),
-                    isStory: story
                 });
             }
             else {
@@ -169,11 +184,10 @@ class ModalPbiView extends React.Component {
                     description: description,
                     completed: document.getElementById('sample_checked').checked,
                     timestamp: document.getElementById('modalTimestamp').innerText,
-                    isStory: story
                 });
             }
 
-            
+
 
             titleNode.style.border = "1px solid black";
             descriptionNode.style.border = "1px solid black";
@@ -201,10 +215,10 @@ class ModalPbiView extends React.Component {
                 <div className="modal-content">
                     <div className={"samplePBI " + this.state.shadowColor} id="parent-container">
                         <span className="button_icons" onClick={this.handler}>&times;</span>
-                        <input className="heading" id="title" type="textbox" name="title" placeholder={"Enter " + this.state.placeholderText + " Title"} required/>
-                        <hr/>
+                        <input className="heading" id="title" type="textbox" name="title" placeholder={"Enter " + this.state.placeholderText + " Title"} required />
+                        <hr />
                         <br />
-                        <textarea id="description" name="description" placeholder={"Enter " + this.state.placeholderText + " Description"} required/>
+                        <textarea id="description" name="description" placeholder={"Enter " + this.state.placeholderText + " Description"} required />
                         <br />
                         <br />
                         <select id="story-selector" onChange={() => this.handlerStory()}>
@@ -231,6 +245,7 @@ class ModalPbiView extends React.Component {
     }
 }
 
+//Properties: share_code
 class ModalShareView extends React.Component {
     handler = () => {
         ReactDOM.unmountComponentAtNode(document.querySelector("#rootModal"));
@@ -242,21 +257,20 @@ class ModalShareView extends React.Component {
                 <div className="modal-content">
                     <div className="samplePBI extraPadding">
                         <span className="button_icons" onClick={() => this.handler()}>&times;</span>
-                            <h1 className="heading">Allow other users to view your product backlog.</h1>
-                            <hr />
-                            <br />
-                            <h3 className="heading">Code: {this.props.share_code}</h3>
-                        </div>
+                        <h1 className="heading">Allow other users to view your product backlog.</h1>
+                        <hr />
+                        <br />
+                        <h3 className="heading">Code: {this.props.share_code}</h3>
+                    </div>
                 </div>
 
             </div>
 
-            );
+        );
     }
 }
-//<p className="padding-right"><span className="bolder">In Progress: </span> Defects: <span className="status-defect">{this.props.inProgressDefect}</span> Stories: <span className="status-story">{this.props.inProgressStory} </span></p>
-//<p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.completedDefect}</span> Stories: <span className="status-completed">{this.props.completedStory}</span> </p>
-//id="pt4-projects-carrot" onClick="toggleContent(event)"
+
+//Properties: stats
 class Stats extends React.Component {
     constructor(props) {
         super(props);
@@ -302,38 +316,39 @@ class Stats extends React.Component {
         };
     }
 
-    
+
 
     render() {
-    return (
-        <div className="status" onClick={(e) => this.toggleContent(event)}>
-            <hr />
-            <div id="stats-display">
-                <h3>Visible Backlog Items:</h3>
-                <p className="padding-right"><span className="bolder">In Progress: </span> Defects: <span className="status-defect">{this.props.stats.visible.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.visible.inProgressStory} </span></p>
-                <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.visible.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.visible.completedStory}</span> </p>
-                <h3>Hidden Backlog Items:</h3>
-                <p className="padding-right"><span className="bolder">In Progress: </span> Defects: <span className="status-defect">{this.props.stats.hidden.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.hidden.inProgressStory} </span></p>
-                <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.hidden.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.hidden.completedStory}</span> </p>
-                <h3>Total Backlog Items:</h3>
-                <p className="padding-right"><span className="bolder">In Progress: </span> Defects: <span className="status-defect">{this.props.stats.total.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.total.inProgressStory} </span></p>
-                <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.total.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.total.completedStory}</span> </p>
-            </div>
+        return (
+            <div className="status" onClick={(e) => this.toggleContent(event)}>
+                <hr />
+                <div id="stats-display">
+                    <h3>Visible Backlog Items:</h3>
+                    <p className="padding-right"><span className="bolder">In Progress: </span> Tasks: <span className="status-story">{this.props.stats.visible.inProgressTask}</span> </p>
+                    <p className="padding-right"><span className="bolder">Completed: </span>Tasks: <span className="status-completed">{this.props.stats.visible.completedTask}</span> </p>
+                    <h3>Hidden Backlog Items:</h3>
+                    <p className="padding-right"><span className="bolder">In Progress: </span> Tasks: <span className="status-story">{this.props.stats.hidden.inProgressTask}</span> </p>
+                    <p className="padding-right"><span className="bolder">Completed: </span>Tasks: <span className="status-completed">{this.props.stats.hidden.completedTask}</span> </p>
+                    <h3>Total Backlog Items:</h3>
+                    <p className="padding-right"><span className="bolder">In Progress: </span> Tasks: <span className="status-story">{this.props.stats.total.inProgressTask}</span> </p>
+                    <p className="padding-right"><span className="bolder">Completed: </span>Tasks: <span className="status-completed">{this.props.stats.total.completedTask}</span> </p>
+                </div>
                 <a id="hideShowLink" href="#null" onClick={this.props.action} >{hiddenText}</a>
                 <div id="carrot"> <center> <span>{this.state.carrot}</span> </center></div>
                 <hr />
             </div>
-            );
+        );
     }
 }
 
+//Properties: id, title, description, completed, timestamp, hidden, hiddenPB
 class PBI extends React.Component {
     constructor(props) {
         super(props);
         var hiddenState = this.props.hidden == null ? false : this.props.hidden;
 
         this.state = {
-            shadowColor: "PBI " + (this.props.completed ? "box_shadow_green" : this.props.isStory ? "box_shadow_blue" : "box_shadow_red"),
+            shadowColor: "PBI " + (this.props.completed ? "box_shadow_green" : "box_shadow_blue"),
             completed: this.props.completed,
             ID: this.props.id,
             hide: hiddenState
@@ -355,10 +370,9 @@ class PBI extends React.Component {
             }
             else if (e.target.id == ("edit")) {
 
-                generatePbiModalPopup(this.props.isStory ? null : "box_shadow_red", this.state.hide);
+                generatePbiModalPopup(this.state.hide);
                 document.getElementById('title').value = this.props.title;
                 document.getElementById('description').value = this.props.description;
-                document.getElementById('story-selector').selectedIndex = this.props.isStory ? 0 : 1;
                 document.getElementById('sample_checked').checked = this.state.completed;
                 document.getElementById('modalID').innerText = this.state.ID;
                 document.getElementById('modalTimestamp').innerText = this.props.timestamp;
@@ -392,7 +406,7 @@ class PBI extends React.Component {
                         if (confirms) {
                             updatePbiDatabase(this.state.ID, !this.state.completed)
                                 .then(() => {
-                                    this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : this.props.isStory ? "box_shadow_blue" : "box_shadow_red"), completed: !this.state.completed, ID: this.state.ID });
+                                    this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : "box_shadow_blue"), completed: !this.state.completed, ID: this.state.ID });
                                 })
                                 .catch((error) => {
                                 });
@@ -406,7 +420,7 @@ class PBI extends React.Component {
                 sessionStorage.setItem('uid', uid);
                 sessionStorage.setItem('pid', pid);
                 sessionStorage.setItem('bid', this.state.ID);
-                sessionStorage.setItem('backlog_title', this.props.title);
+                sessionStorage.setItem('project_name', this.props.title);
                 window.location.href = 'Tasks.html';
             }
         }
@@ -417,7 +431,7 @@ class PBI extends React.Component {
     }
     render() {
         return (
-            <div className={this.state.shadowColor + (this.state.hide ? " hide" : "")} id={this.state.id} onClick={(e) => this.updateHandler(e)}>
+            <div className={this.state.shadowColor + (this.state.hide ? " hide" : "")} id={this.state.ID} onClick={(e) => this.updateHandler(e)}>
                 <span className="button_icons" id="close">&times;</span>
                 <span className="button_icons" id="edit" >✎</span>
                 <span className="button_icons" id="hide" >☌</span>
@@ -425,7 +439,7 @@ class PBI extends React.Component {
                 <h1>{this.props.title}</h1>
                 <hr />
                 <p>Description: {this.props.description}</p>
-                <h3>{this.props.isStory ? "Story" : "Defect"}</h3>
+                <h3>Task</h3>
                 <input type="checkbox" id={"done" + this.state.ID} name={"done" + this.state.ID} checked={this.state.completed} value="none" />
                 <label htmlFor={"done" + this.state.ID} disabled> Item Completed</label><br />
                 <p className="small_info"> {this.state.hide ? "Hidden" : ""} </p>
@@ -435,24 +449,26 @@ class PBI extends React.Component {
         );
     }
 }
+
+//Properties: data
 class PB extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
+        this.state = {
             hidePbiItems: true
         }
         this.handleHiddenItems = this.handleHiddenItems.bind(this);
     }
 
-    renderPBI(id, title, description, completed, timestamp, isStory, hidden) {
+    renderPBI(id, title, description, completed, timestamp, hidden) {
         return (
-            <PBI id={id} title={title} description={description} completed={completed} timestamp={timestamp} isStory={isStory} hidden={hidden} hiddenPB={this.state.hidePbiItems} />
-            );
+            <PBI id={id} title={title} description={description} completed={completed} timestamp={timestamp} hidden={hidden} hiddenPB={this.state.hidePbiItems} />
+        );
     };
 
     handler() {
         generatePbiModalPopup();
-        
+
     };
 
     shareLink() {
@@ -471,7 +487,7 @@ class PB extends React.Component {
             event.target.innerText = hiddenText;
         }
 
-        
+
     };
 
     static getDerivedStateFromError(error) {
@@ -480,7 +496,7 @@ class PB extends React.Component {
         //location.href = 'ProductBacklog.html';
         return { hasError: true };
     }
-    
+
     render() {
         var statsGroup = {
             visible: new Object(),
@@ -493,20 +509,14 @@ class PB extends React.Component {
             completedStory: 0,
             completedDefect: 0
         };
-        statsGroup.visible.inProgressStory = 0;
-        statsGroup.visible.inProgressDefect = 0;
-        statsGroup.visible.completedStory = 0;
-        statsGroup.visible.completedDefect = 0;
+        statsGroup.visible.inProgressTask = 0;
+        statsGroup.visible.completedTask = 0;
 
-        statsGroup.hidden.inProgressStory = 0;
-        statsGroup.hidden.inProgressDefect = 0;
-        statsGroup.hidden.completedStory = 0;
-        statsGroup.hidden.completedDefect = 0;
+        statsGroup.hidden.inProgressTask = 0;
+        statsGroup.hidden.completedTask = 0;
 
-        statsGroup.total.inProgressStory = 0;
-        statsGroup.total.inProgressDefect = 0;
-        statsGroup.total.completedStory = 0;
-        statsGroup.total.completedDefect = 0;
+        statsGroup.total.inProgressTask = 0;
+        statsGroup.total.completedTask = 0;
 
 
         function compare(object1, object2) {
@@ -515,51 +525,34 @@ class PB extends React.Component {
         const orderedData = this.props.data.docs.sort((object1, object2) => compare(object1.data().timestamp, object2.data().timestamp));
 
         const PBIContainer = orderedData.map((object, index) => {
-            if (object.data().completed && object.data().isStory) {
+            if (object.data().completed) {
                 if (object.data().hidden != null && object.data().hidden) {
-                    statsGroup.hidden.completedStory++;
+                    statsGroup.hidden.completedTask++;
                 }
                 else {
-                    statsGroup.visible.completedStory++;
+                    statsGroup.visible.completedTask++;
                 }
-                statsGroup.total.completedStory++;
+                statsGroup.total.completedTask++;
             }
-            else if (object.data().completed && !object.data().isStory) {
+            else if (!object.data().completed) {
                 if (object.data().hidden != null && object.data().hidden) {
-                    statsGroup.hidden.completedDefect++;
+                    statsGroup.hidden.inProgressTask++;
                 }
                 else {
-                    statsGroup.visible.completedDefect++;
+                    statsGroup.visible.inProgressTask++;
                 }
-                statsGroup.total.completedDefect++;
+                statsGroup.total.inProgressTask++;
             }
-            else if (!object.data().completed && object.data().isStory) {
-                if (object.data().hidden != null && object.data().hidden) {
-                    statsGroup.hidden.inProgressStory++;
-                }
-                else {
-                    statsGroup.visible.inProgressStory++;
-                }
-                statsGroup.total.inProgressStory++;
-            }
-            else if (!object.data().completed && !object.data().isStory) {
-                if (object.data().hidden != null && object.data().hidden) {
-                    statsGroup.hidden.inProgressDefect++;
-                }
-                else {
-                    statsGroup.visible.inProgressDefect++;
-                }
-                statsGroup.total.inProgressDefect++;
-            }
+
             return (
-                <div key={object.id} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed, object.data().timestamp, object.data().isStory, object.data().hidden)}</div>
-                );
+                <div key={object.id} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed, object.data().timestamp, object.data().hidden)}</div>
+            );
         });
 
         return (
             <div className="grid-container">
                 <div>
-                    <h1 className="pages">{project_name}</h1>
+                    <h1 className="pages">Product Backlog Item: {backlog_title}</h1>
                     <a id="shareLink" href="#null" onClick={this.shareLink}>Get Shareable Readonly Code</a>
                 </div>
 
@@ -590,9 +583,12 @@ else if (pid == null) {
     ReactDOM.render(<NoProjectError />, domContainer);
     document.getElementById('loading-gif').style.display = 'none';
 }
+else if (bid == null) {
+    ReactDOM.render(<NoBacklogItemError />, domContainer);
+    document.getElementById('loading-gif').style.display = 'none';
+}
 else {
-
-    db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog')
+    db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog')
         .onSnapshot((snapshot) => {
             ReactDOM.render(<PB data={snapshot} />, domContainer, () => {
                 var inProgressItems = document.getElementById('grid1');
@@ -630,12 +626,17 @@ else {
 
         })
 }
+//Deselect any projects
+window.onload = function () {
+    this.sessionStorage.removeItem('bid');
+}
 
 //Prevent user from changing values
 window.addEventListener('storage', function (e) {
     if (e.storageArea === sessionStorage) {
         sessionStorage.setItem('uid', uid);
         sessionStorage.setItem('pid', pid);
+        sessionStorage.setItem('bid', bid);
         sessionStorage.setItem('readonly', readonly);
     }
 });

@@ -207,6 +207,7 @@ else {
 //Deselect any projects
 window.onload = function () {
     this.sessionStorage.removeItem('pid');
+    this.sessionStorage.removeItem('bid');
 }
 
 //Prevent user from changing values

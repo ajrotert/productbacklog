@@ -31,6 +31,8 @@
     <None Include="Scripts\react-project-selection.js" />
     <None Include="Images\loading.gif" />
     <None Include="Scripts\online-connection.js" />
+    <None Include="Tasks.html" />
+    <None Include="Scripts\react-tasks.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />

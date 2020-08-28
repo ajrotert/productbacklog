@@ -138,6 +138,7 @@ window.onclose = (() => {
 window.onload = function () {
     this.sessionStorage.removeItem('uid');
     this.sessionStorage.removeItem('pid');
+    this.sessionStorage.removeItem('bid');
     this.sessionStorage.removeItem('readonly');
 
 }

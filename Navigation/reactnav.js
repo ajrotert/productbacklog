@@ -24,6 +24,7 @@ class ArNav extends React.Component {
                     <li className="navitem PBIDEV" id="Parent"><a href="#null">ProductBacklog.Dev</a></li>
                     <li className="navitem" id="PR-Page"><a href="Projects.html">Projects</a></li>
                     <li className="navitem" id="PB-Page"><a href="ProductBacklog.html">Product Backlog</a></li>
+                    <li className="navitem" id="PT-Page"><a href="Tasks.html">Tasks</a></li>
                     <li className="navitem hamburgerBar" id="Drop-Down"><a href="#null" onClick={this.props.onClick}>&#9776;</a></li>
 
                 </ul>
@@ -50,6 +51,12 @@ else if (title.includes("Online")) {
 }
 else if (title.includes("Projects")) {
     document.getElementById("PR-Page").classList.add("active");
+    document.getElementById("logo-nav").style.display = "none";
+    document.getElementById("nav-logo").style.display = "none";
+    document.getElementById("Home-Page").classList = "navitem";
+}
+else if (title.includes("Tasks")) {
+    document.getElementById("PT-Page").classList.add("active");
     document.getElementById("logo-nav").style.display = "none";
     document.getElementById("nav-logo").style.display = "none";
     document.getElementById("Home-Page").classList = "navitem";
