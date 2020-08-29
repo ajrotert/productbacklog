@@ -18,7 +18,15 @@ function getPbiDatabase(docId) {
 };
 function updatePbiDatabase(docId, completed) {
     if (!readonly) {
-        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).update({ completed: completed });
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).update({ completed: completed, inprogress: false });
+    }
+    else {
+        //Readonly
+    }
+};
+function updatePbiDatabaseWithInprogress(docId, inprogress) {
+    if (!readonly) {
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).update({ inprogress: inprogress });
     }
     else {
         //Readonly
@@ -213,6 +221,8 @@ class ModalPbiView extends React.Component {
                         <h1>Task</h1>
                         <br />
                         <br />
+                        <input type="checkbox" id="sample_checked1" name="sample_checked1" checked={false} value="none" disabled />
+                        <label htmlFor="sample_checked1" id="sample_label1" disabled> In Progress </label><br /><br/>
                         <input type="checkbox" id="sample_checked" name="sample_checked" checked={false} value="none" disabled />
                         <label htmlFor="sample_checked" disabled> Item Completed</label><br />
                         <br />
@@ -310,13 +320,13 @@ class Stats extends React.Component {
                 <hr />
                 <div id="stats-display">
                     <h3>Visible Backlog Items:</h3>
-                    <p className="padding-right"><span className="bolder">In Progress: </span> Tasks: <span className="status-story">{this.props.stats.visible.inProgressTask}</span> </p>
+                    <p className="padding-right"><span className="bolder">Available: </span> Tasks: <span className="status-story">{this.props.stats.visible.inProgressTask}</span> </p>
                     <p className="padding-right"><span className="bolder">Completed: </span>Tasks: <span className="status-completed">{this.props.stats.visible.completedTask}</span> </p>
                     <h3>Hidden Backlog Items:</h3>
-                    <p className="padding-right"><span className="bolder">In Progress: </span> Tasks: <span className="status-story">{this.props.stats.hidden.inProgressTask}</span> </p>
+                    <p className="padding-right"><span className="bolder">Available: </span> Tasks: <span className="status-story">{this.props.stats.hidden.inProgressTask}</span> </p>
                     <p className="padding-right"><span className="bolder">Completed: </span>Tasks: <span className="status-completed">{this.props.stats.hidden.completedTask}</span> </p>
                     <h3>Total Backlog Items:</h3>
-                    <p className="padding-right"><span className="bolder">In Progress: </span> Tasks: <span className="status-story">{this.props.stats.total.inProgressTask}</span> </p>
+                    <p className="padding-right"><span className="bolder">Available: </span> Tasks: <span className="status-story">{this.props.stats.total.inProgressTask}</span> </p>
                     <p className="padding-right"><span className="bolder">Completed: </span>Tasks: <span className="status-completed">{this.props.stats.total.completedTask}</span> </p>
                 </div>
                 <a id="hideShowLink" href="#null" onClick={this.props.action} >{hiddenText}</a>
@@ -327,7 +337,7 @@ class Stats extends React.Component {
     }
 }
 
-//Properties: id, title, description, completed, timestamp, hidden, hiddenPB
+//Properties: id, title, description, completed, timestamp, hidden, hiddenPB, inprogress
 class PBI extends React.Component {
     constructor(props) {
         super(props);
@@ -337,7 +347,8 @@ class PBI extends React.Component {
             shadowColor: "PBI " + (this.props.completed ? "box_shadow_green" : "box_shadow_blue"),
             completed: this.props.completed,
             ID: this.props.id,
-            hide: hiddenState
+            hide: hiddenState,
+            inprogress: this.props.inprogress == null ? false : this.props.inprogress
         }
     }
 
@@ -359,6 +370,9 @@ class PBI extends React.Component {
                 generatePbiModalPopup(this.state.hide);
                 document.getElementById('title').value = this.props.title;
                 document.getElementById('description').value = this.props.description;
+                document.getElementById('sample_checked1').checked = this.state.inprogress;
+                document.getElementById('sample_checked1').hidden = this.state.completed;
+                document.getElementById('sample_label1').hidden = this.state.completed;
                 document.getElementById('sample_checked').checked = this.state.completed;
                 document.getElementById('modalID').innerText = this.state.ID;
                 document.getElementById('modalTimestamp').innerText = this.props.timestamp;
@@ -392,12 +406,25 @@ class PBI extends React.Component {
                         if (confirms) {
                             updatePbiDatabase(this.state.ID, !this.state.completed)
                                 .then(() => {
-                                    this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : "box_shadow_blue"), completed: !this.state.completed, ID: this.state.ID });
+                                    this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : "box_shadow_blue"), completed: !this.state.completed, ID: this.state.ID, inprogress: false });
                                 })
                                 .catch((error) => {
                                 });
                         }
                     }
+
+                });
+            }
+            else if (e.target.id == ("inprogress" + this.state.ID)) {
+                getPbiDatabase(this.state.ID).then((doc) => {
+                    if (doc.exists) {
+                        updatePbiDatabaseWithInprogress(this.state.ID, !this.state.inprogress)
+                            .then(() => {
+                                this.setState({ inprogress: !this.state.inprogress});
+                            })
+                            .catch((error) => {
+                            });
+                     }
 
                 });
             }
@@ -419,6 +446,8 @@ class PBI extends React.Component {
                 <hr />
                 <p>Description: {this.props.description}</p>
                 <h3>Task</h3>
+                <input type="checkbox" id={"inprogress" + this.state.ID} name={"inprogress" + this.state.ID} checked={this.state.inprogress} value="none" hidden={this.state.completed} />
+                <label htmlFor={"inprogress" + this.state.ID} disabled hidden={this.state.completed}> In Progress</label><br /><br/>
                 <input type="checkbox" id={"done" + this.state.ID} name={"done" + this.state.ID} checked={this.state.completed} value="none" />
                 <label htmlFor={"done" + this.state.ID} disabled> Item Completed</label><br />
                 <p className="small_info"> {this.state.hide ? "Hidden" : ""} </p>
@@ -439,9 +468,9 @@ class PB extends React.Component {
         this.handleHiddenItems = this.handleHiddenItems.bind(this);
     }
 
-    renderPBI(id, title, description, completed, timestamp, hidden) {
+    renderPBI(id, title, description, completed, timestamp, hidden, inprogress) {
         return (
-            <PBI id={id} title={title} description={description} completed={completed} timestamp={timestamp} hidden={hidden} hiddenPB={this.state.hidePbiItems} />
+            <PBI id={id} title={title} description={description} completed={completed} timestamp={timestamp} hidden={hidden} hiddenPB={this.state.hidePbiItems} inprogress={inprogress}/>
         );
     };
 
@@ -524,7 +553,7 @@ class PB extends React.Component {
             }
 
             return (
-                <div key={object.id} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed, object.data().timestamp, object.data().hidden)}</div>
+                <div key={object.id} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed, object.data().timestamp, object.data().hidden, object.data().inprogress)}</div>
             );
         });
 

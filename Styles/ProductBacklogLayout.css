@@ -151,8 +151,7 @@ h1.pbm {
     display: none;
 }
 /********************************** React Status Items **********************************/
-
-.status{
+.status {
     display: block;
     text-align: left;
 }
@@ -246,7 +245,6 @@ h1.pbm {
 }
 
 /********************************** React Modal Items **********************************/
-
 .modal {
     display: block;
     position: fixed;

@@ -17,7 +17,15 @@ function getPbiDatabase(docId) {
 };
 function updatePbiDatabase(docId, completed) {
     if (!readonly) {
-        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).update({ completed: completed });
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).update({ completed: completed, inprogress: false});
+    }
+    else {
+        //Readonly
+    }
+};
+function updatePbiDatabaseWithInprogress(docId, inprogress) {
+    if (!readonly) {
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).update({ inprogress: inprogress });
     }
     else {
         //Readonly
@@ -213,6 +221,8 @@ class ModalPbiView extends React.Component {
                         </select>
                         <br />
                         <br />
+                        <input type="checkbox" id="sample_checked1" name="sample_checked1" checked={false} value="none" disabled />
+                        <label htmlFor="sample_checked1" id="sample_label1" disabled> In Progress </label><br /><br />
                         <input type="checkbox" id="sample_checked" name="sample_checked" checked={false} value="none" disabled />
                         <label htmlFor="sample_checked" disabled> Item Completed</label><br />
                         <br />
@@ -310,13 +320,13 @@ class Stats extends React.Component {
             <hr />
             <div id="stats-display">
                 <h3>Visible Backlog Items:</h3>
-                <p className="padding-right"><span className="bolder">In Progress: </span> Defects: <span className="status-defect">{this.props.stats.visible.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.visible.inProgressStory} </span></p>
+                <p className="padding-right"><span className="bolder">Available: </span> Defects: <span className="status-defect">{this.props.stats.visible.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.visible.inProgressStory} </span></p>
                 <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.visible.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.visible.completedStory}</span> </p>
                 <h3>Hidden Backlog Items:</h3>
-                <p className="padding-right"><span className="bolder">In Progress: </span> Defects: <span className="status-defect">{this.props.stats.hidden.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.hidden.inProgressStory} </span></p>
+                <p className="padding-right"><span className="bolder">Available: </span> Defects: <span className="status-defect">{this.props.stats.hidden.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.hidden.inProgressStory} </span></p>
                 <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.hidden.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.hidden.completedStory}</span> </p>
                 <h3>Total Backlog Items:</h3>
-                <p className="padding-right"><span className="bolder">In Progress: </span> Defects: <span className="status-defect">{this.props.stats.total.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.total.inProgressStory} </span></p>
+                <p className="padding-right"><span className="bolder">Available: </span> Defects: <span className="status-defect">{this.props.stats.total.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.total.inProgressStory} </span></p>
                 <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.total.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.total.completedStory}</span> </p>
             </div>
                 <a id="hideShowLink" href="#null" onClick={this.props.action} >{hiddenText}</a>
@@ -336,7 +346,8 @@ class PBI extends React.Component {
             shadowColor: "PBI " + (this.props.completed ? "box_shadow_green" : this.props.isStory ? "box_shadow_blue" : "box_shadow_red"),
             completed: this.props.completed,
             ID: this.props.id,
-            hide: hiddenState
+            hide: hiddenState,
+            inprogress: this.props.inprogress == null ? false : this.props.inprogress
         }
     }
 
@@ -359,6 +370,9 @@ class PBI extends React.Component {
                 document.getElementById('title').value = this.props.title;
                 document.getElementById('description').value = this.props.description;
                 document.getElementById('story-selector').selectedIndex = this.props.isStory ? 0 : 1;
+                document.getElementById('sample_checked1').checked = this.state.inprogress;
+                document.getElementById('sample_checked1').hidden = this.state.completed;
+                document.getElementById('sample_label1').hidden = this.state.completed;
                 document.getElementById('sample_checked').checked = this.state.completed;
                 document.getElementById('modalID').innerText = this.state.ID;
                 document.getElementById('modalTimestamp').innerText = this.props.timestamp;
@@ -392,7 +406,7 @@ class PBI extends React.Component {
                         if (confirms) {
                             updatePbiDatabase(this.state.ID, !this.state.completed)
                                 .then(() => {
-                                    this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : this.props.isStory ? "box_shadow_blue" : "box_shadow_red"), completed: !this.state.completed, ID: this.state.ID });
+                                    this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : this.props.isStory ? "box_shadow_blue" : "box_shadow_red"), completed: !this.state.completed, ID: this.state.ID, inprogress: false });
                                 })
                                 .catch((error) => {
                                 });
@@ -401,7 +415,20 @@ class PBI extends React.Component {
 
                 });
             }
-            else {
+            else if (e.target.id == ("inprogress" + this.state.ID)) {
+                getPbiDatabase(this.state.ID).then((doc) => {
+                    if (doc.exists) {
+                        updatePbiDatabaseWithInprogress(this.state.ID, !this.state.inprogress)
+                            .then(() => {
+                                this.setState({ inprogress: !this.state.inprogress });
+                            })
+                            .catch((error) => {
+                            });
+                    }
+
+                });
+            }
+            else if (e.target.id != ("inprogressL" + this.state.ID) && e.target.id != ("doneL" + this.state.ID)) {
                 //Present task view
                 sessionStorage.setItem('uid', uid);
                 sessionStorage.setItem('pid', pid);
@@ -411,7 +438,7 @@ class PBI extends React.Component {
             }
         }
         else {
-            if (e.target.id != ("close") && e.target.id != ("edit") && e.target.id != ("hide") && e.target.id != ("done" + this.state.ID)) {
+            if (e.target.id != ("close") && e.target.id != ("edit") && e.target.id != ("hide") && e.target.id != ("done" + this.state.ID) && e.target.id == ("inprogress" + this.state.ID)) {
                 //Present task view
                 sessionStorage.setItem('uid', uid);
                 sessionStorage.setItem('pid', pid);
@@ -433,8 +460,10 @@ class PBI extends React.Component {
                 <hr />
                 <p>Description: {this.props.description}</p>
                 <h3>{this.props.isStory ? "Story" : "Defect"}</h3>
+                <input type="checkbox" id={"inprogress" + this.state.ID} name={"inprogress" + this.state.ID} checked={this.state.inprogress} value="none" hidden={this.state.completed} />
+                <label id={"inprogressL" + this.state.ID} htmlFor={"inprogress" + this.state.ID} disabled hidden={this.state.completed}> In Progress</label><br /><br />
                 <input type="checkbox" id={"done" + this.state.ID} name={"done" + this.state.ID} checked={this.state.completed} value="none" />
-                <label htmlFor={"done" + this.state.ID} disabled> Item Completed</label><br />
+                <label id={"doneL" + this.state.ID} htmlFor={"done" + this.state.ID} disabled> Item Completed</label><br />
                 <p className="small_info"> {this.state.hide ? "Hidden" : ""} </p>
                 <p className="small_info">Timestamp: {this.props.timestamp} </p>
                 <p className="small_info">ID: {this.state.ID}</p>
@@ -451,9 +480,9 @@ class PB extends React.Component {
         this.handleHiddenItems = this.handleHiddenItems.bind(this);
     }
 
-    renderPBI(id, title, description, completed, timestamp, isStory, hidden) {
+    renderPBI(id, title, description, completed, timestamp, isStory, hidden, inprogress) {
         return (
-            <PBI id={id} title={title} description={description} completed={completed} timestamp={timestamp} isStory={isStory} hidden={hidden} hiddenPB={this.state.hidePbiItems} />
+            <PBI id={id} title={title} description={description} completed={completed} timestamp={timestamp} isStory={isStory} hidden={hidden} hiddenPB={this.state.hidePbiItems} inprogress={inprogress}/>
             );
     };
 
@@ -559,7 +588,7 @@ class PB extends React.Component {
                 statsGroup.total.inProgressDefect++;
             }
             return (
-                <div key={object.id} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed, object.data().timestamp, object.data().isStory, object.data().hidden)}</div>
+                <div key={object.id} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed, object.data().timestamp, object.data().isStory, object.data().hidden, object.data().inprogress)}</div>
                 );
         });
 
