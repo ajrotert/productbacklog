@@ -553,57 +553,61 @@ class PB extends React.Component {
 }
 
 const domContainer = document.querySelector('#root');
+start();
 
-if (uid == null) {
-    ReactDOM.render(<NotAuthError />, domContainer);
-    document.getElementById('loading-gif').style.display = 'none';
-}
-else if (pid == null) {
-    ReactDOM.render(<NoProjectError />, domContainer);
-    document.getElementById('loading-gif').style.display = 'none';
-}
-else if (bid == null) {
-    ReactDOM.render(<NoBacklogItemError />, domContainer);
-    document.getElementById('loading-gif').style.display = 'none';
-}
-else {
-    db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog')
-        .onSnapshot((snapshot) => {
-            ReactDOM.render(<PB data={snapshot} />, domContainer, () => {
-                var inProgressItems = document.getElementById('grid1');
-                var completedItems = document.getElementById('grid2');
-                var completedNodeList = new Array(0);
-                var inProgressNodeList = new Array(0);
-                inProgressItems.childNodes.forEach((node) => {
-                    if (node.className === 'true') {
-                        completedNodeList.push(node);
+async function start() {
+    if (uid == null) {
+        ReactDOM.render(<NotAuthError />, domContainer);
+        document.getElementById('loading-gif').style.display = 'none';
+    }
+    else if (pid == null) {
+        ReactDOM.render(<NoProjectError />, domContainer);
+        document.getElementById('loading-gif').style.display = 'none';
+    }
+    else if (bid == null) {
+        ReactDOM.render(<NoBacklogItemError />, domContainer);
+        document.getElementById('loading-gif').style.display = 'none';
+    }
+    else {
+        db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog')
+            .onSnapshot((snapshot) => {
+                ReactDOM.render(<PB data={snapshot} />, domContainer, () => {
+                    var inProgressItems = document.getElementById('grid1');
+                    var completedItems = document.getElementById('grid2');
+                    var completedNodeList = new Array(0);
+                    var inProgressNodeList = new Array(0);
+                    inProgressItems.childNodes.forEach((node) => {
+                        if (node.className === 'true') {
+                            completedNodeList.push(node);
+                        }
+                    });
+                    completedItems.childNodes.forEach((node) => {
+                        if (node.className === 'false') {
+                            inProgressNodeList.push(node);
+                        }
+                    });
+                    completedNodeList.forEach((node) => {
+                        completedItems.appendChild(node);
+                    });
+                    inProgressNodeList.forEach((node) => {
+                        inProgressItems.appendChild(node);
+                    });
+                    if (inProgressItems.childNodes.length > completedItems.childNodes.length) {
+
+                        inProgressItems.className = "grid_border_right";
+                        completedItems.className = "";
+                    }
+                    else {
+                        inProgressItems.className = "";
+                        completedItems.className = "grid_border_left";
                     }
                 });
-                completedItems.childNodes.forEach((node) => {
-                    if (node.className === 'false') {
-                        inProgressNodeList.push(node);
-                    }
-                });
-                completedNodeList.forEach((node) => {
-                    completedItems.appendChild(node);
-                });
-                inProgressNodeList.forEach((node) => {
-                    inProgressItems.appendChild(node);
-                });
-                if (inProgressItems.childNodes.length > completedItems.childNodes.length) {
 
-                    inProgressItems.className = "grid_border_right";
-                    completedItems.className = "";
-                }
-                else {
-                    inProgressItems.className = "";
-                    completedItems.className = "grid_border_left";
-                }
+                document.getElementById('loading-gif').style.display = 'none';
+
             });
 
-            document.getElementById('loading-gif').style.display = 'none';
-
-        })
+    }
 }
 
 //Prevent user from changing values
