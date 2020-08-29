@@ -438,7 +438,7 @@ class PBI extends React.Component {
             }
         }
         else {
-            if (e.target.id != ("close") && e.target.id != ("edit") && e.target.id != ("hide") && e.target.id != ("done" + this.state.ID) && e.target.id == ("inprogress" + this.state.ID)) {
+            if (e.target.id != ("close") && e.target.id != ("edit") && e.target.id != ("hide") && e.target.id != ("done" + this.state.ID) && e.target.id != ("inprogress" + this.state.ID)) {
                 //Present task view
                 sessionStorage.setItem('uid', uid);
                 sessionStorage.setItem('pid', pid);
