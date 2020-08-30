@@ -33,6 +33,7 @@
     <None Include="Scripts\online-connection.js" />
     <None Include="Tasks.html" />
     <None Include="Scripts\react-tasks.js" />
+    <None Include="Images\PBDWebLogo.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
