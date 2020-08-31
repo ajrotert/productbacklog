@@ -618,7 +618,7 @@ class PB extends React.Component {
     }
 }
 
-const domContainer = document.querySelector('#root');
+const domContainer = document.querySelector('#root'); 
 start();
 
 async function start() {
