@@ -270,8 +270,10 @@ class ModalShareView extends React.Component {
 class Stats extends React.Component {
     constructor(props) {
         super(props);
+        const hidden = localStorage.getItem('PBSTATSAREAHIDDEN');
         this.state = {
-            carrot: '\u2571\u2572'
+            carrot: '\u2571\u2572',
+            hidden: hidden == null ? 'false' : hidden
         };
     }
     toggleContent = (event) => {
@@ -283,13 +285,15 @@ class Stats extends React.Component {
             if (ids.classList.contains('hide-const')) {
                 ids.classList.remove('hide-const');
                 ids.style.opacity = 0;
+                localStorage.setItem('PBSTATSAREAHIDDEN', 'false');
                 this.setState({ carrot: pointsUp });
                 intervalID = setInterval(buildOpacity, 15, ids);
             }
             else {
                 ids.style.opacity = 1;
-                intervalID = setInterval(dropOpacity, 15, ids);
+                localStorage.setItem('PBSTATSAREAHIDDEN', 'true');
                 this.setState({ carrot: pointsDown });
+                intervalID = setInterval(dropOpacity, 15, ids);
             }
         }
 
@@ -318,7 +322,7 @@ class Stats extends React.Component {
     return (
         <div className="status" onClick={(e) => this.toggleContent(event)}>
             <hr />
-            <div id="stats-display">
+            <div id="stats-display" className={this.state.hidden == 'true' ? "hide-const" : ""}>
                 <h3>Visible Backlog Items:</h3>
                 <p className="padding-right"><span className="bolder">Available: </span> Defects: <span className="status-defect">{this.props.stats.visible.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.visible.inProgressStory} </span></p>
                 <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.visible.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.visible.completedStory}</span> </p>

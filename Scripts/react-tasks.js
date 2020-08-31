@@ -270,8 +270,10 @@ class ModalShareView extends React.Component {
 class Stats extends React.Component {
     constructor(props) {
         super(props);
+        const hidden = localStorage.getItem('TASKSTATSAREAHIDDEN');
         this.state = {
-            carrot: '\u2571\u2572'
+            carrot: '\u2571\u2572',
+            hidden: hidden == null ? 'false' : hidden
         };
     }
     toggleContent = (event) => {
@@ -284,12 +286,14 @@ class Stats extends React.Component {
                 ids.classList.remove('hide-const');
                 ids.style.opacity = 0;
                 this.setState({ carrot: pointsUp });
+                localStorage.setItem('TASKSTATSAREAHIDDEN', 'false');
                 intervalID = setInterval(buildOpacity, 15, ids);
             }
             else {
                 ids.style.opacity = 1;
-                intervalID = setInterval(dropOpacity, 15, ids);
+                localStorage.setItem('TASKSTATSAREAHIDDEN', 'true');
                 this.setState({ carrot: pointsDown });
+                intervalID = setInterval(dropOpacity, 15, ids);
             }
         }
 
@@ -318,7 +322,7 @@ class Stats extends React.Component {
         return (
             <div className="status" onClick={(e) => this.toggleContent(event)}>
                 <hr />
-                <div id="stats-display">
+                <div id="stats-display" className={this.state.hidden == 'true' ? "hide-const" : ""}>
                     <h3>Visible Backlog Items:</h3>
                     <p className="padding-right"><span className="bolder">Available: </span> Tasks: <span className="status-story">{this.props.stats.visible.inProgressTask}</span> </p>
                     <p className="padding-right"><span className="bolder">Completed: </span>Tasks: <span className="status-completed">{this.props.stats.visible.completedTask}</span> </p>
