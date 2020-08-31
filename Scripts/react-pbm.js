@@ -6,6 +6,8 @@ const readonly = (sessionStorage.getItem('readonly') == null ? true : sessionSto
 const project_name = sessionStorage.getItem('project_name');
 const hiddenText = "View hidden items";
 const showText = "Stop viewing hidden items";
+const SHOW_IN_PROGRESS_ITEMS = "Show in progress items";
+const SHOW_ALL_ITEMS = "Show all items";
 
 function getPbiDatabase(docId) {
     if (!readonly) {
@@ -107,6 +109,22 @@ function updateHiddenAttributes(show) {
         var hideItems = document.getElementsByClassName('hide');
         for (var a = 0; a < hideItems.length; a++) {
             hideItems[a].style.display = 'none';
+        };
+    }
+}
+function updateInProgressAttributes(showOnly) {
+
+    if (showOnly) {
+        var hideItems = document.getElementsByClassName('inprogress-not-selector');
+        console.log(hideItems);
+        for (var a = 0; a < hideItems.length; a++) {
+            hideItems[a].style.display = 'none';
+        };
+    }
+    else {
+        var hideItems = document.getElementsByClassName('inprogress-not-selector');
+        for (var a = 0; a < hideItems.length; a++) {
+            hideItems[a].style.display = 'block';
         };
     }
 }
@@ -281,7 +299,7 @@ class Stats extends React.Component {
         var ids = document.getElementById("stats-display");
         const pointsUp = '\u2571\u2572';
         const pointsDown = '\u2572\u2571';
-        if (event.target.id != 'hideShowLink') {
+        if (!event.target.id.includes('hideShowLink')) {
             if (ids.classList.contains('hide-const')) {
                 ids.classList.remove('hide-const');
                 ids.style.opacity = 0;
@@ -333,7 +351,8 @@ class Stats extends React.Component {
                 <p className="padding-right"><span className="bolder">Available: </span> Defects: <span className="status-defect">{this.props.stats.total.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.total.inProgressStory} </span></p>
                 <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.total.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.total.completedStory}</span> </p>
             </div>
-                <a id="hideShowLink" href="#null" onClick={this.props.action} >{hiddenText}</a>
+            <a id="hideShowLink" className="stats-links" href="#null" onClick={this.props.action} >{hiddenText}</a><br />
+            <a id="hideShowLink-inprogress" className="stats-links" href="#null" onClick={this.props.action2} >{SHOW_IN_PROGRESS_ITEMS}</a>
                 <div id="carrot"> <center> <span>{this.state.carrot}</span> </center></div>
                 <hr />
             </div>
@@ -411,6 +430,7 @@ class PBI extends React.Component {
                             updatePbiDatabase(this.state.ID, !this.state.completed)
                                 .then(() => {
                                     this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : this.props.isStory ? "box_shadow_blue" : "box_shadow_red"), completed: !this.state.completed, ID: this.state.ID, inprogress: false });
+                                    updateInProgressAttributes(this.props.showInprogress);
                                 })
                                 .catch((error) => {
                                 });
@@ -425,6 +445,7 @@ class PBI extends React.Component {
                         updatePbiDatabaseWithInprogress(this.state.ID, !this.state.inprogress)
                             .then(() => {
                                 this.setState({ inprogress: !this.state.inprogress });
+                                updateInProgressAttributes(this.props.showInprogress);
                             })
                             .catch((error) => {
                             });
@@ -455,7 +476,7 @@ class PBI extends React.Component {
     }
     render() {
         return (
-            <div className={this.state.shadowColor + (this.state.hide ? " hide" : "")} id={this.state.id} onClick={(e) => this.updateHandler(e)}>
+            <div className={this.state.shadowColor + (this.state.hide ? " hide" : "") + (this.state.inprogress ? " inprogress-selector" : " inprogress-not-selector")} id={this.state.id} onClick={(e) => this.updateHandler(e)}>
                 <span className="button_icons" id="close">&times;</span>
                 <span className="button_icons" id="edit" >✎</span>
                 <span className="button_icons" id="hide" >☌</span>
@@ -479,14 +500,16 @@ class PB extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            hidePbiItems: true
+            hidePbiItems: true,
+            showInprogress: false
         }
         this.handleHiddenItems = this.handleHiddenItems.bind(this);
+        this.toggleInprogress = this.toggleInprogress.bind(this);
     }
 
     renderPBI(id, title, description, completed, timestamp, isStory, hidden, inprogress) {
         return (
-            <PBI id={id} title={title} description={description} completed={completed} timestamp={timestamp} isStory={isStory} hidden={hidden} hiddenPB={this.state.hidePbiItems} inprogress={inprogress}/>
+            <PBI id={id} title={title} description={description} completed={completed} timestamp={timestamp} isStory={isStory} hidden={hidden} hiddenPB={this.state.hidePbiItems} showInprogress={this.state.showInprogress} inprogress={inprogress}/>
             );
     };
 
@@ -513,6 +536,17 @@ class PB extends React.Component {
 
         
     };
+    toggleInprogress = (event) => {
+        var show = event.target.innerText == SHOW_IN_PROGRESS_ITEMS;
+        updateInProgressAttributes(show);
+        this.setState({ showInprogress: !this.state.showInprogress });
+        if (show) {
+            event.target.innerText = SHOW_ALL_ITEMS;
+        }
+        else {
+            event.target.innerText = SHOW_IN_PROGRESS_ITEMS;
+        }
+    }
 
     static getDerivedStateFromError(error) {
         console.log(`Error ${error}`);
@@ -603,7 +637,7 @@ class PB extends React.Component {
                     <a id="shareLink" href="#null" onClick={this.shareLink}>Get Shareable Readonly Code</a>
                 </div>
 
-                <Stats stats={statsGroup} action={this.handleHiddenItems} />
+                <Stats stats={statsGroup} action={this.handleHiddenItems} action2={this.toggleInprogress} />
 
                 <div id="grid1" className="grid_border_right">
                     <h1 className="grid_border_bottom">Backlog</h1>

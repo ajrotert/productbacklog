@@ -284,7 +284,7 @@ class ModalShareView extends React.Component {
     }
 }
 
-//Properties: stats
+//Properties: stats, action, action2
 class Stats extends React.Component {
     constructor(props) {
         super(props);
