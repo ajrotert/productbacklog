@@ -124,7 +124,8 @@ function updateInProgressAttributes(showOnly) {
     else {
         var hideItems = document.getElementsByClassName('inprogress-not-selector');
         for (var a = 0; a < hideItems.length; a++) {
-            hideItems[a].style.display = 'block';
+            if (!hideItems[a].classList.contains('hide'))
+                hideItems[a].style.display = 'block';
         };
     }
 }
