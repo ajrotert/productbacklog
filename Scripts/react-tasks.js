@@ -359,7 +359,7 @@ class Stats extends React.Component {
     }
 }
 
-//Properties: id, title, description, completed, timestamp, hidden, hiddenPB, showInprogress, inprogress
+//Properties: id, title, description, completed, timestamp, hidden, hiddenPB, showInprogress, inprogress 
 class PBI extends React.Component {
     constructor(props) {
         super(props);
