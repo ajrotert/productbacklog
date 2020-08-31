@@ -219,7 +219,7 @@ h1.pbm {
     color: #36FF54;
     text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
 }
-#hideShowLink {
+#stats-links {
     clear: left;
 }
 #carrot{
