@@ -84,7 +84,7 @@ var sticky = navbar.offsetTop;
 function myFunction() {
     var title = document.title;
 
-    if (title.includes("Online") || title.includes("Projects")) {
+    if (title.includes("Online") || title.includes("Projects") || title.includes("Tasks")) {
         if (window.pageYOffset >= sticky) {
             navbar.classList.add("sticky");
         } else {
