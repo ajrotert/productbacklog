@@ -5,8 +5,8 @@ const pid = sessionStorage.getItem('pid');  //Project ID
 const bid = sessionStorage.getItem('bid');  //Backlog ID
 const readonly = (sessionStorage.getItem('readonly') == null ? true : sessionStorage.getItem('readonly') == 'true' ? true : false);
 const backlog_title = sessionStorage.getItem('backlog_title');
-const hiddenText = "View hidden items";
-const showText = "Stop viewing hidden items";
+const SHOW_HIDDEN_ITEMS = "Show hidden items";
+const STOP_SHOWING_HIDDEN_ITEMS = "Stop showing hidden items";
 const SHOW_IN_PROGRESS_ITEMS = "Show in progress items";
 const SHOW_ALL_ITEMS = "Show all items";
 
@@ -36,7 +36,7 @@ function updatePbiDatabaseWithInprogress(docId, inprogress) {
 };
 function hidePbiDatabase(docId, hidden) {
     if (!readonly) {
-        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).update({ hidden: hidden });
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).update({ hidden: hidden, inprogress: false });
     }
     else {
         //Readonly
@@ -117,9 +117,9 @@ function updateInProgressAttributes(showOnly) {
     
     if (showOnly) {
         var hideItems = document.getElementsByClassName('inprogress-not-selector');
-        console.log(hideItems);
         for (var a = 0; a < hideItems.length; a++) {
-            hideItems[a].style.display = 'none';
+            if (!hideItems[a].classList.contains('hide'))
+                hideItems[a].style.display = 'none';
         };
     }
     else {
@@ -351,7 +351,7 @@ class Stats extends React.Component {
                     <p className="padding-right"><span className="bolder">Available: </span> Tasks: <span className="status-story">{this.props.stats.total.inProgressTask}</span> </p>
                     <p className="padding-right"><span className="bolder">Completed: </span>Tasks: <span className="status-completed">{this.props.stats.total.completedTask}</span> </p>
                 </div>
-                <a id="hideShowLink" className="stats-links" href="#null" onClick={this.props.action} >{hiddenText}</a><br />
+                <a id="hideShowLink" className="stats-links" href="#null" onClick={this.props.action} >{SHOW_HIDDEN_ITEMS}</a><br />
                 <a id="hideShowLink-inprogress" className="stats-links" href="#null" onClick={this.props.action2} >{SHOW_IN_PROGRESS_ITEMS}</a>
                 <div id="carrot"> <center> <span>{this.state.carrot}</span> </center></div>
                 <hr />
@@ -402,23 +402,17 @@ class PBI extends React.Component {
 
             }
             else if (e.target.id == ("hide")) {
-                if ((!this.props.hiddenPB && this.state.hide) || this.props.hiddenPB) {
-                    var confirms = true;
-                    if (!this.state.hide) {
-                        confirms = window.confirm(`Hide: ${this.props.title}?`);
-                    }
-                    if (confirms) {
-                        hidePbiDatabase(this.state.ID, !this.state.hide)
-                            .then(() => {
-                                this.setState({ hide: !this.state.hide });
-                                updateHiddenAttributes(!this.props.hiddenPB);
-                            })
-                        //Update hidden labels.
-                    }
-
+                var confirms = true;
+                if (!this.state.hide) {
+                    confirms = window.confirm(`Hide: ${this.props.title}?`);
                 }
-                else {
-                    window.alert("Cannot hide product backlog items when: \"" + hiddenText + "\" is selected.");
+                if (confirms) {
+                    hidePbiDatabase(this.state.ID, !this.state.hide)
+                        .then(() => {
+                            this.setState({ hide: !this.state.hide, inprogress: false });
+                            updateHiddenAttributes(!this.props.hiddenPB);
+                        })
+                    //Update hidden labels.
                 }
 
             }
@@ -440,18 +434,24 @@ class PBI extends React.Component {
                 });
             }
             else if (e.target.id == ("inprogress" + this.state.ID)) {
-                getPbiDatabase(this.state.ID).then((doc) => {
-                    if (doc.exists) {
-                        updatePbiDatabaseWithInprogress(this.state.ID, !this.state.inprogress)
-                            .then(() => {
-                                this.setState({ inprogress: !this.state.inprogress });
-                                updateInProgressAttributes(this.props.showInprogress);
-                            })
-                            .catch((error) => {
-                            });
-                     }
+                if (!this.state.hide) {
+                    getPbiDatabase(this.state.ID).then((doc) => {
+                        if (doc.exists) {
+                            updatePbiDatabaseWithInprogress(this.state.ID, !this.state.inprogress)
+                                .then(() => {
+                                    this.setState({ inprogress: !this.state.inprogress });
+                                    updateInProgressAttributes(this.props.showInprogress);
+                                })
+                                .catch((error) => {
+                                });
+                        }
 
-                });
+                    });
+                }
+                else {
+                    window.alert("Cannot set in progress when product backlog item is hidden.");
+                }
+                
             }
 
         }
@@ -471,7 +471,7 @@ class PBI extends React.Component {
                 <hr />
                 <p>Description: {this.props.description}</p>
                 <h3>Task</h3>
-                <input type="checkbox" id={"inprogress" + this.state.ID} name={"inprogress" + this.state.ID} checked={this.state.inprogress} value="none" hidden={this.state.completed} />
+                <input type="checkbox" id={"inprogress" + this.state.ID} name={"inprogress" + this.state.ID} checked={this.state.inprogress} value="none" hidden={this.state.completed} disabled={this.state.hide}/>
                 <label htmlFor={"inprogress" + this.state.ID} disabled hidden={this.state.completed}> In Progress</label><br /><br/>
                 <input type="checkbox" id={"done" + this.state.ID} name={"done" + this.state.ID} checked={this.state.completed} value="none" />
                 <label htmlFor={"done" + this.state.ID} disabled> Item Completed</label><br />
@@ -512,14 +512,14 @@ class PB extends React.Component {
     };
 
     handleHiddenItems = (event) => {
-        var show = event.target.innerText == hiddenText;
+        var show = event.target.innerText == SHOW_HIDDEN_ITEMS;
         this.setState({ hidePbiItems: !this.state.hidePbiItems });
         updateHiddenAttributes(show);
         if (show) {
-            event.target.innerText = showText;
+            event.target.innerText = STOP_SHOWING_HIDDEN_ITEMS;
         }
         else {
-            event.target.innerText = hiddenText;
+            event.target.innerText = SHOW_HIDDEN_ITEMS;
         }
 
 
