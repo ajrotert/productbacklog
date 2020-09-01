@@ -150,6 +150,10 @@ h1.pbm {
 .hide-const {
     display: none;
 }
+.bigger{
+    font-weight: 700;
+    font-size: 125%;
+}
 /********************************** React Status Items **********************************/
 .status {
     display: block;

@@ -69,6 +69,9 @@ function generatePbiModalPopup(shadowColor = null, hide = false) {
         //Readonly
     }
 }
+function getProjectDocFromDatabase() {
+    return db.collection('users').doc(uid).collection('Projects').doc(pid).get();
+};
 
 function generateShareCodeFromDatabase(longShareCode) {
     var foundInDatabase = false;
@@ -281,6 +284,38 @@ class ModalShareView extends React.Component {
             </div>
 
             );
+    }
+}
+
+class Heading extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            description: "Loading description..."
+        };
+    }
+
+    componentDidMount() {
+        getProjectDocFromDatabase()
+            .then((doc) => {
+                this.setState({ description: doc.data().description });
+            });
+    }
+
+    shareLink() {
+        var shareCode = uid + '»' + pid
+        generateShareCodeFromDatabase(shareCode)
+    };
+
+    render() {
+        return (
+            <div>
+                <h1 className="pages">{this.props.project_name}</h1>
+                <p className="bigger">Description: {this.state.description}</p>
+                <a id="shareLink" href="#null" onClick={this.shareLink}>Get Shareable Readonly Code</a>
+            </div>
+        );
+
     }
 }
 
@@ -516,11 +551,6 @@ class PB extends React.Component {
         
     };
 
-    shareLink() {
-        var shareCode = uid + '»' + pid
-        generateShareCodeFromDatabase(shareCode)
-    };
-
     handleHiddenItems = (event) => {
         var show = event.target.innerText == SHOW_HIDDEN_ITEMS;
         this.setState({ hidePbiItems: !this.state.hidePbiItems });
@@ -630,10 +660,8 @@ class PB extends React.Component {
 
         return (
             <div className="grid-container">
-                <div>
-                    <h1 className="pages">{project_name}</h1>
-                    <a id="shareLink" href="#null" onClick={this.shareLink}>Get Shareable Readonly Code</a>
-                </div>
+
+                <Heading project_name={project_name} />
 
                 <Stats stats={statsGroup} action={this.handleHiddenItems} action2={this.toggleInprogress} />
 

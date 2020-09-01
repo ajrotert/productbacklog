@@ -49,6 +49,10 @@ function deleteProjectFromDatabase(docId) {
     else {
         //Readonly
     }
+
+};
+function getPbiDocFromDatabase() {
+    return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).get();
 };
 
 const copyToClipboard = str => {
@@ -284,6 +288,38 @@ class ModalShareView extends React.Component {
         );
     }
 }
+//Properties: backlog_title
+class Heading extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            description: "Loading description..."
+        };
+    }
+
+    componentDidMount() {
+        getPbiDocFromDatabase()
+            .then((doc) => {
+                this.setState({ description: doc.data().description });
+            });
+    }
+
+    shareLink() {
+        var shareCode = uid + '»' + pid
+        generateShareCodeFromDatabase(shareCode)
+    };
+
+    render() {
+        return (
+            <div>
+                <h1 className="pages">Product Backlog Item: {this.props.backlog_title}</h1>
+                <p className="bigger">Product Backlog Description: {this.state.description}</p>
+                <a id="shareLink" href="#null" onClick={this.shareLink}>Get Shareable Readonly Code</a>
+            </div>
+        );
+        
+    }
+}
 
 //Properties: stats, action, action2
 class Stats extends React.Component {
@@ -507,11 +543,6 @@ class PB extends React.Component {
 
     };
 
-    shareLink() {
-        var shareCode = uid + '»' + pid
-        generateShareCodeFromDatabase(shareCode)
-    };
-
     handleHiddenItems = (event) => {
         var show = event.target.innerText == SHOW_HIDDEN_ITEMS;
         this.setState({ hidePbiItems: !this.state.hidePbiItems });
@@ -598,10 +629,8 @@ class PB extends React.Component {
 
         return (
             <div className="grid-container">
-                <div>
-                    <h1 className="pages">Product Backlog Item: {backlog_title}</h1>
-                    <a id="shareLink" href="#null" onClick={this.shareLink}>Get Shareable Readonly Code</a>
-                </div>
+
+                <Heading backlog_title={backlog_title} />
 
                 <Stats stats={statsGroup} action={this.handleHiddenItems} action2={this.toggleInprogress} />
 
