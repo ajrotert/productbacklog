@@ -327,7 +327,7 @@ class Stats extends React.Component {
             node.style.opacity = opacity;
             if (node.style.opacity <= 0) {
                 clearInterval(intervalID);
-                node.classList.add('hide-const');
+                node.classList.add('hide-const'); 
 
             }
         };
