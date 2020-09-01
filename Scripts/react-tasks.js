@@ -340,6 +340,7 @@ class Stats extends React.Component {
         return (
             <div className="status" onClick={(e) => this.toggleContent(event)}>
                 <hr />
+                <div> {readonly ? <h1 className="readonly-link">READ-ONLY</h1> : null}</div>
                 <div id="stats-display" className={this.state.hidden == 'true' ? "hide-const" : ""}>
                     <h3>Visible Backlog Items:</h3>
                     <p className="padding-right"><span className="bolder">Available: </span> Tasks: <span className="status-story">{this.props.stats.visible.inProgressTask}</span> </p>

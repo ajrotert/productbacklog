@@ -243,7 +243,14 @@ h1.pbm {
 .clears {
     clear: both;
 }
+/********************************** React readonly Items **********************************/
 
+.readonly-link{
+    color: red;
+    float: right;
+    clear: both;
+    font-weight: 900;
+}
 /********************************** React Modal Items **********************************/
 .modal {
     display: block;
