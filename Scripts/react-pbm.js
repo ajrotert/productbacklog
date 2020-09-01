@@ -3,7 +3,6 @@ var db = firebase.firestore();
 const uid = sessionStorage.getItem('uid');  //User ID
 const pid = sessionStorage.getItem('pid');  //Project ID
 const readonly = (sessionStorage.getItem('readonly') == null ? true : sessionStorage.getItem('readonly') == 'true' ? true : false);
-const project_name = sessionStorage.getItem('project_name');
 const SHOW_HIDDEN_ITEMS = "Show hidden items";
 const STOP_SHOWING_HIDDEN_ITEMS = "Stop showing hidden items";
 const SHOW_IN_PROGRESS_ITEMS = "Show in progress items";
@@ -48,6 +47,9 @@ function deleteProjectFromDatabase(docId) {
     else {
         //Readonly
     }
+};
+function getTasksDatabase(bid) {
+      return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').get();
 };
 
 const copyToClipboard = str => {
@@ -291,6 +293,7 @@ class Heading extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            title: "Loading name...",
             description: "Loading description..."
         };
     }
@@ -298,7 +301,7 @@ class Heading extends React.Component {
     componentDidMount() {
         getProjectDocFromDatabase()
             .then((doc) => {
-                this.setState({ description: doc.data().description });
+                this.setState({ description: doc.data().description, title: doc.data().name});
             });
     }
 
@@ -310,7 +313,7 @@ class Heading extends React.Component {
     render() {
         return (
             <div>
-                <h1 className="pages">{this.props.project_name}</h1>
+                <h1 className="pages">{this.state.title}</h1>
                 <p className="bigger">Description: {this.state.description}</p>
                 <a id="shareLink" href="#null" onClick={this.shareLink}>Get Shareable Readonly Code</a>
             </div>
@@ -386,7 +389,8 @@ class Stats extends React.Component {
                 <p className="padding-right"><span className="bolder">Available: </span> Defects: <span className="status-defect">{this.props.stats.total.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.total.inProgressStory} </span></p>
                 <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.total.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.total.completedStory}</span> </p>
             </div>
-            <a id="hideShowLink" className="stats-links padding-left" href="#null" onClick={this.props.action} >{SHOW_HIDDEN_ITEMS}</a><br />
+            <br className="clears" />
+            <a id="hideShowLink" className="stats-links padding-left" href="#null" onClick={this.props.action} >{SHOW_HIDDEN_ITEMS}</a><br className="clears" />
             <a id="hideShowLink-inprogress" className="stats-links padding-left" href="#null" onClick={this.props.action2} >{SHOW_IN_PROGRESS_ITEMS}</a>
                 <div id="carrot"> <center> <span>{this.state.carrot}</span> </center></div>
                 <hr />
@@ -405,7 +409,8 @@ class PBI extends React.Component {
             completed: this.props.completed,
             ID: this.props.id,
             hide: hiddenState,
-            inprogress: this.props.inprogress == null ? false : this.props.inprogress
+            inprogress: this.props.inprogress == null ? false : this.props.inprogress,
+            tasks: "Loading..."
         }
     }
 
@@ -491,7 +496,6 @@ class PBI extends React.Component {
                 sessionStorage.setItem('uid', uid);
                 sessionStorage.setItem('pid', pid);
                 sessionStorage.setItem('bid', this.state.ID);
-                sessionStorage.setItem('backlog_title', this.props.title);
                 window.location.href = 'Tasks.html';
             }
         }
@@ -501,12 +505,21 @@ class PBI extends React.Component {
                 sessionStorage.setItem('uid', uid);
                 sessionStorage.setItem('pid', pid);
                 sessionStorage.setItem('bid', this.state.ID);
-                sessionStorage.setItem('backlog_title', this.props.title);
                 window.location.href = 'Tasks.html';
             }
         }
 
     }
+
+    componentDidMount() {
+        //getTasksDatabase(this.state.ID)
+        //    .then((res) => {
+        //        console.log(res);
+        //        this.setState({ tasks: res.docs.length });
+        //    });                <p className="small_info">Tasks: {this.state.tasks} </p>
+
+    }
+
     render() {
         return (
             <div className={this.state.shadowColor + (this.state.hide ? " hide" : "") + (this.state.inprogress ? " inprogress-selector" : " inprogress-not-selector")} id={this.state.id} onClick={(e) => this.updateHandler(e)}>
@@ -661,7 +674,7 @@ class PB extends React.Component {
         return (
             <div className="grid-container">
 
-                <Heading project_name={project_name} />
+                <Heading />
 
                 <Stats stats={statsGroup} action={this.handleHiddenItems} action2={this.toggleInprogress} />
 

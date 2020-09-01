@@ -4,7 +4,6 @@ const uid = sessionStorage.getItem('uid');  //User ID
 const pid = sessionStorage.getItem('pid');  //Project ID
 const bid = sessionStorage.getItem('bid');  //Backlog ID
 const readonly = (sessionStorage.getItem('readonly') == null ? true : sessionStorage.getItem('readonly') == 'true' ? true : false);
-const backlog_title = sessionStorage.getItem('backlog_title');
 const SHOW_HIDDEN_ITEMS = "Show hidden items";
 const STOP_SHOWING_HIDDEN_ITEMS = "Stop showing hidden items";
 const SHOW_IN_PROGRESS_ITEMS = "Show in progress items";
@@ -288,11 +287,12 @@ class ModalShareView extends React.Component {
         );
     }
 }
-//Properties: backlog_title
+//Properties:
 class Heading extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            title: "Loading title...",
             description: "Loading description..."
         };
     }
@@ -300,7 +300,7 @@ class Heading extends React.Component {
     componentDidMount() {
         getPbiDocFromDatabase()
             .then((doc) => {
-                this.setState({ description: doc.data().description });
+                this.setState({ description: doc.data().description, title: doc.data().title });
             });
     }
 
@@ -312,7 +312,7 @@ class Heading extends React.Component {
     render() {
         return (
             <div>
-                <h1 className="pages">Product Backlog Item: {this.props.backlog_title}</h1>
+                <h1 className="pages">Product Backlog Item: {this.state.title}</h1>
                 <p className="bigger">Product Backlog Description: {this.state.description}</p>
                 <a id="shareLink" href="#null" onClick={this.shareLink}>Get Shareable Readonly Code</a>
             </div>
@@ -630,7 +630,7 @@ class PB extends React.Component {
         return (
             <div className="grid-container">
 
-                <Heading backlog_title={backlog_title} />
+                <Heading />
 
                 <Stats stats={statsGroup} action={this.handleHiddenItems} action2={this.toggleInprogress} />
 
