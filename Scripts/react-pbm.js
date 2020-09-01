@@ -339,7 +339,7 @@ class Stats extends React.Component {
     return (
         <div className="status" onClick={(e) => this.toggleContent(event)}>
             <hr />
-            <div> {readonly ? <h1 className="readonly-link">READ-ONLY</h1> : null}</div>
+            <div> {readonly ? <h1 className="readonly-link">READ-ONLY</h1> : null} <br className="clears" /></div>
             <div id="stats-display" className={this.state.hidden == 'true' ? "hide-const" : ""}>
                 <h3>Visible Backlog Items:</h3>
                 <p className="padding-right"><span className="bolder">Available: </span> Defects: <span className="status-defect">{this.props.stats.visible.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.visible.inProgressStory} </span></p>
@@ -351,8 +351,8 @@ class Stats extends React.Component {
                 <p className="padding-right"><span className="bolder">Available: </span> Defects: <span className="status-defect">{this.props.stats.total.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.total.inProgressStory} </span></p>
                 <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.total.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.total.completedStory}</span> </p>
             </div>
-            <a id="hideShowLink" className="stats-links" href="#null" onClick={this.props.action} >{SHOW_HIDDEN_ITEMS}</a><br />
-            <a id="hideShowLink-inprogress" className="stats-links" href="#null" onClick={this.props.action2} >{SHOW_IN_PROGRESS_ITEMS}</a>
+            <a id="hideShowLink" className="stats-links padding-left" href="#null" onClick={this.props.action} >{SHOW_HIDDEN_ITEMS}</a><br />
+            <a id="hideShowLink-inprogress" className="stats-links padding-left" href="#null" onClick={this.props.action2} >{SHOW_IN_PROGRESS_ITEMS}</a>
                 <div id="carrot"> <center> <span>{this.state.carrot}</span> </center></div>
                 <hr />
             </div>
