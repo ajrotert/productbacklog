@@ -442,37 +442,56 @@ class PBI extends React.Component {
 
             }
             else if (e.target.id == ("hide")) {
+                document.body.style.cursor = 'wait';
                 var confirms = true;
                 if (!this.state.hide) {
+                    document.body.style.cursor = 'default';
                     confirms = window.confirm(`Hide: ${this.props.title}?`);
                 }
                 if (confirms) {
+                    document.body.style.cursor = 'wait';
                     hidePbiDatabase(this.state.ID, !this.state.hide)
                         .then(() => {
                             this.setState({ hide: !this.state.hide, inprogress: false });
                             updateHiddenAttributes(!this.props.hiddenPB);
+                            document.body.style.cursor = 'default';
                         })
+                        .catch((error) => {
+                            document.body.style.cursor = 'default';
+                        });
+                }
+                else {
+                    document.body.style.cursor = 'default';
                 }
 
             }
             else if (e.target.id == ("done" + this.state.ID)) {
+                document.body.style.cursor = 'wait';
                 getPbiDatabase(this.state.ID).then((doc) => {
                     if (doc.exists) {
+                        document.body.style.cursor = 'default';
                         var confirms = window.confirm(`Move: ${this.props.title} \nTo: ${this.state.completed ? "Backlog" : "Completed"}`);
                         if (confirms) {
+                            document.body.style.cursor = 'wait';
                             updatePbiDatabase(this.state.ID, !this.state.completed)
                                 .then(() => {
                                     this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : this.props.isStory ? "box_shadow_blue" : "box_shadow_red"), completed: !this.state.completed, ID: this.state.ID, inprogress: false });
                                     updateInProgressAttributes(this.props.showInprogress);
+                                    document.body.style.cursor = 'default';
                                 })
                                 .catch((error) => {
+                                    document.body.style.cursor = 'default';
                                 });
                         }
+                    }
+                    else {
+                        document.body.style.cursor = 'default';
                     }
 
                 });
             }
             else if (e.target.id == ("inprogress" + this.state.ID)) {
+                document.body.style.cursor = 'wait';
                 if (!this.state.hide) {
                     getPbiDatabase(this.state.ID).then((doc) => {
                         if (doc.exists) {
@@ -480,14 +499,20 @@ class PBI extends React.Component {
                                 .then(() => {
                                     this.setState({ inprogress: !this.state.inprogress });
                                     updateInProgressAttributes(this.props.showInprogress);
+                                    document.body.style.cursor = 'default';
                                 })
                                 .catch((error) => {
+                                    document.body.style.cursor = 'default';
                                 });
+                        }
+                        else {
+                            document.body.style.cursor = 'default';
                         }
 
                     });
                 }
                 else {
+                    document.body.style.cursor = 'default';
                     window.alert("Cannot set in progress when product backlog item is hidden.");
                 }
             }
