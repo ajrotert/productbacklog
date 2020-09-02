@@ -512,7 +512,7 @@ class PBI extends React.Component {
     }
 
     componentDidMount() {
-        //getTasksDatabase(this.state.ID)
+        //getTasksDatabase(this.state.ID)       //This method requires to many database calls. 
         //    .then((res) => {
         //        console.log(res);
         //        this.setState({ tasks: res.docs.length });
