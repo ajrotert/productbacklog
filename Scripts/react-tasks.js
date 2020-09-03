@@ -287,20 +287,66 @@ class ModalShareView extends React.Component {
         );
     }
 }
+
+//Properties: state
+class PBI extends React.Component {
+    constructor(props) {
+        super(props);
+        var hiddenState = this.props.hidden == null ? false : this.props.hidden;        
+    }
+
+    render() {
+        return (
+            <div className={this.props.state.shadowColor} id={this.props.state.id}>
+                <br className="clears" />
+                <h1>{this.props.state.title}</h1>
+                <hr />
+                <p>Description: {this.props.state.description}</p>
+                <h3>{this.props.state.isStory ? "Story" : "Defect"}</h3>
+                <input type="checkbox" id={"inprogress" + this.props.state.ID} name={"inprogress" + this.props.state.ID} checked={this.props.state.inprogress} value="none" hidden={this.props.state.completed} disabled={true} />
+                <label id={"inprogressL" + this.props.state.ID} htmlFor={"inprogress" + this.props.state.ID} hidden={this.props.state.completed}> In Progress</label><br /><br />
+                <input type="checkbox" id={"done" + this.props.state.ID} name={"done" + this.props.state.ID} checked={this.props.state.completed} value="none" disabled={true} />
+                <label id={"doneL" + this.props.state.ID} htmlFor={"done" + this.props.state.ID} disabled> Item Completed</label><br />
+                <p className="small_info"> {this.props.state.hide ? "Hidden" : ""} </p>
+                <p className="small_info">Timestamp: {this.props.state.timestamp} </p>
+                <p className="small_info">ID: {this.props.state.ID}</p>
+            </div>
+        );
+    }
+}
+
 //Properties:
 class Heading extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             title: "Loading title...",
-            description: "Loading description..."
+            description: "Loading description...",
+            isStory: true,
+            completed: false,
+            ID: "Loading id...",
+            inprogress: false,
+            timestamp: "Loading timestamp...",
+            hidden: false,
+            shadowColor: "PBI box_shadow_blue",
+            hide: false
         };
     }
 
     componentDidMount() {
         getPbiDocFromDatabase()
             .then((doc) => {
-                this.setState({ description: doc.data().description, title: doc.data().title });
+                this.setState({
+                    title: doc.data().title,
+                    description: doc.data().description,
+                    isStory: doc.data().isStory,
+                    completed: doc.data().completed,
+                    ID: doc.id,
+                    inprogress: doc.data().inprogress == null ? false : doc.data().inprogress,
+                    timestamp: doc.data().timestamp,
+                    shadowColor: "PBI " + (doc.data().completed ? "box_shadow_green" : doc.data().isStory ? "box_shadow_blue" : "box_shadow_red"),
+                    hide: doc.data().hidden == null ? false : doc.data().hidden
+                });
             });
     }
 
@@ -312,8 +358,8 @@ class Heading extends React.Component {
     render() {
         return (
             <div>
-                <h1 className="pages">Product Backlog Item: {this.state.title}</h1>
-                <p className="bigger">Product Backlog Description: {this.state.description}</p>
+                <h1 className="pages">Selected {this.state.isStory ? "Story" : "Defect"}: </h1>
+                <PBI state={this.state} />
                 <a id="shareLink" href="#null" onClick={this.shareLink}>Get Shareable Readonly Code</a>
             </div>
         );
@@ -398,7 +444,7 @@ class Stats extends React.Component {
 }
 
 //Properties: id, title, description, completed, timestamp, hidden, hiddenPB, showInprogress, inprogress 
-class PBI extends React.Component {
+class Task extends React.Component {
     constructor(props) {
         super(props);
         var hiddenState = this.props.hidden == null ? false : this.props.hidden;
@@ -562,7 +608,7 @@ class PB extends React.Component {
 
     renderPBI(id, title, description, completed, timestamp, hidden, inprogress) {
         return (
-            <PBI id={id} title={title} description={description} completed={completed} timestamp={timestamp} hidden={hidden} hiddenPB={this.state.hidePbiItems} showInprogress={this.state.showInprogress} inprogress={inprogress}/>
+            <Task id={id} title={title} description={description} completed={completed} timestamp={timestamp} hidden={hidden} hiddenPB={this.state.hidePbiItems} showInprogress={this.state.showInprogress} inprogress={inprogress}/>
         );
     };
 

@@ -223,6 +223,15 @@ h1.pbm {
     color: #36FF54;
     text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
 }
+.text-red {
+    color: #ff3333;
+}
+.text-blue {
+    color: #0066FF;
+}
+.text-green {
+    color: #36FF54;
+}
 #stats-links {
     clear: left;
 }
