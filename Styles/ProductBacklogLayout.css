@@ -65,6 +65,15 @@ h1.pbm {
 .PBI:hover{
     opacity: .75;
 }
+.normalizePBIheading {
+    margin: 1em 20%;
+}
+.normalizePBIheading:hover{
+    opacity: 1;
+}
+.normalizePBI:hover{
+    opacity: 1;
+}
     .PBI > h1 {
         font-size: 1.75em;
     }
@@ -264,6 +273,14 @@ h1.pbm {
     clear: both;
     font-weight: 900;
 }
+/********************************** React project Items **********************************/
+
+.project_item {
+    border: 5px #022E6D solid;
+    margin: 1em 20%;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, .5);
+}
+
 /********************************** React Modal Items **********************************/
 .modal {
     display: block;

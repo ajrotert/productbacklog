@@ -14,7 +14,7 @@ var uiConfig = {
         },
         uiShown: function () {
             try {
-
+                document.getElementById('loading-gif').style.display = "none";
             }
             catch (error) {
                 console.log('An error has occured');
@@ -22,7 +22,8 @@ var uiConfig = {
             }
         }
     },
-    signInFlow: 'popup',
+    //immediateFederatedRedirect: false,
+    signInFlow: 'popup', // 'redirect',
     
     signInOptions: [
         {
@@ -34,9 +35,9 @@ var uiConfig = {
         }
     ],
     // Terms of service url.
-    tosUrl: '<https://developednotdownloaded.com>',
+    tosUrl: 'https://developednotdownloaded.com',
     // Privacy policy url.
-    privacyPolicyUrl: '<https://developednotdownloaded.com>'
+    privacyPolicyUrl: 'https://developednotdownloaded.com'
 };
 
 ui.start('#firebaseui-auth-container', uiConfig);
@@ -126,13 +127,13 @@ input.oninput = function validator() {
     validateShareCode();
 };
 
-window.onclose = (() => {
+/*window.onclose = (() => {
     firebase.auth().signOut().then(function () {
         // Sign-out successful.
     }).catch(function (error) {
         // An error happened.
     });
-});
+});*/
 
 //Remove any existing data
 window.onload = function () {

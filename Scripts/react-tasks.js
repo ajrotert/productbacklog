@@ -328,7 +328,7 @@ class Heading extends React.Component {
             inprogress: false,
             timestamp: "Loading timestamp...",
             hidden: false,
-            shadowColor: "PBI box_shadow_blue",
+            shadowColor: "PBI normalizePBIheading box_shadow_blue",
             hide: false
         };
     }
@@ -344,7 +344,7 @@ class Heading extends React.Component {
                     ID: doc.id,
                     inprogress: doc.data().inprogress == null ? false : doc.data().inprogress,
                     timestamp: doc.data().timestamp,
-                    shadowColor: "PBI " + (doc.data().completed ? "box_shadow_green" : doc.data().isStory ? "box_shadow_blue" : "box_shadow_red"),
+                    shadowColor: "PBI normalizePBIheading " + (doc.data().completed ? "box_shadow_green" : doc.data().isStory ? "box_shadow_blue" : "box_shadow_red"),
                     hide: doc.data().hidden == null ? false : doc.data().hidden
                 });
             });
@@ -450,7 +450,7 @@ class Task extends React.Component {
         var hiddenState = this.props.hidden == null ? false : this.props.hidden;
 
         this.state = {
-            shadowColor: "PBI " + (this.props.completed ? "box_shadow_green" : "box_shadow_blue"),
+            shadowColor: "PBI normalizePBI " + (this.props.completed ? "box_shadow_green" : "box_shadow_blue"),
             completed: this.props.completed,
             ID: this.props.id,
             hide: hiddenState,
@@ -519,7 +519,7 @@ class Task extends React.Component {
                             document.body.style.cursor = 'wait';
                             updatePbiDatabase(this.state.ID, !this.state.completed)
                                 .then(() => {
-                                    this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : "box_shadow_blue"), completed: !this.state.completed, ID: this.state.ID, inprogress: false });
+                                    this.setState({ shadowColor: "PBI normalizePBI " + (!this.state.completed ? "box_shadow_green" : "box_shadow_blue"), completed: !this.state.completed, ID: this.state.ID, inprogress: false });
                                     updateInProgressAttributes(this.props.showInprogress);
                                     document.body.style.cursor = 'default';
                                 })

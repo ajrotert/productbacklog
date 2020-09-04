@@ -288,12 +288,28 @@ class ModalShareView extends React.Component {
             );
     }
 }
+//Props: state: name, description
+class Projects extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <div className="project_item" >
+                <h1>{this.props.state.name}</h1>
+                <hr />
+                <h3>{this.props.state.description}</h3>
+            </div>
+        );
+    }
+}
 
 class Heading extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            title: "Loading name...",
+            name: "Loading name...",
             description: "Loading description..."
         };
     }
@@ -301,7 +317,10 @@ class Heading extends React.Component {
     componentDidMount() {
         getProjectDocFromDatabase()
             .then((doc) => {
-                this.setState({ description: doc.data().description, title: doc.data().name});
+                this.setState({
+                    description: doc.data().description,
+                    name: doc.data().name
+                });
             });
     }
 
@@ -313,8 +332,8 @@ class Heading extends React.Component {
     render() {
         return (
             <div>
-                <h1 className="pages">{this.state.title}</h1>
-                <p className="bigger">Description: {this.state.description}</p>
+                <h1 className="pages">Selected Project: </h1>
+                <Projects state={this.state}/>
                 <a id="shareLink" href="#null" onClick={this.shareLink}>Get Shareable Readonly Code</a>
             </div>
         );
