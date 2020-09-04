@@ -17,6 +17,14 @@ function getPbiDatabase(docId) {
         //Readonly
     }
 };
+function getPbiForTaskDatabase(docId) {
+    if (!readonly) {
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).get();
+    }
+    else {
+        //Readonly
+    }
+};
 function updatePbiDatabase(docId, completed) {
     if (!readonly) {
         return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).update({ completed: completed, inprogress: false });
@@ -25,9 +33,25 @@ function updatePbiDatabase(docId, completed) {
         //Readonly
     }
 };
+function updatePbiForTaskDatabase(docId, completed) {
+    if (!readonly) {
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).update({ completed: completed, inprogress: false });
+    }
+    else {
+        //Readonly
+    }
+};
 function updatePbiDatabaseWithInprogress(docId, inprogress) {
     if (!readonly) {
         return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).update({ inprogress: inprogress });
+    }
+    else {
+        //Readonly
+    }
+};
+function updatePbiForTaskDatabaseWithInprogress(docId, inprogress) {
+    if (!readonly) {
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).update({ inprogress: inprogress });
     }
     else {
         //Readonly
@@ -288,11 +312,11 @@ class ModalShareView extends React.Component {
     }
 }
 
-//Properties: state
+//Properties: state, inProgressChecked
 class PBI extends React.Component {
     constructor(props) {
         super(props);
-        var hiddenState = this.props.hidden == null ? false : this.props.hidden;        
+        var hiddenState = this.props.hidden == null ? false : this.props.hidden;
     }
 
     render() {
@@ -303,9 +327,9 @@ class PBI extends React.Component {
                 <hr />
                 <p>Description: {this.props.state.description}</p>
                 <h3>{this.props.state.isStory ? "Story" : "Defect"}</h3>
-                <input type="checkbox" id={"inprogress" + this.props.state.ID} name={"inprogress" + this.props.state.ID} checked={this.props.state.inprogress} value="none" hidden={this.props.state.completed} disabled={true} />
+                <input type="checkbox" id={"inprogress" + this.props.state.ID} name={"inprogress" + this.props.state.ID} checked={this.props.state.inprogress} value="none" hidden={this.props.state.completed} disabled={this.props.state.completed} onChange={this.props.inProgressChecked}/>
                 <label id={"inprogressL" + this.props.state.ID} htmlFor={"inprogress" + this.props.state.ID} hidden={this.props.state.completed}> In Progress</label><br /><br />
-                <input type="checkbox" id={"done" + this.props.state.ID} name={"done" + this.props.state.ID} checked={this.props.state.completed} value="none" disabled={true} />
+                <input type="checkbox" id={"done" + this.props.state.ID} name={"done" + this.props.state.ID} checked={this.props.state.completed} value="none" disabled={false} onChange={this.props.completedChecked} />
                 <label id={"doneL" + this.props.state.ID} htmlFor={"done" + this.props.state.ID} disabled> Item Completed</label><br />
                 <p className="small_info"> {this.props.state.hide ? "Hidden" : ""} </p>
                 <p className="small_info">Timestamp: {this.props.state.timestamp} </p>
@@ -331,6 +355,8 @@ class Heading extends React.Component {
             shadowColor: "PBI normalizePBIheading box_shadow_blue",
             hide: false
         };
+        this.inProgressChecked = this.inProgressChecked.bind(this);
+        this.completedChecked = this.completedChecked.bind(this);
     }
 
     componentDidMount() {
@@ -350,6 +376,56 @@ class Heading extends React.Component {
             });
     }
 
+    inProgressChecked = () => {
+        document.body.style.cursor = 'wait';
+        if (!this.state.hide) {
+            getPbiForTaskDatabase(this.state.ID).then((doc) => {
+                if (doc.exists) {
+                    updatePbiForTaskDatabaseWithInprogress(this.state.ID, !this.state.inprogress)
+                        .then(() => {
+                            this.setState({ inprogress: !this.state.inprogress });
+                            document.body.style.cursor = 'default';
+                        })
+                        .catch((error) => {
+                            document.body.style.cursor = 'default';
+                        });
+                }
+                else {
+                    document.body.style.cursor = 'default';
+                }
+            });
+        }
+        else {
+            document.body.style.cursor = 'default';
+            window.alert("Cannot set in progress when product backlog item is hidden.");
+        }
+    }
+
+    completedChecked = () => {
+        document.body.style.cursor = 'wait';
+        getPbiForTaskDatabase(this.state.ID).then((doc) => {
+            if (doc.exists) {
+                document.body.style.cursor = 'default';
+                var confirms = window.confirm(`Move: ${this.state.title} \nTo: ${this.state.completed ? "Backlog" : "Completed"}`);
+                if (confirms) {
+                    document.body.style.cursor = 'wait';
+                    updatePbiForTaskDatabase(this.state.ID, !this.state.completed)
+                        .then(() => {
+                            this.setState({ shadowColor: "PBI normalizePBIheading " + (!this.state.completed ? "box_shadow_green" : this.state.isStory ? "box_shadow_blue" : "box_shadow_red"), completed: !this.state.completed, ID: this.state.ID, inprogress: false });
+                            document.body.style.cursor = 'default';
+                        })
+                        .catch((error) => {
+                            document.body.style.cursor = 'default';
+                        });
+                }
+            }
+            else {
+                document.body.style.cursor = 'default';
+            }
+
+        });
+    }
+
     shareLink() {
         var shareCode = uid + '»' + pid
         generateShareCodeFromDatabase(shareCode)
@@ -359,7 +435,7 @@ class Heading extends React.Component {
         return (
             <div>
                 <h1 className="pages">Selected {this.state.isStory ? "Story" : "Defect"}: </h1>
-                <PBI state={this.state} />
+                <PBI state={this.state} inProgressChecked={this.inProgressChecked} completedChecked={this.completedChecked}/>
                 <a id="shareLink" href="#null" onClick={this.shareLink}>Get Shareable Readonly Code</a>
             </div>
         );
