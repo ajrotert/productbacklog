@@ -286,7 +286,7 @@ h1.pbm {
     display: block;
     position: fixed;
     z-index: 1;
-    padding-top: 2.5%;
+    padding-top: 2.75%;
     left: 0;
     top: 0;
     width: 100%;
@@ -408,6 +408,9 @@ h1.pbm {
     .samplePBI > select {
         font-size: 100%;
     }
+    .modal {
+        padding-top: 4%;
+    }
 
 }
 
@@ -457,6 +460,9 @@ h1.pbm {
     .small_info {
         font-size: 12px;
     }
+    .modal {
+        padding-top: 7%;
+    }
 }
 
 @media screen and (max-width: 415px) {
@@ -504,6 +510,9 @@ h1.pbm {
     .samplePBI > select {
         font-size: 65%;
     }
+    .modal {
+        padding-top: 10%;
+    }
 }
 
 @media screen and (max-width: 275px) {
@@ -550,5 +559,8 @@ h1.pbm {
 
     .samplePBI > select {
         font-size: 55%;
+    }
+    .modal {
+        padding-top: 10%;
     }
 }
