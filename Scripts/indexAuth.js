@@ -8,6 +8,10 @@ var uiConfig = {
             // Return type determines whether we continue the redirect automatically
             // or whether we leave that to developer to handle.
 
+            console.log(authResult);
+
+            document.getElementById('welcome-label').style.display = 'block';
+            document.getElementById('welcome-user').innerText = `${authResult.user.displayName}`
             document.getElementById('pb-button').style.display = 'block';
 
             return false;
@@ -42,15 +46,6 @@ var uiConfig = {
 
 ui.start('#firebaseui-auth-container', uiConfig);
 
-firebase.auth().onAuthStateChanged(function (user) {
-    if (user) {
-        document.getElementById('welcome-label').style.display = 'block';
-        document.getElementById('welcome-user').innerText = `${user.displayName}`
-
-    } else {
-        document.getElementById('welcome-label').style.display = 'none';
-    }
-});
 function loadPB() {
     if (firebase.auth().currentUser.uid != null) {
         sessionStorage.setItem('uid', firebase.auth().currentUser.uid);
@@ -117,10 +112,13 @@ function validateShareCode() {
 
 var input = document.getElementById("inputShareCode");
 
-input.addEventListener("keyup", function (event) {
+window.addEventListener("keyup", function (event) {
     if (event.keyCode === 13) {
+        if (document.getElementById('pb-button').style.display == 'block' && document.getElementById('startup').style.display != 'none')
+            loadPB();
+        else 
+            shareCodeEntered();
         event.preventDefault();
-        shareCodeEntered();
     }
 });
 input.oninput = function validator() {

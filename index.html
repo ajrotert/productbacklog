@@ -21,65 +21,131 @@
     <link rel="stylesheet" href="Styles/IndexLayout.css" />
 </head>
 <body>
+    <center><img src="Images/productbacklogdev.png" class="logo" alt="Logo" /></center>
+
+    <hr class="nav" />
     <nav id="nav-placeholder"></nav>
+    <hr class="nav" />
 
-    <header id="index-header" class="parallax1 margin-bottom">
-        <div class="index-container">
-            <center><div class="backupImage"></div></center>
-            <h1 class="index">Official Website of Product Backlog</h1>
-            <h2 class="index">A realtime product backlog development technology.</h2>
+    <div class="parallax-container">
+        <div class="inner-parallax-container">
+            <h1 class="pbm">Product Backlog Developer</h1>
         </div>
-        <img id="scroller-gif" src="Images/scroll.gif" />
-    </header>
-
-    <h2 class="index-user" id="welcome-label">Welcome, <object id="welcome-user"></object></h2>
-
+    </div>
     <center>
         <center>
             <div id="offline">
                 <h1>OFFLINE: Please Refresh.</h1>
             </div>
         </center>
+        <div>
+            <hr />
+            <h1>Enter an <span class="blue">Email</span> address to get started.</h1>
+            <hr />
+        </div>
+        <main class="index-grid">
+            <div id="index-login">
+                <h2 class="index-user" id="welcome-label">Welcome, <object id="welcome-user"></object></h2>
+                <div id="startup">
+                    <span id="firebaseui-auth-container"></span>
+                    <img id="loading-gif" src="Images/loading.gif" />
+                    <div class="container" id="pb-button">
+                        <a class="button" onclick="loadPB()">Go to Product Backlog</a>
+                    </div>
+                </div>
+            </div>
+            <div id="index-welcome">
+                <h3>For demonstration, with sample data, use: </h3>
+                <h5>Email: <span class="blue">test@testing.com</span></h5>
+                <h5>Password: <span class="blue">Testing</span></h5>
+                <h3>Or</h3>
+                <input id="inputShareCode" type="text" placeholder="Enter a share code: " />
+                <br />
+                <label id="labelShareCode">(Share code is valid)</label><br />
+                <a class="button" id="buttonShareCode" onclick="shareCodeEntered()">Go to Product Backlog</a>
+            </div>
+            <div id="index-desc">
+                <hr />
+                <h3 class="index-desc">
+                    Create and manage product backlogs for all your projects. <br /> Add new stories and defects to the backlog, and view completed items. <br />
+                    Better manage product backlog items by adding and completing tasks for each item.<br>Generate a share code and allow other users to view your product backlog.
+                </h3>
+                <hr />
+            </div>
 
-        <h3>For demonstration, with sample data, use: </h3>
-        <h5>Email: test@testing.com</h5>
-        <h5>Password: Testing</h5>
-        <input id="inputShareCode" type="text" placeholder="Enter share code: " />
-        <br />
-        <label id="labelShareCode">(Share code is valid)</label><br />
-        <a class="button" id="buttonShareCode" onclick="shareCodeEntered()">Go to Product Backlog</a>
+        </main>
+
         <br />
         <br />
     </center>
 
-    <center>
-        <div id="startup">
-            <div id="firebaseui-auth-container"></div>
-            <img id="loading-gif" src="Images/loading.gif" />
-            <div class="container" id="pb-button">
-                <a class="button" onclick="loadPB()">Go to Product Backlog</a>
+    <div class="figures">
+        <figure class="tooltip">
+            <img src="Images/Projects.png" class="resize" />
+            <figcaption>Create Projects</figcaption>
+            <span class="tooltiptext">Create, edit, and delete as many projects as you want.</span>
+        </figure>
+        <figure class="tooltip">
+            <img src="Images/ProductBacklog.png" class="resize" />
+            <figcaption>Create Backlogs</figcaption>
+            <span class="tooltiptext">Manage your projects product backlog. Add new stories and defects, and complete stories and defects. </span>
+        </figure>
+        <figure class="tooltip">
+            <img src="Images/TaskBacklog.png" class="resize" />
+            <figcaption>Create Tasks</figcaption>
+            <span class="tooltiptext">Add tasks to your product backlog item. </span>
+        </figure>
+
+    </div>
+    <hr />
+
+    <div class="tech-desc">
+        <h2>Technical Description: </h2>
+        <h3>
+            Product Backlog Developer was built as a full stack application. The front-end is built using ReactJS, and the back-end is built using 
+            Google Firebase. Product Backlog Developer authenticates users through the Firebase AuthUI. The project is build around a Firestore database. 
+            This allows for realtime access to data. Multiple users to be connected to the same backlog, and changes made are reflected instantly. 
+            Users can create as many projects as they want, each project has its own product backlog, and each product backlog item has its own task backlog. The Firestore 
+            database, being a NoSQL database, saves this structure. The front-end using React allows for each product backlog item to have its own state.
+            Only product backlog items with changes are re-rendered. This results in quicker load times for the user.
+        </h3>
+        <h4>Languages and Technologies Used:</h4>
+        <div class="tech-grid">
+            <div>
+                <figure>
+                    <img src="Images/ICONS/HTML.png" class="resize" />
+                    <figcaption>HTML5</figcaption>
+                </figure>
+            </div>
+            <div>
+                <figure>
+                    <img src="Images/ICONS/CSS.png" class="resize" />
+                    <figcaption>CSS3</figcaption>
+                </figure>
+            </div>
+            <div>
+                <figure>
+                    <img src="Images/ICONS/JAVASCRIPT.png" class="resize" />
+                    <figcaption>JavaScript</figcaption>
+                </figure>
+            </div>
+            <div>
+                <figure>
+                    <img src="Images/ICONS/FIREBASE.png" class="resize" />
+                    <figcaption>Google Firebase</figcaption>
+                </figure>
+            </div>
+            <div>
+                <figure>
+                    <img src="Images/ICONS/REACT.png" class="resize" />
+                    <figcaption>React JS</figcaption>
+                </figure>
             </div>
         </div>
 
-    </center>
+        <hr />
 
-    <main id="index-main" class="parallax1 margin-top">
-        <div class="index-container2">
-            <h1 class="index">About Product Backlog Developer</h1>
-            <h3 class="index">Languages Used: HTML5, CSS3, and JavaScript</h3>
-            <br />
-            <h3 class="index">Technologies Used: Backend: Google Firebase, Front-end: React JS</h3>
-            <br />
-            <h3 class="index">Description: </h3>
-            <h3 class="index">
-                Product Backlog Developer was built as a full stack application. The backend, being Google Firebase, allows for realtime access to data.
-                This allows multiple users to be connected to the same backlog, and changes made are reflected instantly. Google firebase also allows for
-                users to be authenticated through the Firebase AuthUI. Each user is assigned a product backlog.
-                Users can add stories or defects to this, and complete stories or defects as needed. The front-end using React, means that only changes need to be rendered. This results
-                in quicker load times for the user.
-            </h3>
-        </div>
-    </main>
+    </div>
 
     <footer>
         <div class="right_position">

@@ -34,9 +34,18 @@
     <None Include="Tasks.html" />
     <None Include="Scripts\react-tasks.js" />
     <None Include="Images\PBDWebLogo.png" />
+    <None Include="Images\TaskBacklog.png" />
+    <None Include="Images\ProductBacklog.png" />
+    <None Include="Images\Projects.png" />
+    <None Include="Images\ICONS\JAVASCRIPT.png" />
+    <None Include="Images\ICONS\CSS.png" />
+    <None Include="Images\ICONS\HTML.png" />
+    <None Include="Images\ICONS\REACT.png" />
+    <None Include="Images\ICONS\FIREBASE.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
     <Folder Include="Scripts\" />
+    <Folder Include="Images\ICONS\" />
   </ItemGroup>
 </Project>

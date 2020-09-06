@@ -1,4 +1,62 @@
-﻿/********************************** Footer Items **********************************/
+﻿/*********************** Parallax Layout ***************************/
+.parallax-container {
+    min-height: 15vh;
+    background-image: url("../Images/ServersImage.png");
+    position: relative !important;
+    background-attachment: fixed !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    margin-bottom: 2%;
+}
+
+.inner-parallax-container {
+    position: absolute;
+    text-align: center;
+    top: 10%;
+    width: 100%;
+}
+h1.pbm {
+    font-size: 300%;
+    text-align: center;
+    color: white;
+    font-weight: 900;
+}
+
+
+/*********************** Hover Text Layout ***************************/
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 40%;
+        margin-left: -20%;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 10px 0;
+        position: absolute;
+        z-index: 1;
+        top: 50%;
+        left: 50%;
+        opacity: 0;
+        transition: opacity 1s;
+    }
+
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
+
+/*********************** Hover Text End ***************************/
+
+
+/********************************** Footer Items **********************************/
 footer{
 margin-right: 1%;
 margin-top: 5%;
@@ -12,7 +70,7 @@ margin-top: 5%;
 
 /********************************** Standard Items **********************************/
 .logo{
-    height: 300px;
+    height: 250px;
 }
 html {
     color: #131313; /*light black*/
@@ -131,6 +189,23 @@ ul.effect {
     h1.pages {
         font-size: 175%;
     }
+    .parallax-container {
+        background-image: url("../Images/ServersImageWideSmall.png");
+    }
+    h1.pbm {
+        font-size: 250%;
+    }
+}
+
+@media screen and (max-width: 750px) {
+
+    .parallax-container {
+        background-image: none;
+    }
+    h1.pbm {
+        font-size: 200%;
+        color: #131313;
+    }
 }
 @media screen and (max-width: 415px) {
     ul.sidenav {
@@ -138,5 +213,21 @@ ul.effect {
         margin-left: 1.5%;
         width: 15%;
     }
+    .parallax-container {
+        background-image: none;
+    }
+    h1.pbm {
+        font-size: 150%;
+        color: #131313;
+    }
+}
+@media screen and (max-width: 275px) {
 
+    .parallax-container {
+        background-image: none;
+    }
+    h1.pbm {
+        font-size: 50%;
+        color: #131313;
+    }
 }

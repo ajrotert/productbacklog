@@ -10,6 +10,8 @@ class ArNav extends React.Component {
 
         }
     }
+        //                <img src="Images/PBDLogo.png" className="logo-nav" id="logo-nav" />
+    //                    <li id="nav-logo"> <img src="Images/PBDLogo.png" className="logo-nav" id="logo-nav" /> </li>
 
     render() {
         return (
@@ -17,10 +19,8 @@ class ArNav extends React.Component {
             <style dangerouslySetInnerHTML={getStylesAsString()} />
 
             <nav id="nav-placeholder">
-                <img src="Images/PBDLogo.png" className="logo-nav" id="logo-nav" />
                 <ul className="nav" id="navStart">
-                    <li className="navitem pad" id="Home-Page"><a href="index.html">Home</a></li>
-                    <li id="nav-logo"> <img src="Images/PBDLogo.png" className="logo-nav" id="logo-nav" /> </li>
+                    <li className="navitem" id="Home-Page"><a href="index.html">Home</a></li>
                     <li className="navitem PBIDEV" id="Parent"><a href="#null">ProductBacklog.Dev</a></li>
                     <li className="navitem" id="PR-Page"><a href="Projects.html">Projects</a></li>
                     <li className="navitem" id="PB-Page"><a href="ProductBacklog.html">Product Backlog</a></li>
@@ -84,14 +84,14 @@ var sticky = navbar.offsetTop;
 function myFunction() {
     var title = document.title;
 
-    if (title.includes("Online") || title.includes("Projects") || title.includes("Tasks")) {
+    if (title.includes("Online") || title.includes("Projects") || title.includes("Tasks") || title.includes("Home")) {
         if (window.pageYOffset >= sticky) {
             navbar.classList.add("sticky");
         } else {
             navbar.classList.remove("sticky");
         }
     }
-    else {
+    else { //Old home page needed full nav bar. 
         if (window.pageYOffset >= sticky) {
             navbar.classList.add("sticky-full");
         } else {

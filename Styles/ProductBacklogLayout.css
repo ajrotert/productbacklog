@@ -10,12 +10,7 @@
 }
 
 /********************************** PBM Items **********************************/
-h1.pbm {
-    font-size: 300%;
-    text-align: center;
-    color: white;
-    font-weight: 900;
-}
+
 #root{
     display: block;
     text-align: center;
@@ -351,23 +346,7 @@ h1.pbm {
     padding-top: 3em;
     padding-bottom: 3em;
 }
-/*********************** Parallax Layout ***************************/
-.parallax-container {
-    min-height: 15vh;
-    background-image: url("../Images/ServersImage.png");
-    position: relative !important;
-    background-attachment: fixed !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
-    background-size: cover !important;
-    margin-bottom: 2%;
-}
-.inner-parallax-container {
-    position: absolute;
-    text-align: center;
-    top: 10%;
-    width: 100%;
-}
+
 /*********************** Mobile Layout ***************************/
 @media screen and (max-width: 1000px) {
     .PBI > h1 {
@@ -382,12 +361,8 @@ h1.pbm {
     .PBI > h3 {
         font-size: 1.25em;
     }
-    h1.pbm {
-        font-size: 250%;
-    }
-    .parallax-container {
-        background-image: url("../Images/ServersImageWideSmall.png");
-    }
+
+
     #shareLink {
         font-size: 95%;
     }
@@ -449,14 +424,6 @@ h1.pbm {
         font-size: 85%;
     }
 
-
-    h1.pbm {
-        font-size: 200%;
-        color: #131313;
-    }
-    .parallax-container {
-        background-image: none;
-    }
     .small_info {
         font-size: 12px;
     }
@@ -486,13 +453,6 @@ h1.pbm {
     }
     .small_info {
         font-size: 10px;
-    }
-    h1.pbm {
-        font-size: 150%;
-        color: #131313;
-    }
-    .parallax-container {
-        background-image: none;
     }
     .samplePBI > label {
         font-size: 65%;
@@ -537,13 +497,6 @@ h1.pbm {
     .small_info {
         font-size: 10px;
     }
-    h1.pbm {
-        font-size: 50%;
-        color: #131313;
-    }
-    .parallax-container {
-        background-image: none;
-    }
     .samplePBI > label {
         font-size: 55%;
     }
@@ -556,7 +509,6 @@ h1.pbm {
         font-size: 55%;
         width: 85%;
     }
-
     .samplePBI > select {
         font-size: 55%;
     }

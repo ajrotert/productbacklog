@@ -3,13 +3,6 @@
 
 
 /********************************** Default Items **********************************/
-h1.pbm {
-    font-size: 300%;
-    text-align: center;
-    color: white;
-    font-weight: 900;
-}
-
 .project_item {
     border: 5px #022E6D solid;
     margin: 1em 20%;
@@ -73,26 +66,6 @@ h1.pbm {
     .button:hover {
         background-color: #0066FF;
     }
-
-/*********************** Parallax Layout ***************************/
-
-.parallax-container {
-    min-height: 15vh;
-    background-image: url("../Images/ServersImage.png");
-    position: relative !important;
-    background-attachment: fixed !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
-    background-size: cover !important;
-    margin-bottom: 2%;
-}
-
-.inner-parallax-container {
-    position: absolute;
-    text-align: center;
-    top: 10%;
-    width: 100%;
-}
 
 /********************************** React button icon Items **********************************/
 
@@ -186,13 +159,7 @@ h1.pbm {
 
 /*********************** Mobile Layout ***************************/
 @media screen and (max-width: 1000px) {
-    h1.pbm {
-        font-size: 250%;
-    }
 
-    .parallax-container {
-        background-image: url("../Images/ServersImageWideSmall.png");
-    }
 }
 
 @media screen and (max-width: 750px) {
@@ -212,15 +179,6 @@ h1.pbm {
     .samplePBI > select {
         font-size: 95%;
     }
-
-    h1.pbm {
-        font-size: 200%;
-        color: #131313;
-    }
-
-    .parallax-container {
-        background-image: none;
-    }
 }
 
 @media screen and (max-width: 415px) {
@@ -234,15 +192,6 @@ h1.pbm {
 
     .small_info {
         font-size: 10px;
-    }
-
-    h1.pbm {
-        font-size: 150%;
-        color: #131313;
-    }
-
-    .parallax-container {
-        background-image: none;
     }
 }
 
@@ -260,12 +209,4 @@ h1.pbm {
         font-size: 10px;
     }
 
-    h1.pbm {
-        font-size: 50%;
-        color: #131313;
-    }
-
-    .parallax-container {
-        background-image: none;
-    }
 }
