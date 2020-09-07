@@ -10,7 +10,7 @@ function updateOnlineMessage() {
                 .then(function () {
 
                     setTimeout(function () {
-                        var confirms = window.confirm('Refresh the page to restore all functionality.');
+                        var confirms = window.confirm('Internet Connection Restored. \nPress OK to refresh the page to restore all functionality.');
                         if (confirms) {
                             location.reload();
                         }
