@@ -377,53 +377,65 @@ class Heading extends React.Component {
     }
 
     inProgressChecked = () => {
-        document.body.style.cursor = 'wait';
-        if (!this.state.hide) {
+        if (!readonly) {
+            document.body.style.cursor = 'wait';
+            if (!this.state.hide) {
+                getPbiForTaskDatabase(this.state.ID).then((doc) => {
+                    if (doc.exists) {
+                        updatePbiForTaskDatabaseWithInprogress(this.state.ID, !this.state.inprogress)
+                            .then(() => {
+                                this.setState({ inprogress: !this.state.inprogress });
+                                document.body.style.cursor = 'default';
+                            })
+                            .catch((error) => {
+                                document.body.style.cursor = 'default';
+                            });
+                    }
+                    else {
+                        document.body.style.cursor = 'default';
+                    }
+                });
+            }
+            else {
+                document.body.style.cursor = 'default';
+                window.alert("Cannot set in progress when product backlog item is hidden.");
+            }
+        }
+        else {
+            //Readonly
+        }
+        
+    }
+
+    completedChecked = () => {
+        if (!readonly) {
+            document.body.style.cursor = 'wait';
             getPbiForTaskDatabase(this.state.ID).then((doc) => {
                 if (doc.exists) {
-                    updatePbiForTaskDatabaseWithInprogress(this.state.ID, !this.state.inprogress)
-                        .then(() => {
-                            this.setState({ inprogress: !this.state.inprogress });
-                            document.body.style.cursor = 'default';
-                        })
-                        .catch((error) => {
-                            document.body.style.cursor = 'default';
-                        });
+                    document.body.style.cursor = 'default';
+                    var confirms = window.confirm(`Move: ${this.state.title} \nTo: ${this.state.completed ? "Backlog" : "Completed"}`);
+                    if (confirms) {
+                        document.body.style.cursor = 'wait';
+                        updatePbiForTaskDatabase(this.state.ID, !this.state.completed)
+                            .then(() => {
+                                this.setState({ shadowColor: "PBI normalizePBIheading " + (!this.state.completed ? "box_shadow_green" : this.state.isStory ? "box_shadow_blue" : "box_shadow_red"), completed: !this.state.completed, ID: this.state.ID, inprogress: false });
+                                document.body.style.cursor = 'default';
+                            })
+                            .catch((error) => {
+                                document.body.style.cursor = 'default';
+                            });
+                    }
                 }
                 else {
                     document.body.style.cursor = 'default';
                 }
+
             });
         }
         else {
-            document.body.style.cursor = 'default';
-            window.alert("Cannot set in progress when product backlog item is hidden.");
+            //Readonly
         }
-    }
-
-    completedChecked = () => {
-        document.body.style.cursor = 'wait';
-        getPbiForTaskDatabase(this.state.ID).then((doc) => {
-            if (doc.exists) {
-                document.body.style.cursor = 'default';
-                var confirms = window.confirm(`Move: ${this.state.title} \nTo: ${this.state.completed ? "Backlog" : "Completed"}`);
-                if (confirms) {
-                    document.body.style.cursor = 'wait';
-                    updatePbiForTaskDatabase(this.state.ID, !this.state.completed)
-                        .then(() => {
-                            this.setState({ shadowColor: "PBI normalizePBIheading " + (!this.state.completed ? "box_shadow_green" : this.state.isStory ? "box_shadow_blue" : "box_shadow_red"), completed: !this.state.completed, ID: this.state.ID, inprogress: false });
-                            document.body.style.cursor = 'default';
-                        })
-                        .catch((error) => {
-                            document.body.style.cursor = 'default';
-                        });
-                }
-            }
-            else {
-                document.body.style.cursor = 'default';
-            }
-
-        });
+        
     }
 
     shareLink() {
