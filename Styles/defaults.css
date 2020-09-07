@@ -386,16 +386,19 @@ ul.effect {
     h1.pbm {
         font-size: 250%;
     }
+    .tooltip .tooltiptext {
+        top: 20%;
+    }
 }
 
 @media screen and (max-width: 750px) {
 
     .parallax-container {
         background-image: none;
+        background-color: #022E6D;
     }
     h1.pbm {
         font-size: 200%;
-        color: #131313;
     }
 }
 @media screen and (max-width: 415px) {
@@ -406,19 +409,19 @@ ul.effect {
     }
     .parallax-container {
         background-image: none;
+        background-color: #022E6D;
     }
     h1.pbm {
         font-size: 150%;
-        color: #131313;
     }
 }
 @media screen and (max-width: 275px) {
 
     .parallax-container {
         background-image: none;
+        background-color: #022E6D;
     }
     h1.pbm {
         font-size: 50%;
-        color: #131313;
     }
 }

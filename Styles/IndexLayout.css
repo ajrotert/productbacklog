@@ -198,6 +198,13 @@ h2.index-user{
     .figures > figure {
         width: 75%;
     }
+    .h3-mobile{
+        font-size: 95%;
+    }
+    .tech-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: auto auto;
+    }
 }
 @media screen and (max-width: 415px) {
     .index-container {
@@ -218,6 +225,9 @@ h2.index-user{
     .figures > figure {
         width: 80%;
     }
+    .h3-mobile {
+        font-size: 85%;
+    }
 }
 @media screen and (max-width: 275px) {
     .index-container {
@@ -237,5 +247,8 @@ h2.index-user{
     }
     .figures > figure {
         width: 85%;
+    }
+    .h3-mobile {
+        font-size: 75%;
     }
 }
