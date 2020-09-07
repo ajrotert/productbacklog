@@ -7,6 +7,8 @@ const SHOW_HIDDEN_ITEMS = "Show hidden items";
 const STOP_SHOWING_HIDDEN_ITEMS = "Stop showing hidden items";
 const SHOW_IN_PROGRESS_ITEMS = "Show in progress items";
 const SHOW_ALL_ITEMS = "Show all items";
+const SHOW_ENTIRE_BACKLOG = "Show entire backlog";
+const SHOW_FIXED_SIZE_BACKLOG = "Show fixed size backlog";
 
 function getPbiDatabase(docId) {
     if (!readonly) {
@@ -132,6 +134,23 @@ function updateInProgressAttributes(showOnly) {
             if (!hideItems[a].classList.contains('hide'))
                 hideItems[a].style.display = 'block';
         };
+    }
+}
+function updateBacklogUI() {
+    var left = document.getElementById('grid1');
+    var right = document.getElementById('grid2');
+    var button = document.getElementById('bottom-button');
+    if (button.innerText == SHOW_FIXED_SIZE_BACKLOG) {
+        left.style.height = 'auto';
+        right.style.height = 'auto';
+        if (left.offsetHeight > right.offsetHeight)
+            right.style.height = left.offsetHeight + 'px';
+        else
+            left.style.height = right.offsetHeight + 'px';
+    }
+    else {
+        left.style.height = '85vh';
+        right.style.height = '85vh';
     }
 }
 
@@ -607,6 +626,16 @@ class PB extends React.Component {
         generatePbiModalPopup();
         
     };
+    increaseHeight() {
+        var button = document.getElementById('bottom-button');
+        if (button.innerText == SHOW_ENTIRE_BACKLOG) {
+            button.innerText = SHOW_FIXED_SIZE_BACKLOG;
+        }
+        else {
+            button.innerText = SHOW_ENTIRE_BACKLOG;
+        }
+        updateBacklogUI()
+    }
 
     handleHiddenItems = (event) => {
         var show = event.target.innerText == SHOW_HIDDEN_ITEMS;
@@ -618,8 +647,7 @@ class PB extends React.Component {
         else {
             event.target.innerText = SHOW_HIDDEN_ITEMS;
         }
-
-        
+        updateBacklogUI();
     };
     toggleInprogress = (event) => {
         var show = event.target.innerText == SHOW_IN_PROGRESS_ITEMS;
@@ -631,6 +659,7 @@ class PB extends React.Component {
         else {
             event.target.innerText = SHOW_IN_PROGRESS_ITEMS;
         }
+        updateBacklogUI();
     }
 
     static getDerivedStateFromError(error) {
@@ -716,21 +745,33 @@ class PB extends React.Component {
         });
 
         return (
-            <div className="grid-container">
+            <div>
+                <div className="grid-container">
 
                 <Heading />
 
                 <Stats stats={statsGroup} action={this.handleHiddenItems} action2={this.toggleInprogress} />
 
-                <div id="grid1" className="grid_border_right">
+                <div id="pregrid1" className="grid_border_right">
                     <h1 className="grid_border_bottom">Backlog</h1>
+                </div>
+                <div id="pregrid2" className="grid_border_left">
+                    <h1 className="grid_border_bottom">Backlog</h1>
+                </div>
+
+                <div id="grid1" className="grid_border_right">
                     <div>
                         <a className="button" onClick={this.handler}>New Item</a>
                     </div>
                     {PBIContainer}
                 </div>
-                <div id="grid2" className="grid_border_left">
-                    <h1 className="grid_border_bottom">Completed</h1>
+                <div id="grid2" className="grid_border_left"></div>
+
+                </div>
+
+                <div>
+                    <hr />
+                    <a id="bottom-button" className="standard-link" href="#null" onClick={this.increaseHeight} >{SHOW_ENTIRE_BACKLOG}</a><br />
                 </div>
             </div>
         );
@@ -772,15 +813,7 @@ else {
                 inProgressNodeList.forEach((node) => {
                     inProgressItems.appendChild(node);
                 });
-                if (inProgressItems.childNodes.length > completedItems.childNodes.length) {
-
-                    inProgressItems.className = "grid_border_right";
-                    completedItems.className = "";
-                }
-                else {
-                    inProgressItems.className = "";
-                    completedItems.className = "grid_border_left";
-                }
+                
             });
 
             document.getElementById('loading-gif').style.display = 'none';

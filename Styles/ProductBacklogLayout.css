@@ -6,12 +6,10 @@
     clear: both;
 }
 .grid-container {
-
+    text-align: center;
 }
-
 /********************************** PBM Items **********************************/
-
-#root{
+#root {
     display: block;
     text-align: center;
 }
@@ -34,6 +32,9 @@
         font-weight: 900;
     }
 
+    .inline-block{
+        display: inline-block;
+    }
 .button {
     text-align: center;
     padding-left: 2em;
@@ -86,25 +87,38 @@
     text-align: right;
     font-size: .2em;
 }
-
-#grid1 {
+#pregrid1 {
     width: 50%;
     float: left;
     position: relative;
 }
+#pregrid2 {
+    width: 50%;
+    float: right;
+    position: relative;
+}
+#grid1 {
+    width: 50%;
+    float: left;
+    position: relative;
+    height: 85vh;
+    overflow-y: auto;
+}
 .grid_border_left {
-    margin-left: -1px;
-    border-left: 1px solid black;
+    margin-left: -.1em;
+    border-left: .1em solid black;
 }
 .grid_border_right {
-    margin-right: -1px;
-    border-right: 1px solid black;
+    margin-right: -.1em;
+    border-right: .1em solid black;
 }
 
 #grid2 {
     width: 50%;
     float: right;
     position: relative;
+    height: 85vh;
+    overflow-y: auto;
 }
 
 .grid_border_bottom {
@@ -158,6 +172,30 @@
     font-weight: 700;
     font-size: 125%;
 }
+.standard-link {
+    font-size: 100%;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+}
+    .standard-link:link {
+        text-decoration: none;
+        color: #0066ff;
+    }
+    .standard-link:visited {
+        text-decoration: none;
+        color: #0066ff;
+    }
+
+    .standard-link:hover {
+        text-decoration: underline;
+        color: #0066ff;
+    }
+
+    .standard-link:active {
+        text-decoration: underline;
+        color: #0066ff;
+    }
 /********************************** React Status Items **********************************/
 .status {
     display: block;

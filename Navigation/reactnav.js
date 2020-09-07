@@ -45,20 +45,20 @@ if (title.includes("Home"))
     document.getElementById("Home-Page").classList.add("active");
 else if (title.includes("Online")) {
     document.getElementById("PB-Page").classList.add("active");
-    document.getElementById("logo-nav").style.display = "none";
-    document.getElementById("nav-logo").style.display = "none";
+    //document.getElementById("logo-nav").style.display = "none";
+    //document.getElementById("nav-logo").style.display = "none";
     document.getElementById("Home-Page").classList = "navitem";
 }
 else if (title.includes("Projects")) {
     document.getElementById("PR-Page").classList.add("active");
-    document.getElementById("logo-nav").style.display = "none";
-    document.getElementById("nav-logo").style.display = "none";
+    //document.getElementById("logo-nav").style.display = "none";
+    //document.getElementById("nav-logo").style.display = "none";
     document.getElementById("Home-Page").classList = "navitem";
 }
 else if (title.includes("Tasks")) {
     document.getElementById("PT-Page").classList.add("active");
-    document.getElementById("logo-nav").style.display = "none";
-    document.getElementById("nav-logo").style.display = "none";
+    //document.getElementById("logo-nav").style.display = "none";
+    //document.getElementById("nav-logo").style.display = "none";
     document.getElementById("Home-Page").classList = "navitem";
 }
 
