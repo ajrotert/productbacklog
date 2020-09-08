@@ -10,6 +10,8 @@ const SHOW_IN_PROGRESS_ITEMS = "Show in progress items";
 const SHOW_ALL_ITEMS = "Show all items";
 const SHOW_ENTIRE_BACKLOG = "Show entire backlog";
 const SHOW_FIXED_SIZE_BACKLOG = "Show fixed size backlog";
+const ADD_YOUR_FIRST_TASK = "Add your first task";
+const PRESS_NEW_ITEM_TO_ADD_YOUR_FIRST_TASK = "Press 'New Item' to add your first task"
 
 function getPbiDatabase(docId) {
     if (!readonly) {
@@ -328,6 +330,23 @@ class ModalShareView extends React.Component {
             </div>
 
         );
+    }
+}
+
+class FirstPbi extends React.Component {
+    render() {
+        return (
+            <div className="PBI normalizePBIheading box_shadow_blue" id="00000">
+                <br className="clears" />
+                <h1>{ADD_YOUR_FIRST_TASK}</h1>
+                <hr />
+                <p>Description: {PRESS_NEW_ITEM_TO_ADD_YOUR_FIRST_TASK}</p>
+                <h3>Task</h3>
+
+                <p className="small_info">Timestamp: 00000 </p>
+                <p className="small_info">ID: 00000</p>
+            </div>
+            );
     }
 }
 
@@ -835,8 +854,9 @@ class PB extends React.Component {
                 <div id="grid1" className="grid_border_right">
                     <div>
                         <a className="button" onClick={this.handler}>New Item</a>
-                    </div>
-                    {PBIContainer}
+                        </div>
+                        {PBIContainer}
+                        {PBIContainer.length == 0 ? <FirstPbi /> : null}
                 </div>
                 <div id="grid2" className="grid_border_left"></div>
                 

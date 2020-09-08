@@ -204,10 +204,10 @@ else {
 }
 
 //Deselect any projects
-window.onload = function () {
-    this.sessionStorage.removeItem('pid');
-    this.sessionStorage.removeItem('bid');
-}
+window.addEventListener('load', function (e) {
+    sessionStorage.removeItem('pid');
+    sessionStorage.removeItem('bid');
+});
 
 //Prevent user from changing values
 window.addEventListener('storage', function (e) {

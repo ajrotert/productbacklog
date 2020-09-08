@@ -133,11 +133,10 @@ input.oninput = function validator() {
     });
 });*/
 
-//Remove any existing data
-window.onload = function () {
-    this.sessionStorage.removeItem('uid');
-    this.sessionStorage.removeItem('pid');
-    this.sessionStorage.removeItem('bid');
-    this.sessionStorage.removeItem('readonly');
-
-}
+//Deselect any projects
+window.addEventListener('load', function (e) {
+    sessionStorage.removeItem('uid');
+    sessionStorage.removeItem('pid');
+    sessionStorage.removeItem('bid');
+    sessionStorage.removeItem('readonly');
+});

@@ -9,6 +9,8 @@ const SHOW_IN_PROGRESS_ITEMS = "Show in progress items";
 const SHOW_ALL_ITEMS = "Show all items";
 const SHOW_ENTIRE_BACKLOG = "Show entire backlog";
 const SHOW_FIXED_SIZE_BACKLOG = "Show fixed size backlog";
+const ADD_YOUR_FIRST_STORY = "Add your first story";
+const PRESS_NEW_ITEM_TO_ADD_YOUR_FIRST_STORY = "Press 'New Item' to add your first story";
 
 function getPbiDatabase(docId) {
     if (!readonly) {
@@ -437,6 +439,23 @@ class Stats extends React.Component {
     }
 }
 
+class FirstPbi extends React.Component {
+    render() {
+        return (
+            <div className="PBI normalizePBIheading box_shadow_blue" id="00000">
+                <br className="clears" />
+                <h1>{ADD_YOUR_FIRST_STORY}</h1>
+                <hr />
+                <p>Description: {PRESS_NEW_ITEM_TO_ADD_YOUR_FIRST_STORY}</p>
+                <h3>Story</h3>
+
+                <p className="small_info">Timestamp: 00000 </p>
+                <p className="small_info">ID: 00000</p>
+            </div>
+        );
+    }
+}
+
 class PBI extends React.Component {
     constructor(props) {
         super(props);
@@ -763,7 +782,8 @@ class PB extends React.Component {
                     <div>
                         <a className="button" onClick={this.handler}>New Item</a>
                     </div>
-                    {PBIContainer}
+                        {PBIContainer}
+                        {PBIContainer.length == 0 ? <FirstPbi /> : null}
                 </div>
                 <div id="grid2" className="grid_border_left"></div>
 
@@ -821,9 +841,9 @@ else {
         })
 }
 //Deselect any projects
-window.onload = function () {
-    this.sessionStorage.removeItem('bid');
-}
+window.addEventListener('load', function (e) {
+    sessionStorage.removeItem('bid');
+});
 
 //Prevent user from changing values
 window.addEventListener('storage', function (e) {
