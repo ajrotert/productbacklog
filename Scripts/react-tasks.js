@@ -829,7 +829,7 @@ class PB extends React.Component {
                     <h1 className="grid_border_bottom">Backlog</h1>
                 </div>
                 <div id="pregrid2" className="grid_border_left">
-                    <h1 className="grid_border_bottom">Backlog</h1>
+                    <h1 className="grid_border_bottom">Completed</h1>
                 </div>
 
                 <div id="grid1" className="grid_border_right">

@@ -228,6 +228,10 @@ h2.index-user{
     .h3-mobile {
         font-size: 85%;
     }
+    .tech-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto auto auto;
+    }
 }
 @media screen and (max-width: 275px) {
     .index-container {
@@ -250,5 +254,9 @@ h2.index-user{
     }
     .h3-mobile {
         font-size: 75%;
+    }
+    .tech-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto auto auto;
     }
 }
