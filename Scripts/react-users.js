@@ -2,18 +2,6 @@
 var db = firebase.firestore();
 const readonly = (sessionStorage.getItem('readonly') == null ? false : sessionStorage.getItem('readonly') == 'true' ? true : false);
 
-/*
-if (user != null) {
-    user.providerData.forEach(function (profile) {
-        console.log("Sign-in provider: " + profile.providerId);
-        console.log("  Provider-specific UID: " + profile.uid);
-        console.log("  Name: " + profile.displayName);
-        console.log("  Email: " + profile.email);
-        console.log("  Photo URL: " + profile.photoURL);
-    });
-}
-*/
-
 class NotAuthError extends React.Component {
     render() {
         return (
@@ -39,7 +27,7 @@ class UpdatePassword extends React.Component {
             valid = false;
         }
         else {
-            currentPassword.style.border = "1px solid black";
+            currentPassword.style.border = "1px solid #0066FF";
         }
         if (newPassword.value == "") {
             newPassword.style.border = "1px solid red";
@@ -47,7 +35,7 @@ class UpdatePassword extends React.Component {
             valid = false;
         }
         else {
-            newPassword.style.border = "1px solid black";
+            newPassword.style.border = "1px solid #0066FF";
         }
         if (confirmPassword.value == "") {
             confirmPassword.style.border = "1px solid red";
@@ -55,7 +43,7 @@ class UpdatePassword extends React.Component {
             valid = false;
         }
         else {
-            confirmPassword.style.border = "1px solid black";
+            confirmPassword.style.border = "1px solid #0066FF";
         }
         if (!valid) {
             console.log(valid);
@@ -64,12 +52,37 @@ class UpdatePassword extends React.Component {
         else {
             if (confirmPassword.value != newPassword.value) {
                 confirmPassword.style.border = "1px solid red";
+                validationMessage.style.color = "red";
                 validationMessage.innerText += "Confirm password does not match new password.\n"
                 valid = false;
             }
             if (!valid) {
-                console.log(valid);
                 validationMessage.style.color = "red";
+            }
+            else {
+                var credential = firebase.auth.EmailAuthProvider.credential(
+                    firebase.auth().currentUser.email,
+                    currentPassword.value
+                );
+                firebase.auth().currentUser.reauthenticateWithCredential(credential).then(function () {
+                    firebase.auth().currentUser.updatePassword(newPassword.value).then(function () {
+                        currentPassword.style.border = "1px solid #36FF54";
+                        newPassword.style.border = "1px solid #36FF54";
+                        confirmPassword.style.border = "1px solid #36FF54";
+                        validationMessage.style.color = "black";
+                        validationMessage.innerText += "Password updated successfully.\n";
+                        valid = false;
+                    }).catch(function (error) {
+                        validationMessage.style.color = "#36FF54";
+                        validationMessage.innerText += "Password updated failed.\n";
+                        validationMessage.innerText += error;
+                    });
+                }).catch(function (error) {
+                    currentPassword.style.border = "1px solid red";
+                    validationMessage.style.color = "red";
+                    validationMessage.innerText += "Current password is incorrect.\n"
+                    valid = false;
+                });
             }
         }
 
@@ -102,10 +115,11 @@ class UserInfo extends React.Component {
             <div>
                 <h1 className="large"><span className="large-darkblue">Display Name: </span> <span className="large-blue">{this.props.userData.displayName}</span></h1>
                 <h1 className="large"><span className="large-darkblue">Email: </span> <span className="large-blue">{this.props.userData.email}</span></h1>
-                <h1 className="small"><span className="large-darkblue">Last Sign In: </span> <span className="large-blue">{this.props.userData.lastSignIn}</span></h1>
-                <h1 className="small"><span className="large-darkblue">First Sign on: </span> <span className="large-blue">{this.props.userData.firstSignOn}</span></h1>
-                <h1 className="small"><span className="large-darkblue">Provider: </span> <span className="large-blue">{this.props.userData.providerId}</span></h1>
-                <h1 className="small"><span className="large-darkblue">UID: </span> <span className="large-blue">{this.props.userData.uid}</span></h1>
+                <hr/>
+                <h1 className="small left"><span className="large-darkblue">Last Sign In: </span> <span className="large-blue">{this.props.userData.lastSignIn}</span></h1>
+                <h1 className="small left"><span className="large-darkblue">First Sign on: </span> <span className="large-blue">{this.props.userData.firstSignOn}</span></h1>
+                <h1 className="small left"><span className="large-darkblue">Provider: </span> <span className="large-blue">{this.props.userData.providerId}</span></h1>
+                <h1 className="small left"><span className="large-darkblue">UID: </span> <span className="large-blue">{this.props.userData.uid}</span></h1>
             </div>
             );
     }
@@ -128,6 +142,9 @@ const domContainer = document.querySelector('#root');
 
 firebase.auth().onAuthStateChanged(function (user) {
     if (user && !readonly) {
+        sessionStorage.setItem('uid', firebase.auth().currentUser.uid);
+        sessionStorage.setItem('readonly', false);
+
         const userData = {
             displayName: user.displayName,
             email: user.email,

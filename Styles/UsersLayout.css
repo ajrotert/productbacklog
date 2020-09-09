@@ -73,6 +73,9 @@
 .center{
     text-align: center !important;
 }
+.left {
+    text-align: left !important;
+}
 .input-style {
     background-color: #DCDCDC;
     font-size: 150%;
