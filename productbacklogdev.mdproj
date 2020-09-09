@@ -42,6 +42,9 @@
     <None Include="Images\ICONS\HTML.png" />
     <None Include="Images\ICONS\REACT.png" />
     <None Include="Images\ICONS\FIREBASE.png" />
+    <None Include="Profile.html" />
+    <None Include="Scripts\react-users.js" />
+    <None Include="Styles\UsersLayout.css" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />

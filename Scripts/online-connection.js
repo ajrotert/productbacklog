@@ -6,11 +6,13 @@ function updateOnlineMessage() {
         document.getElementById('offline').style.display = 'none';
         if (!online) {
             online = true;
+            document.body.style.cursor = 'wait';
             firebase.firestore().enableNetwork()
                 .then(function () {
 
                     setTimeout(function () {
                         var confirms = window.confirm('Internet Connection Restored. \nPress OK to refresh the page to restore all functionality.');
+                        document.body.style.cursor = 'default';
                         if (confirms) {
                             location.reload();
                         }

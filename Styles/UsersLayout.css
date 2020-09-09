@@ -1,0 +1,85 @@
+﻿.user-section{
+    display : grid;
+    grid-auto-columns: 1fr 1fr;
+    grid-auto-rows: auto auto;
+    grid-template-areas: 'info password' 'unset unset';
+}
+#user-info{
+    grid-area: info;
+}
+#user-password{
+    grid-area: password;
+}
+/********************************** Default Items **********************************/
+#root {
+    display: block;
+    text-align: center;
+}
+
+.redError {
+    color: red;
+    font-size: 300%;
+    text-align: center;
+}
+
+.signInLink {
+    text-align: center;
+    font-size: 200%;
+}
+
+    .signInLink:visited, .signInLink:hover, .signInLink:link {
+        color: red;
+        text-align: center;
+    }
+
+    .signInLink:hover {
+        font-weight: 900;
+    }
+
+.button {
+    text-align: center;
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-top: .75em;
+    padding-bottom: .75em;
+    color: white;
+    font-size: 150%;
+    background-color: #022E6D;
+    display: block;
+    text-decoration: none;
+    margin: 0 20%;
+    position: relative;
+}
+
+    .button:hover {
+        background-color: #0066FF;
+    }
+
+
+.large {
+    font-size: 300%;
+    text-align: center;
+}
+.large-darkblue {
+    color: #022E6D;
+}
+.large-blue {
+    color: #0066FF;
+}
+.small{
+    font-size: 75%;
+    text-align: center;
+}
+.center{
+    text-align: center !important;
+}
+.input-style {
+    background-color: #DCDCDC;
+    font-size: 150%;
+    margin-bottom: 1em;
+}
+
+.label-style {
+    font-size: 110%;
+    color: #022E6D;
+}

@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="Product backlog manager. Build complete product backlogs with stories and defects. Add tasks to stories and defects. Manage completed items. ">
+    <meta name="keywords" content="developer, Andrew Rotert, software, DSU, dakota state university, backlog, published, engineering, iOS, projects, development, web, personal, website">
+    <meta name="author" content="Andrew Rotert">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-analytics.js"></script>
+
+    <title>Product Backlog | User Profile</title>
+    <link rel="icon" type="image/x-icon" href="Images/PBDWebLogo.png" />
+
+    <link rel="stylesheet" href="Styles/normalize.css" />
+    <link rel="stylesheet" href="Styles/defaults.css" />
+    <link rel="stylesheet" href="Styles/UsersLayout.css" />
+</head>
+<body>
+    <center><img src="Images/productbacklogdev.png" class="logo" alt="Logo" /></center>
+
+    <hr class="nav" />
+    <nav id="nav-placeholder"></nav>
+    <hr class="nav" />
+
+    <div class="parallax-container">
+        <div class="inner-parallax-container">
+            <h1 class="pbm">User Profile</h1>
+        </div>
+    </div>
+
+    <center>
+        <div id="offline">
+            <h1>OFFLINE: Please Refresh.</h1>
+            <h3>(Data will be saved offline.)</h3>
+        </div>
+    </center>
+
+    <div class="cssload-thecube" id="loading-gif">
+        <div class="cssload-cube cssload-c1"></div>
+        <div class="cssload-cube cssload-c2"></div>
+        <div class="cssload-cube cssload-c4"></div>
+        <div class="cssload-cube cssload-c3"></div>
+    </div>
+
+    <div id="rootModal"></div>
+    <div id="root"></div>
+
+    <br /><br />
+
+    <footer>
+        <div class="right_position">
+            <img src="Images/ARLogo.png" height="150" alt="Andrew Rotert Development Logo" />
+            <br />
+            <p class="bottom_position">&copy; Copyright 2019-2020 Andrew Rotert</p>
+        </div>
+
+    </footer>
+
+    <script src="Scripts/connection.js"></script>
+    <script src="Scripts/online-connection.js"></script>
+
+    <!-- Load React. -->
+    <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>
+
+
+    <!--
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+
+    -->
+    <!-- Load our React component.-->
+
+    <script type="text/babel" src="Scripts/react-users.js">
+    </script>
+    <script type="text/babel" src="Navigation/reactnav.js">
+    </script>
+</body>
+</html>

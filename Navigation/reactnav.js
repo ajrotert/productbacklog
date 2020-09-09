@@ -25,6 +25,7 @@ class ArNav extends React.Component {
                     <li className="navitem" id="PR-Page"><a href="Projects.html">Projects</a></li>
                     <li className="navitem" id="PB-Page"><a href="ProductBacklog.html">Product Backlog</a></li>
                     <li className="navitem" id="PT-Page"><a href="Tasks.html">Tasks</a></li>
+                    <li className="navitem" id="PU-Page"><a href="Profile.html">Profile</a></li>
                     <li className="navitem hamburgerBar" id="Drop-Down"><a href="#null" onClick={this.props.onClick}>&#9776;</a></li>
 
                 </ul>
@@ -61,6 +62,12 @@ else if (title.includes("Tasks")) {
     //document.getElementById("nav-logo").style.display = "none";
     document.getElementById("Home-Page").classList = "navitem";
 }
+else if (title.includes("User")) {
+    document.getElementById("PU-Page").classList.add("active");
+    //document.getElementById("logo-nav").style.display = "none";
+    //document.getElementById("nav-logo").style.display = "none";
+    document.getElementById("Home-Page").classList = "navitem RIGHT";
+}
 
 function toggleFunction() {
     var x = document.getElementById("navStart");
@@ -84,7 +91,7 @@ var sticky = navbar.offsetTop;
 function myFunction() {
     var title = document.title;
 
-    if (title.includes("Online") || title.includes("Projects") || title.includes("Tasks") || title.includes("Home")) {
+    if (title.includes("Online") || title.includes("Projects") || title.includes("Tasks") || title.includes("Home") || title.includes("User")) {
         if (window.pageYOffset >= sticky) {
             navbar.classList.add("sticky");
         } else {
