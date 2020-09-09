@@ -66,6 +66,10 @@
 .large-blue {
     color: #0066FF;
 }
+.medium-red{
+    color: red;
+    font-size: 125%;
+}
 .small{
     font-size: 75%;
     text-align: center;
@@ -85,4 +89,49 @@
 .label-style {
     font-size: 110%;
     color: #022E6D;
+}
+
+/*********************** Mobile Layout ***************************/
+@media screen and (max-width: 1000px) {
+    .large {
+        font-size: 250%;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .user-section {
+        grid-auto-columns: 1fr;
+        grid-auto-rows: auto auto auto auto;
+        grid-template-areas: 'info' 'password' 'unset' 'unset';
+    }
+    .left {
+        text-align: center !important;
+    }
+    .large {
+        font-size: 200%;
+    }
+
+    .small {
+        font-size: 65%;
+    }
+}
+
+@media screen and (max-width: 415px) {
+    .large {
+        font-size: 150%;
+    }
+
+    .small {
+        font-size: 60%;
+    }
+}
+
+@media screen and (max-width: 275px) {
+    .large {
+        font-size: 100%;
+    }
+
+    .small {
+        font-size: 50%;
+    }
 }
