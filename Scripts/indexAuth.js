@@ -1,14 +1,11 @@
 ﻿// Initialize the FirebaseUI Widget using Firebase.
 var ui = new firebaseui.auth.AuthUI(firebase.auth());
-
 var uiConfig = {
     callbacks: {
         signInSuccessWithAuthResult: function (authResult, redirectUrl) {
             // User successfully signed in.
             // Return type determines whether we continue the redirect automatically
             // or whether we leave that to developer to handle.
-
-            console.log(authResult);
 
             document.getElementById('welcome-label').style.display = 'block';
             document.getElementById('welcome-user').innerText = `${authResult.user.displayName}`
@@ -44,7 +41,25 @@ var uiConfig = {
     privacyPolicyUrl: 'https://developednotdownloaded.com'
 };
 
-ui.start('#firebaseui-auth-container', uiConfig);
+//Check if user is signed in, if not display login
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user != null) {
+        sessionStorage.setItem('uid', firebase.auth().currentUser.uid);
+        sessionStorage.setItem('readonly', false);
+        document.getElementById('loading-gif').style.display = "none";
+
+        document.getElementById('welcome-label').style.display = 'block';
+        document.getElementById('welcome-user').innerText = `${firebase.auth().currentUser.displayName}`;
+        document.getElementById('pb-button').style.display = 'block';
+    }
+    else {
+        document.getElementById('welcome-label').style.display = 'none';
+        document.getElementById('welcome-user').innerText = 'User';
+        document.getElementById('pb-button').style.display = 'none';
+        ui.start('#firebaseui-auth-container', uiConfig);
+    }
+});
+
 
 function loadPB() {
     if (firebase.auth().currentUser.uid != null) {
@@ -124,14 +139,6 @@ window.addEventListener("keyup", function (event) {
 input.oninput = function validator() {
     validateShareCode();
 };
-
-/*window.onclose = (() => {
-    firebase.auth().signOut().then(function () {
-        // Sign-out successful.
-    }).catch(function (error) {
-        // An error happened.
-    });
-});*/
 
 //Deselect any projects
 window.addEventListener('load', function (e) {

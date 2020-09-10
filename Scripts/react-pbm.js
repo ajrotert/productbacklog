@@ -800,46 +800,48 @@ class PB extends React.Component {
 
 const domContainer = document.querySelector('#root');
 
-if (uid == null) {
-    ReactDOM.render(<NotAuthError />, domContainer);
-    document.getElementById('loading-gif').style.display = 'none';
-}
-else if (pid == null) {
-    ReactDOM.render(<NoProjectError />, domContainer);
-    document.getElementById('loading-gif').style.display = 'none';
-}
-else {
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user == null && !readonly) {
+        ReactDOM.render(<NotAuthError />, domContainer);
+        document.getElementById('loading-gif').style.display = 'none';
+    }
+    else if (pid == null) {
+        ReactDOM.render(<NoProjectError />, domContainer);
+        document.getElementById('loading-gif').style.display = 'none';
+    }
+    else {
+        db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog')
+            .onSnapshot((snapshot) => {
+                ReactDOM.render(<PB data={snapshot} />, domContainer, () => {
+                    var inProgressItems = document.getElementById('grid1');
+                    var completedItems = document.getElementById('grid2');
+                    var completedNodeList = new Array(0);
+                    var inProgressNodeList = new Array(0);
+                    inProgressItems.childNodes.forEach((node) => {
+                        if (node.className === 'true') {
+                            completedNodeList.push(node);
+                        }
+                    });
+                    completedItems.childNodes.forEach((node) => {
+                        if (node.className === 'false') {
+                            inProgressNodeList.push(node);
+                        }
+                    });
+                    completedNodeList.forEach((node) => {
+                        completedItems.appendChild(node);
+                    });
+                    inProgressNodeList.forEach((node) => {
+                        inProgressItems.appendChild(node);
+                    });
 
-    db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog')
-        .onSnapshot((snapshot) => {
-            ReactDOM.render(<PB data={snapshot} />, domContainer, () => {
-                var inProgressItems = document.getElementById('grid1');
-                var completedItems = document.getElementById('grid2');
-                var completedNodeList = new Array(0);
-                var inProgressNodeList = new Array(0);
-                inProgressItems.childNodes.forEach((node) => {
-                    if (node.className === 'true') {
-                        completedNodeList.push(node);
-                    }
                 });
-                completedItems.childNodes.forEach((node) => {
-                    if (node.className === 'false') {
-                        inProgressNodeList.push(node);
-                    }
-                });
-                completedNodeList.forEach((node) => {
-                    completedItems.appendChild(node);
-                });
-                inProgressNodeList.forEach((node) => {
-                    inProgressItems.appendChild(node);
-                });
-                
+
+                document.getElementById('loading-gif').style.display = 'none';
+
             });
+    }
+});
 
-            document.getElementById('loading-gif').style.display = 'none';
-
-        })
-}
 //Deselect any projects
 window.addEventListener('load', function (e) {
     sessionStorage.removeItem('bid');

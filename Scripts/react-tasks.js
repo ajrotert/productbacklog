@@ -871,10 +871,10 @@ class PB extends React.Component {
 }
 
 const domContainer = document.querySelector('#root'); 
-start();
 
-async function start() {
-    if (uid == null) {
+
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user == null && !readonly) {
         ReactDOM.render(<NotAuthError />, domContainer);
         document.getElementById('loading-gif').style.display = 'none';
     }
@@ -916,9 +916,8 @@ async function start() {
                 document.getElementById('loading-gif').style.display = 'none';
 
             });
-
     }
-}
+});
 
 //Prevent user from changing values
 window.addEventListener('storage', function (e) {

@@ -10,25 +10,35 @@ class ArNav extends React.Component {
 
         }
     }
-        //                <img src="Images/PBDLogo.png" className="logo-nav" id="logo-nav" />
-    //                    <li id="nav-logo"> <img src="Images/PBDLogo.png" className="logo-nav" id="logo-nav" /> </li>
+
+    signOut() {
+        firebase.auth().signOut().then(function () {
+            //console.log('Signed Out');
+        }, function (error) {
+            console.error('Sign Out Error', error);
+        });
+    }
 
     render() {
         return (
             <div>
             <style dangerouslySetInnerHTML={getStylesAsString()} />
 
-            <nav id="nav-placeholder">
-                <ul className="nav" id="navStart">
-                    <li className="navitem" id="Home-Page"><a href="index.html">Home</a></li>
-                    <li className="navitem PBIDEV" id="Parent"><a href="#null">ProductBacklog.Dev</a></li>
-                    <li className="navitem" id="PR-Page"><a href="Projects.html">Projects</a></li>
-                    <li className="navitem" id="PB-Page"><a href="ProductBacklog.html">Product Backlog</a></li>
-                    <li className="navitem" id="PT-Page"><a href="Tasks.html">Tasks</a></li>
-                    <li className="navitem" id="PU-Page"><a href="Profile.html">Profile</a></li>
-                    <li className="navitem hamburgerBar" id="Drop-Down"><a href="#null" onClick={this.props.onClick}>&#9776;</a></li>
-
-                </ul>
+                <nav id="nav-placeholder">
+                    <ul className="nav" id="navStart">
+                        <li className="navitem" id="Home-Page"><a href="index.html">Home</a></li>
+                        <li class="dropdown navitem PBIDEV" id="Parent">
+                            <a href="#null" class="dropbtn">ProductBacklog.Dev</a>
+                            <div class="dropdown-content">
+                                <a onClick={this.signOut}>Sign Out</a>
+                            </div>
+                        </li>
+                        <li className="navitem" id="PR-Page"><a href="Projects.html">Projects</a></li>
+                        <li className="navitem" id="PB-Page"><a href="ProductBacklog.html">Product Backlog</a></li>
+                        <li className="navitem" id="PT-Page"><a href="Tasks.html">Tasks</a></li>
+                        <li className="navitem" id="PU-Page"><a href="Profile.html">Profile</a></li>
+                        <li className="navitem hamburgerBar" id="Drop-Down"><a href="#null" onClick={this.props.onClick}>&#9776;</a></li>
+                    </ul>
                 </nav>
             </div>
         );
