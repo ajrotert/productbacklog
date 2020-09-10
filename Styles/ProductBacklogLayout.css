@@ -280,24 +280,7 @@
 #carrot{
     clear: both;
 }
-/********************************** React button icon Items **********************************/
-.button_icons {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
 
-    .button_icons:hover,
-    .button_icons:focus {
-        color: #000;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-.clears {
-    clear: both;
-}
 /********************************** React readonly Items **********************************/
 
 .readonly-link{

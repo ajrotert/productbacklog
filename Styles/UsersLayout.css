@@ -85,10 +85,20 @@
     font-size: 150%;
     margin-bottom: 1em;
 }
+.edit-input-style {
+    background-color: #DCDCDC;
+    font-size: 200%;
+    color: #0066FF;
+    margin-bottom: 1em;
+}
 
 .label-style {
     font-size: 110%;
     color: #022E6D;
+}
+
+.hide-const {
+    display: none;
 }
 
 /*********************** Mobile Layout ***************************/
