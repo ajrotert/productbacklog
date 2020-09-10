@@ -107,12 +107,25 @@ class NotAuthError extends React.Component {
             <div>
                 <h1 className="redError">Not Authorized.</h1>
                 <a href="index.html" className="signInLink">Sign In.</a>
+                {this.props.children}
             </div>
         );
     }
 }
 
-const debug = false;
+//Properties:
+class NotAuthErrorDemo extends React.Component {
+    render() {
+        return (
+            <NotAuthError>
+                <hr />
+                <h1>Project Selection: </h1>
+                <h3>Easily manage projects through a product backlog. Each project has its own product backlog.</h3>
+                <img src="./Images/Demos/ProjectsDemo.png" className="resize-img-margin" />
+            </NotAuthError>
+        );
+    }
+}
 
 //id, name, description, timestamp
 class Projects extends React.Component {
@@ -201,7 +214,7 @@ firebase.auth().onAuthStateChanged(function (user) {
             });
     }
     else {
-        ReactDOM.render(<NotAuthError />, domContainer);
+        ReactDOM.render(<NotAuthErrorDemo />, domContainer);
         document.getElementById('loading-gif').style.display = 'none';
     }
 });

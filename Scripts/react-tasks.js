@@ -3,7 +3,7 @@ var db = firebase.firestore();
 const uid = sessionStorage.getItem('uid');  //User ID
 const pid = sessionStorage.getItem('pid');  //Project ID
 const bid = sessionStorage.getItem('bid');  //Backlog ID
-const readonly = (sessionStorage.getItem('readonly') == null ? true : sessionStorage.getItem('readonly') == 'true' ? true : false);
+const readonly = (sessionStorage.getItem('readonly') == null ? false : sessionStorage.getItem('readonly') == 'true' ? true : false);
 const SHOW_HIDDEN_ITEMS = "Show hidden items";
 const STOP_SHOWING_HIDDEN_ITEMS = "Stop showing hidden items";
 const SHOW_IN_PROGRESS_ITEMS = "Show in progress items";
@@ -186,8 +186,23 @@ class NotAuthError extends React.Component {
             <div>
                 <h1 className="redError">Not Authorized.</h1>
                 <a href="index.html" className="signInLink">Sign In.</a>
+                {this.props.children}
             </div>
         );
+    }
+}
+
+//Properties:
+class NotAuthErrorDemo extends React.Component {
+    render() {
+        return (
+            <NotAuthError>
+                <hr/>
+                <h1>Task Backlog: </h1>
+                <h3>Easily manage stories and defects by adding tasks. Each item has its own task backlog.</h3>
+                <img src="./Images/Demos/TasksDemo.png" className="resize-img-margin" />
+            </NotAuthError>
+            );
     }
 }
 
@@ -874,48 +889,54 @@ const domContainer = document.querySelector('#root');
 
 
 firebase.auth().onAuthStateChanged(function (user) {
-    if (user == null && !readonly) {
-        ReactDOM.render(<NotAuthError />, domContainer);
-        document.getElementById('loading-gif').style.display = 'none';
-    }
-    else if (pid == null) {
-        ReactDOM.render(<NoProjectError />, domContainer);
-        document.getElementById('loading-gif').style.display = 'none';
-    }
-    else if (bid == null) {
-        ReactDOM.render(<NoBacklogItemError />, domContainer);
-        document.getElementById('loading-gif').style.display = 'none';
-    }
-    else {
-        db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog')
-            .onSnapshot((snapshot) => {
-                ReactDOM.render(<PB data={snapshot} />, domContainer, () => {
-                    var inProgressItems = document.getElementById('grid1');
-                    var completedItems = document.getElementById('grid2');
-                    var completedNodeList = new Array(0);
-                    var inProgressNodeList = new Array(0);
-                    inProgressItems.childNodes.forEach((node) => {
-                        if (node.className === 'true') {
-                            completedNodeList.push(node);
-                        }
+    if (user != null || readonly) {
+        if (uid == null) {
+            ReactDOM.render(<NotAuthError />, domContainer);
+            document.getElementById('loading-gif').style.display = 'none';
+        }
+        else if (pid == null) {
+            ReactDOM.render(<NoProjectError />, domContainer);
+            document.getElementById('loading-gif').style.display = 'none';
+        }
+        else if (bid == null) {
+            ReactDOM.render(<NoBacklogItemError />, domContainer);
+            document.getElementById('loading-gif').style.display = 'none';
+        }
+        else {
+            db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog')
+                .onSnapshot((snapshot) => {
+                    ReactDOM.render(<PB data={snapshot} />, domContainer, () => {
+                        var inProgressItems = document.getElementById('grid1');
+                        var completedItems = document.getElementById('grid2');
+                        var completedNodeList = new Array(0);
+                        var inProgressNodeList = new Array(0);
+                        inProgressItems.childNodes.forEach((node) => {
+                            if (node.className === 'true') {
+                                completedNodeList.push(node);
+                            }
+                        });
+                        completedItems.childNodes.forEach((node) => {
+                            if (node.className === 'false') {
+                                inProgressNodeList.push(node);
+                            }
+                        });
+                        completedNodeList.forEach((node) => {
+                            completedItems.appendChild(node);
+                        });
+                        inProgressNodeList.forEach((node) => {
+                            inProgressItems.appendChild(node);
+                        });
+
                     });
-                    completedItems.childNodes.forEach((node) => {
-                        if (node.className === 'false') {
-                            inProgressNodeList.push(node);
-                        }
-                    });
-                    completedNodeList.forEach((node) => {
-                        completedItems.appendChild(node);
-                    });
-                    inProgressNodeList.forEach((node) => {
-                        inProgressItems.appendChild(node);
-                    });
+
+                    document.getElementById('loading-gif').style.display = 'none';
 
                 });
-
-                document.getElementById('loading-gif').style.display = 'none';
-
-            });
+        }
+    }
+    else {
+            ReactDOM.render(<NotAuthErrorDemo />, domContainer);
+            document.getElementById('loading-gif').style.display = 'none';
     }
 });
 

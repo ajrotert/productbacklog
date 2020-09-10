@@ -13,7 +13,10 @@ class ArNav extends React.Component {
 
     signOut() {
         firebase.auth().signOut().then(function () {
-            //console.log('Signed Out');
+            sessionStorage.removeItem('uid');
+            sessionStorage.removeItem('pid');
+            sessionStorage.removeItem('bid');
+            sessionStorage.removeItem('readonly');
         }, function (error) {
             console.error('Sign Out Error', error);
         });

@@ -45,10 +45,14 @@
     <None Include="Profile.html" />
     <None Include="Scripts\react-users.js" />
     <None Include="Styles\UsersLayout.css" />
+    <None Include="Images\Demos\TasksDemo.png" />
+    <None Include="Images\Demos\ProductBacklogDemo.png" />
+    <None Include="Images\Demos\ProjectsDemo.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
     <Folder Include="Scripts\" />
     <Folder Include="Images\ICONS\" />
+    <Folder Include="Images\Demos\" />
   </ItemGroup>
 </Project>
