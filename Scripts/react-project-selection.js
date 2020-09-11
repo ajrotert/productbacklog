@@ -229,6 +229,8 @@ window.addEventListener('load', function (e) {
 window.addEventListener('storage', function (e) {
     if (e.storageArea === sessionStorage) {
         sessionStorage.setItem('uid', uid);
+        sessionStorage.setItem('add', false);
+        sessionStorage.setItem('all', false);
         sessionStorage.setItem('readonly', readonly);
     }
 });

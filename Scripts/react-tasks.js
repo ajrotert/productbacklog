@@ -4,6 +4,8 @@ const uid = sessionStorage.getItem('uid');  //User ID
 const pid = sessionStorage.getItem('pid');  //Project ID
 const bid = sessionStorage.getItem('bid');  //Backlog ID
 const readonly = (sessionStorage.getItem('readonly') == null ? false : sessionStorage.getItem('readonly') == 'true' ? true : false);
+const canAdd = (sessionStorage.getItem('add') == null ? false : sessionStorage.getItem('add') == 'true' ? true : false);
+const canModify = (sessionStorage.getItem('all') == null ? false : sessionStorage.getItem('all') == 'true' ? true : false);
 const SHOW_HIDDEN_ITEMS = "Show hidden items";
 const STOP_SHOWING_HIDDEN_ITEMS = "Stop showing hidden items";
 const SHOW_IN_PROGRESS_ITEMS = "Show in progress items";
@@ -12,9 +14,12 @@ const SHOW_ENTIRE_BACKLOG = "Show entire backlog";
 const SHOW_FIXED_SIZE_BACKLOG = "Show fixed size backlog";
 const ADD_YOUR_FIRST_TASK = "Add your first task";
 const PRESS_NEW_ITEM_TO_ADD_YOUR_FIRST_TASK = "Press 'New Item' to add your first task"
+const USERS_WITH_THIS_CODE_CAN_ONLY_VIEW_THE_PRODUCT_BACKLOG_USERS_CANNOT_ADD_OR_MODIFY_ANY_STORIES_OR_DEFECTS = "Users with this code can only view the product backlog. Users cannot add or modify any stories or defects.";
+const USERS_WITH_THIS_CODE_CAN_VIEW_AND_ADD_TO_THE_PRODUCT_BACKLOG_USERS_CANNOT_MODIFY_ANY_EXISTING_STORIES_OR_DEFECTS = "Users with this code can view and add to the product backlog. Users cannot modify any stories or defects.";
+const USERS_WITH_THIS_CODE_CAN_VIEW_ADD_AND_MODIFY_THE_PRODUCT_BACKLOG_USERS_CAN_ADD_EDIT_AND_DELETE_ANY_STORY_OR_DEFECT = "Users with this code can view, add, and modify the product backlog. Users can add, edit, and delete any story or defect.";
 
 function getPbiDatabase(docId) {
-    if (!readonly) {
+    if (!readonly || canModify) {
         return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).get();
     }
     else {
@@ -22,7 +27,7 @@ function getPbiDatabase(docId) {
     }
 };
 function getPbiForTaskDatabase(docId) {
-    if (!readonly) {
+    if (!readonly || canModify) {
         return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).get();
     }
     else {
@@ -30,7 +35,7 @@ function getPbiForTaskDatabase(docId) {
     }
 };
 function updatePbiDatabase(docId, completed) {
-    if (!readonly) {
+    if (!readonly || canModify) {
         return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).update({ completed: completed, inprogress: false });
     }
     else {
@@ -38,7 +43,7 @@ function updatePbiDatabase(docId, completed) {
     }
 };
 function updatePbiForTaskDatabase(docId, completed) {
-    if (!readonly) {
+    if (!readonly || canModify) {
         return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).update({ completed: completed, inprogress: false });
     }
     else {
@@ -46,7 +51,7 @@ function updatePbiForTaskDatabase(docId, completed) {
     }
 };
 function updatePbiDatabaseWithInprogress(docId, inprogress) {
-    if (!readonly) {
+    if (!readonly || canModify) {
         return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).update({ inprogress: inprogress });
     }
     else {
@@ -54,7 +59,7 @@ function updatePbiDatabaseWithInprogress(docId, inprogress) {
     }
 };
 function updatePbiForTaskDatabaseWithInprogress(docId, inprogress) {
-    if (!readonly) {
+    if (!readonly || canModify) {
         return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).update({ inprogress: inprogress });
     }
     else {
@@ -62,7 +67,7 @@ function updatePbiForTaskDatabaseWithInprogress(docId, inprogress) {
     }
 };
 function hidePbiDatabase(docId, hidden) {
-    if (!readonly) {
+    if (!readonly || canModify) {
         return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).update({ hidden: hidden, inprogress: false });
     }
     else {
@@ -70,7 +75,7 @@ function hidePbiDatabase(docId, hidden) {
     }
 };
 function deleteProjectFromDatabase(docId) {
-    if (!readonly) {
+    if (!readonly || canModify) {
         return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).delete();
     }
     else {
@@ -93,7 +98,7 @@ const copyToClipboard = str => {
 };
 
 function generatePbiModalPopup(hide = false) {
-    if (!readonly) {
+    if (!readonly || canAdd || canModify) {
         ReactDOM.render(<ModalPbiView hide={hide} />, document.querySelector('#rootModal'));
 
     }
@@ -102,38 +107,14 @@ function generatePbiModalPopup(hide = false) {
     }
 }
 
-function generateShareCodeFromDatabase(sentUid, sentPid) {
-    var foundInDatabase = false;
-    db.collection('shares').where("shared_uid", "==", sentUid).where("shared_pid", "==", sentPid).limit(1)
-        .get()
-        .then(function (querySnapshot) {
-            querySnapshot.forEach(function (doc) {      //At Max, will contain one record
-                copyToClipboard(doc.id);
-                ReactDOM.render(<ModalShareView share_code={doc.id} />, document.querySelector('#rootModal'));
-
-                foundInDatabase = true;
-                return;
-            });
-            if (!foundInDatabase) {
-                db.collection('shares').add({
-                    shared_uid: sentUid,
-                    shared_pid: sentPid,
-                    read: true,
-                    write: false,
-                    add: false
-                })
-                    .then((docRef) => {
-                        copyToClipboard(docRef.id);
-                        ReactDOM.render(<ModalShareView share_code={docRef.id} />, document.querySelector('#rootModal'));
-                    });
-            }
-
-        })
-        .catch(function (error) {
-            console.log("Error getting documents: ", error);
-        });
-
+function generateShareCodeFromDatabase(sentUid, sentPid, read, add, all) {
+    //Moved to event handler, need to sync returns
 }
+
+function generateShareCodePopup() {
+    ReactDOM.render(<ModalShareView />, document.querySelector('#rootModal'));
+}
+
 function updateHiddenAttributes(show) {
     if (show) {
         var hideItems = document.getElementsByClassName('hide');
@@ -327,10 +308,81 @@ class ModalPbiView extends React.Component {
     }
 }
 
-//Properties: share_code
+//Properties: 
 class ModalShareView extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            share_code: null,
+            share_text: USERS_WITH_THIS_CODE_CAN_ONLY_VIEW_THE_PRODUCT_BACKLOG_USERS_CANNOT_ADD_OR_MODIFY_ANY_STORIES_OR_DEFECTS
+        }
+    }
+
     handler = () => {
         ReactDOM.unmountComponentAtNode(document.querySelector("#rootModal"));
+    }
+
+    updateAccess = (e) => {
+        if (e.target.value == 'read') {
+            this.setState({ share_text: USERS_WITH_THIS_CODE_CAN_ONLY_VIEW_THE_PRODUCT_BACKLOG_USERS_CANNOT_ADD_OR_MODIFY_ANY_STORIES_OR_DEFECTS });
+        }
+        else if (e.target.value == 'add') {
+            this.setState({ share_text: USERS_WITH_THIS_CODE_CAN_VIEW_AND_ADD_TO_THE_PRODUCT_BACKLOG_USERS_CANNOT_MODIFY_ANY_EXISTING_STORIES_OR_DEFECTS });
+        }
+        else if (e.target.value == 'all') {
+            this.setState({ share_text: USERS_WITH_THIS_CODE_CAN_VIEW_ADD_AND_MODIFY_THE_PRODUCT_BACKLOG_USERS_CAN_ADD_EDIT_AND_DELETE_ANY_STORY_OR_DEFECT });
+        }
+    }
+
+    getShareCode = () => {
+        var read=false, write=false , add = false;
+        if (this.state.share_text == USERS_WITH_THIS_CODE_CAN_ONLY_VIEW_THE_PRODUCT_BACKLOG_USERS_CANNOT_ADD_OR_MODIFY_ANY_STORIES_OR_DEFECTS) {
+            read = true;
+        }
+        else if (this.state.share_text == USERS_WITH_THIS_CODE_CAN_VIEW_AND_ADD_TO_THE_PRODUCT_BACKLOG_USERS_CANNOT_MODIFY_ANY_EXISTING_STORIES_OR_DEFECTS) {
+            read = true;
+            add = true;
+        }
+        else if (this.state.share_text == USERS_WITH_THIS_CODE_CAN_VIEW_ADD_AND_MODIFY_THE_PRODUCT_BACKLOG_USERS_CAN_ADD_EDIT_AND_DELETE_ANY_STORY_OR_DEFECT) {
+            read = true;
+            add = true;
+            write = true;
+        }
+
+        var foundInDatabase = false;
+        db.collection('shares')
+            .where("shared_uid", "==", uid)
+            .where("shared_pid", "==", pid)
+            .where("read", "==", read)
+            .where("add", "==", add)
+            .where("write", "==", write)
+            .limit(1)
+            .get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {      //At Max, will contain one record
+                    copyToClipboard(doc.id);
+                    foundInDatabase = true;
+                    this.setState({ share_code: doc.id });
+                });
+                if (!foundInDatabase) {
+                    db.collection('shares').add({
+                        shared_uid: uid,
+                        shared_pid: pid,
+                        read: read,
+                        write: write,
+                        add: add
+                    })
+                        .then((docRef) => {
+                            copyToClipboard(docRef.id);
+                            this.setState({ share_code: docRef.id });
+                        });
+                }
+
+            })
+            .catch(function (error) {
+                console.log("Error getting documents: ", error);
+            });
+
     }
 
     render() {
@@ -341,8 +393,16 @@ class ModalShareView extends React.Component {
                         <span className="button_icons" onClick={() => this.handler()}>&times;</span>
                         <h1 className="heading">Allow other users to view your product backlog.</h1>
                         <hr />
+                        <select id="access-selector" onChange={(e) => this.updateAccess(e)}>
+                            <option value="read">Only Read Access</option>
+                            <option value="add">Add Access</option>
+                            <option value="all">Add/Edit/Modify Access</option>
+                        </select>
+                        <h4>{this.state.share_text}</h4>
+                        <button onClick={this.getShareCode.bind(this)}>Generate</button>
+                        <hr />
                         <br />
-                        <h3 className="heading">Code: {this.props.share_code}</h3>
+                        <h3 className="heading">Code: {this.state.share_code}</h3>
                     </div>
                 </div>
 
@@ -434,7 +494,7 @@ class Heading extends React.Component {
     }
 
     inProgressChecked = () => {
-        if (!readonly) {
+        if (!readonly || canModify) {
             document.body.style.cursor = 'wait';
             if (!this.state.hide) {
                 getPbiForTaskDatabase(this.state.ID).then((doc) => {
@@ -465,7 +525,7 @@ class Heading extends React.Component {
     }
 
     completedChecked = () => {
-        if (!readonly) {
+        if (!readonly || canModify) {
             document.body.style.cursor = 'wait';
             getPbiForTaskDatabase(this.state.ID).then((doc) => {
                 if (doc.exists) {
@@ -496,7 +556,8 @@ class Heading extends React.Component {
     }
 
     shareLink() {
-        generateShareCodeFromDatabase(uid, pid)
+        generateShareCodePopup();
+        //generateShareCodeFromDatabase(uid, pid)
     };
 
     render() {
@@ -603,7 +664,7 @@ class Task extends React.Component {
     }
 
     updateHandler = (e) => {
-        if (!readonly) {
+        if (!readonly || canModify) {
 
             if (e.target.id == ("close")) {
                 var confirms = window.confirm(`Delete: ${this.props.title}`);
@@ -949,6 +1010,8 @@ window.addEventListener('storage', function (e) {
         sessionStorage.setItem('uid', uid);
         sessionStorage.setItem('pid', pid);
         sessionStorage.setItem('bid', bid);
+        sessionStorage.setItem('add', canAdd);
+        sessionStorage.setItem('all', canModify);
         sessionStorage.setItem('readonly', readonly);
     }
 });

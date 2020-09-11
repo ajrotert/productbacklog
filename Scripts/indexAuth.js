@@ -87,13 +87,17 @@ function shareCodeEntered() {
                         sessionStorage.setItem('uid', uid);
                         sessionStorage.setItem('pid', pid);
                         sessionStorage.setItem('readonly', true);
+                        sessionStorage.setItem('add', doc.data().add);
+                        sessionStorage.setItem('all', doc.data().write);
                         window.location.href = 'ProductBacklog.html';
                     }, function (error) {
                         uid = doc.data().shared_uid
                         pid = doc.data().shared_pid
                         sessionStorage.setItem('uid', uid);
                         sessionStorage.setItem('pid', pid);
-                        sessionStorage.setItem('readonly', true);
+                            sessionStorage.setItem('readonly', true);
+                            sessionStorage.setItem('add', doc.data().add);
+                            sessionStorage.setItem('all', doc.data().write);
                         window.location.href = 'ProductBacklog.html';
                     });
                     
@@ -160,4 +164,6 @@ window.addEventListener('load', function (e) {
     sessionStorage.removeItem('pid');
     sessionStorage.removeItem('bid');
     sessionStorage.removeItem('readonly');
+    sessionStorage.removeItem('add');
+    sessionStorage.removeItem('all');
 });

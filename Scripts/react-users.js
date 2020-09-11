@@ -296,9 +296,11 @@ firebase.auth().onAuthStateChanged(function (user) {
 //Prevent user from changing values
 window.addEventListener('storage', function (e) {
     if (e.storageArea === sessionStorage) {
-        sessionStorage.setItem('uid', uid);
-        sessionStorage.setItem('pid', pid);
-        sessionStorage.setItem('bid', bid);
+        sessionStorage.setItem('uid', "");
+        sessionStorage.setItem('pid', "");
+        sessionStorage.setItem('bid', "");
+        sessionStorage.setItem('add', false);
+        sessionStorage.setItem('all', false);
         sessionStorage.setItem('readonly', readonly);
     }
 });
