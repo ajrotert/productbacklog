@@ -82,15 +82,15 @@ function shareCodeEntered() {
                         sessionStorage.removeItem('pid');
                         sessionStorage.removeItem('bid');
                         sessionStorage.removeItem('readonly');
-                        uid = doc.data().share_code.split('»')[0]
-                        pid = doc.data().share_code.split('»')[1]
+                        uid = doc.data().shared_uid
+                        pid = doc.data().shared_pid
                         sessionStorage.setItem('uid', uid);
                         sessionStorage.setItem('pid', pid);
                         sessionStorage.setItem('readonly', true);
                         window.location.href = 'ProductBacklog.html';
                     }, function (error) {
-                        uid = doc.data().share_code.split('»')[0]
-                        pid = doc.data().share_code.split('»')[1]
+                        uid = doc.data().shared_uid
+                        pid = doc.data().shared_pid
                         sessionStorage.setItem('uid', uid);
                         sessionStorage.setItem('pid', pid);
                         sessionStorage.setItem('readonly', true);

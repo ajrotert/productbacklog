@@ -102,9 +102,9 @@ function generatePbiModalPopup(hide = false) {
     }
 }
 
-function generateShareCodeFromDatabase(longShareCode) {
+function generateShareCodeFromDatabase(sentUid, sentPid) {
     var foundInDatabase = false;
-    db.collection('shares').where("share_code", "==", longShareCode).limit(1)
+    db.collection('shares').where("shared_uid", "==", sentUid).where("shared_pid", "==", sentPid).limit(1)
         .get()
         .then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {      //At Max, will contain one record
@@ -116,7 +116,11 @@ function generateShareCodeFromDatabase(longShareCode) {
             });
             if (!foundInDatabase) {
                 db.collection('shares').add({
-                    share_code: longShareCode
+                    shared_uid: sentUid,
+                    shared_pid: sentPid,
+                    read: true,
+                    write: false,
+                    add: false
                 })
                     .then((docRef) => {
                         copyToClipboard(docRef.id);
@@ -492,8 +496,7 @@ class Heading extends React.Component {
     }
 
     shareLink() {
-        var shareCode = uid + '»' + pid
-        generateShareCodeFromDatabase(shareCode)
+        generateShareCodeFromDatabase(uid, pid)
     };
 
     render() {

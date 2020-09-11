@@ -79,34 +79,39 @@ function getProjectDocFromDatabase() {
     return db.collection('users').doc(uid).collection('Projects').doc(pid).get();
 };
 
-function generateShareCodeFromDatabase(longShareCode) {
+function generateShareCodeFromDatabase(sentUid, sentPid) {
     var foundInDatabase = false;
-        db.collection('shares').where("share_code", "==", longShareCode).limit(1)
+    db.collection('shares').where("shared_uid", "==", sentUid).where("shared_pid", "==", sentPid).limit(1)
         .get()
-            .then(function (querySnapshot) {
-                querySnapshot.forEach(function (doc) {      //At Max, will contain one record
-                    copyToClipboard(doc.id);
-                    ReactDOM.render(<ModalShareView share_code={doc.id} />, document.querySelector('#rootModal'));
+        .then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {      //At Max, will contain one record
+                copyToClipboard(doc.id);
+                ReactDOM.render(<ModalShareView share_code={doc.id} />, document.querySelector('#rootModal'));
 
-                    foundInDatabase = true;
-                    return;
-                });
-                if (!foundInDatabase) {
-                        db.collection('shares').add({
-                            share_code: longShareCode
-                        })
-                            .then((docRef) => {
-                                copyToClipboard(docRef.id);
-                                ReactDOM.render(<ModalShareView share_code={docRef.id} />, document.querySelector('#rootModal'));
-                            });
-                }
-            
+                foundInDatabase = true;
+                return;
+            });
+            if (!foundInDatabase) {
+                db.collection('shares').add({
+                    shared_uid: sentUid,
+                    shared_pid: sentPid,
+                    read: true,
+                    write: false,
+                    add: false
+                })
+                    .then((docRef) => {
+                        copyToClipboard(docRef.id);
+                        ReactDOM.render(<ModalShareView share_code={docRef.id} />, document.querySelector('#rootModal'));
+                    });
+            }
+
         })
         .catch(function (error) {
             console.log("Error getting documents: ", error);
         });
 
 }
+
 function updateHiddenAttributes(show) {
     if (show) {
         var hideItems = document.getElementsByClassName('hide');
@@ -361,8 +366,7 @@ class Heading extends React.Component {
     }
 
     shareLink() {
-        var shareCode = uid + '»' + pid
-        generateShareCodeFromDatabase(shareCode)
+        generateShareCodeFromDatabase(uid, pid)
     };
 
     render() {
