@@ -1,14 +1,18 @@
-﻿.user-section{
-    display : grid;
+﻿.user-section {
+    display: grid;
     grid-auto-columns: 1fr 1fr;
     grid-auto-rows: auto auto;
-    grid-template-areas: 'info password' 'unset unset';
+    grid-template-areas: 'info password' 'share password';
+    grid-row-gap: 3em;
 }
-#user-info{
+#user-info {
     grid-area: info;
 }
-#user-password{
+#user-password {
     grid-area: password;
+}
+#user-share {
+    grid-area: share;
 }
 /********************************** Default Items **********************************/
 #root {
@@ -112,7 +116,7 @@
     .user-section {
         grid-auto-columns: 1fr;
         grid-auto-rows: auto auto auto auto;
-        grid-template-areas: 'info' 'password' 'unset' 'unset';
+        grid-template-areas: 'info' 'password' 'share' 'unset';
     }
     .left {
         text-align: center !important;

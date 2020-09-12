@@ -17,6 +17,7 @@ const PRESS_NEW_ITEM_TO_ADD_YOUR_FIRST_TASK = "Press 'New Item' to add your firs
 const USERS_WITH_THIS_CODE_CAN_ONLY_VIEW_THE_PRODUCT_BACKLOG_USERS_CANNOT_ADD_OR_MODIFY_ANY_STORIES_OR_DEFECTS = "Users with this code can only view the product backlog. Users cannot add or modify any stories or defects.";
 const USERS_WITH_THIS_CODE_CAN_VIEW_AND_ADD_TO_THE_PRODUCT_BACKLOG_USERS_CANNOT_MODIFY_ANY_EXISTING_STORIES_OR_DEFECTS = "Users with this code can view and add to the product backlog. Users cannot modify any stories or defects.";
 const USERS_WITH_THIS_CODE_CAN_VIEW_ADD_AND_MODIFY_THE_PRODUCT_BACKLOG_USERS_CAN_ADD_EDIT_AND_DELETE_ANY_STORY_OR_DEFECT = "Users with this code can view, add, and modify the product backlog. Users can add, edit, and delete any story or defect.";
+var global_task_counter = 0;
 
 function getPbiDatabase(docId) {
     if (!readonly || canModify) {
@@ -74,9 +75,43 @@ function hidePbiDatabase(docId, hidden) {
         //Readonly
     }
 };
+function updateTasktoDatabase(title, description, completed, date, docId) {
+    if (!readonly || canModify || canAdd) {
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).set({
+            title: title,
+            description: description,
+            completed: completed,
+            timestamp: date
+        });
+    }
+    else {
+        //readonly
+    }
+}
+function addTasktoDatabase(title, description, completed, date) {
+    if (!readonly || canModify || canAdd) {
+        global_task_counter++;
+        var batch = db.batch();
+        batch.update(db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid), { task_counter: global_task_counter });
+        batch.set(db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(), {
+            title: title,
+            description: description,
+            completed: completed,
+            timestamp: date
+        })
+        return batch.commit();
+    }
+    else {
+        //readonly
+    }
+}
 function deleteProjectFromDatabase(docId) {
     if (!readonly || canModify) {
-        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).delete();
+        global_task_counter--;
+        var batch = db.batch();
+        batch.update(db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid), { task_counter: global_task_counter });
+        batch.delete(db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId));
+        return batch.commit();
     }
     else {
         //Readonly
@@ -237,19 +272,13 @@ class ModalPbiView extends React.Component {
         if (title != "" && description != "" && uid != null) {
             var docId = document.getElementById('modalID').innerText;
             if (docId.includes('Not yet generated')) {
-                db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc().set({
-                    title: title,
-                    description: description,
-                    completed: false,
-                    timestamp: Date.now(),
+                addTasktoDatabase(title, description, false, Date.now())
+                    .then(() => {
                 });
             }
             else {
-                db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).set({
-                    title: title,
-                    description: description,
-                    completed: document.getElementById('sample_checked').checked,
-                    timestamp: document.getElementById('modalTimestamp').innerText,
+                updateTasktoDatabase(title, description, document.getElementById('sample_checked').checked, document.getElementById('modalTimestamp').innerText, docId)
+                    .then(() => {
                 });
             }
 
@@ -665,7 +694,6 @@ class Task extends React.Component {
 
     updateHandler = (e) => {
         if (!readonly || canModify) {
-
             if (e.target.id == ("close")) {
                 var confirms = window.confirm(`Delete: ${this.props.title}`);
                 if (confirms) {
@@ -673,6 +701,7 @@ class Task extends React.Component {
                     ReactDOM.unmountComponentAtNode(domContainer);
 
                     deleteProjectFromDatabase(this.state.ID).then(() => {
+
                     });
                 }
             }
@@ -703,6 +732,7 @@ class Task extends React.Component {
                             this.setState({ hide: !this.state.hide, inprogress: false });
                             updateHiddenAttributes(!this.props.hiddenPB);
                             document.body.style.cursor = 'default';
+                            updateBacklogUI();
                         })
                         .catch((error) => {
                             document.body.style.cursor = 'default';
@@ -727,6 +757,7 @@ class Task extends React.Component {
                                     this.setState({ shadowColor: "PBI normalizePBI " + (!this.state.completed ? "box_shadow_green" : "box_shadow_blue"), completed: !this.state.completed, ID: this.state.ID, inprogress: false });
                                     updateInProgressAttributes(this.props.showInprogress);
                                     document.body.style.cursor = 'default';
+                                    updateBacklogUI();
                                 })
                                 .catch((error) => {
                                     document.body.style.cursor = 'default';
@@ -914,6 +945,8 @@ class PB extends React.Component {
                 <div key={object.id} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed, object.data().timestamp, object.data().hidden, object.data().inprogress)}</div>
             );
         });
+
+        global_task_counter = PBIContainer.length;
 
         return (
             <div>

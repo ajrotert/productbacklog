@@ -87,6 +87,11 @@
     text-align: right;
     font-size: .2em;
 }
+    .PBI > p.info {
+        text-align: right;
+        font-size: .8em;
+        padding-right: .2em;
+    }
 #pregrid1 {
     width: 50%;
     float: left;

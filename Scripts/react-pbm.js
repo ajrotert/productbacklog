@@ -213,7 +213,8 @@ class ModalPbiView extends React.Component {
                     description: description,
                     completed: false,
                     timestamp: Date.now(),
-                    isStory: story
+                    isStory: story,
+                    task_counter: 0
                 });
             }
             else {
@@ -592,6 +593,7 @@ class PBI extends React.Component {
                             this.setState({ hide: !this.state.hide, inprogress: false });
                             updateHiddenAttributes(!this.props.hiddenPB);
                             document.body.style.cursor = 'default';
+                            updateBacklogUI();
                         })
                         .catch((error) => {
                             document.body.style.cursor = 'default';
@@ -615,6 +617,7 @@ class PBI extends React.Component {
                                     this.setState({ shadowColor: "PBI " + (!this.state.completed ? "box_shadow_green" : this.props.isStory ? "box_shadow_blue" : "box_shadow_red"), completed: !this.state.completed, ID: this.state.ID, inprogress: false });
                                     updateInProgressAttributes(this.props.showInprogress);
                                     document.body.style.cursor = 'default';
+                                    updateBacklogUI();
                                 })
                                 .catch((error) => {
                                     document.body.style.cursor = 'default';
@@ -673,15 +676,6 @@ class PBI extends React.Component {
 
     }
 
-    componentDidMount() {
-        //getTasksDatabase(this.state.ID)       //This method requires to many database calls. 
-        //    .then((res) => {
-        //        console.log(res);
-        //        this.setState({ tasks: res.docs.length });
-        //    });                <p className="small_info">Tasks: {this.state.tasks} </p>
-
-    }
-
     render() {
         return (
             <div className={this.state.shadowColor + (this.state.hide ? " hide" : "") + (this.state.inprogress ? " inprogress-selector" : " inprogress-not-selector")} id={this.state.id} onClick={(e) => this.updateHandler(e)}>
@@ -697,6 +691,7 @@ class PBI extends React.Component {
                 <label id={"inprogressL" + this.state.ID} htmlFor={"inprogress" + this.state.ID} disabled hidden={this.state.completed}> In Progress</label><br /><br />
                 <input type="checkbox" id={"done" + this.state.ID} name={"done" + this.state.ID} checked={this.state.completed} value="none" />
                 <label id={"doneL" + this.state.ID} htmlFor={"done" + this.state.ID} disabled> Item Completed</label><br />
+                <p className="info" hidden={this.props.tasks == null}>Task Count: {this.props.tasks} </p>
                 <p className="small_info"> {this.state.hide ? "Hidden" : ""} </p>
                 <p className="small_info">Timestamp: {this.props.timestamp} </p>
                 <p className="small_info">ID: {this.state.ID}</p>
@@ -715,9 +710,9 @@ class PB extends React.Component {
         this.toggleInprogress = this.toggleInprogress.bind(this);
     }
 
-    renderPBI(id, title, description, completed, timestamp, isStory, hidden, inprogress) {
+    renderPBI(id, title, description, completed, timestamp, isStory, hidden, inprogress, tasks) {
         return (
-            <PBI id={id} title={title} description={description} completed={completed} timestamp={timestamp} isStory={isStory} hidden={hidden} hiddenPB={this.state.hidePbiItems} showInprogress={this.state.showInprogress} inprogress={inprogress}/>
+            <PBI id={id} title={title} description={description} completed={completed} timestamp={timestamp} isStory={isStory} hidden={hidden} hiddenPB={this.state.hidePbiItems} showInprogress={this.state.showInprogress} inprogress={inprogress} tasks={tasks}/>
             );
     };
 
@@ -839,7 +834,7 @@ class PB extends React.Component {
                 statsGroup.total.inProgressDefect++;
             }
             return (
-                <div key={object.id} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed, object.data().timestamp, object.data().isStory, object.data().hidden, object.data().inprogress)}</div>
+                <div key={object.id} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed, object.data().timestamp, object.data().isStory, object.data().hidden, object.data().inprogress, object.data().task_counter)}</div>
                 );
         });
 

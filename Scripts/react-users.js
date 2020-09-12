@@ -57,6 +57,69 @@ class ModifyError extends React.Component {
     }
 }
 
+//Properties: id, addonly, modify, pid, uid
+class ShareCode extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            project_title: "Loading..."
+        }
+    }
+
+    componentDidMount() {
+        db.collection('users').doc(this.props.uid).collection('Projects').doc(this.props.pid).get().then((doc) => {
+            this.setState({ project_title: doc.data().name });
+        });
+
+    }
+
+    render() {
+        return (
+            <div>
+                <h3>Code: <span className="large-blue">{this.props.id}</span></h3>
+                <h3>{this.state.project_title}</h3>
+                <h4 className="large-darkblue">{this.props.modify ? 'Modify Access' : (this.props.addonly ? 'Add Only' : 'Read-Only')}</h4>
+                <hr/>
+            </div>
+            );
+    }
+}
+
+//Properties: uid
+class ShareCodesView extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            objectArray: new Array(0) 
+        }
+    }
+
+    componentDidMount() {
+        db.collection('shares')
+            .where("shared_uid", "==", this.props.uid)
+            .get()
+            .then((querySnapshot) => {
+                const array = querySnapshot.docs.map((object, index) => {
+
+                    return (
+                        <ShareCode id={object.id} addonly={object.data().add} modify={object.data().write} pid={object.data().shared_pid} uid={this.props.uid} />
+                    );
+                });
+                this.setState({ objectArray: array });
+            });
+    }
+
+    render() {
+        return (
+            <div>
+                <h1 className="large center">Active share codes:</h1>
+                <hr />
+                {this.state.objectArray}
+            </div>
+            );
+    }
+}
+
 //Properties: uid
 class UpdatePassword extends React.Component {
     constructor(props) {
@@ -247,6 +310,7 @@ class UserInfo extends React.Component {
     render() {
         return (
             <div>
+                <h1 className="large center">User Information</h1>
                 <div className={this.state.editDisplayName ? "hide-const" : ""}>
                     <span className="button_icons" id="edit_display_name" onClick={(e) => this.editNames(e)}>✎</span>
                     <h1 className="large"><span className="large-darkblue">Display Name: </span> <span className="large-blue">{this.state.displayName}</span></h1>
@@ -286,8 +350,15 @@ class UserSection extends React.Component {
     render() {
         return (
             <div className="user-section">
-                <UserInfo id="user-info" userData={this.props.userData} />
-                <UpdatePassword id="user-password" uid={this.props.userData.uid} />
+                <div id="user-info">
+                    <UserInfo  userData={this.props.userData} />
+                </div>
+                <div id="user-password">
+                    <UpdatePassword  uid={this.props.userData.uid} />
+                </div>
+                <div id="user-share">
+                    <ShareCodesView  uid={this.props.userData.uid} />
+                </div>
             </div>
             );
     }
