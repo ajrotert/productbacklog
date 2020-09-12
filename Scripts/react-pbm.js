@@ -57,9 +57,6 @@ function deleteProjectFromDatabase(docId) {
         //Readonly
     }
 };
-function getTasksDatabase(bid) {
-      return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').get();
-};
 
 const copyToClipboard = str => {
     const el = document.createElement('textarea');
@@ -833,6 +830,7 @@ class PB extends React.Component {
                 }
                 statsGroup.total.inProgressDefect++;
             }
+
             return (
                 <div key={object.id} className={"" + object.data().completed} >{this.renderPBI(object.id, object.data().title, object.data().description, object.data().completed, object.data().timestamp, object.data().isStory, object.data().hidden, object.data().inprogress, object.data().task_counter)}</div>
                 );
