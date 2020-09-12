@@ -1,6 +1,9 @@
 ﻿'use strict';
 var db = firebase.firestore();
 const readonly = (sessionStorage.getItem('readonly') == null ? false : sessionStorage.getItem('readonly') == 'true' ? true : false);
+const canAdd = (sessionStorage.getItem('add') == null ? false : sessionStorage.getItem('add') == 'true' ? true : false);
+const canModify = (sessionStorage.getItem('all') == null ? false : sessionStorage.getItem('all') == 'true' ? true : false);
+
 const defaultUser = 'swkq0qAdSwft9yf9ovhmjgw2GJR2';
 
 class NotAuthError extends React.Component {
@@ -25,6 +28,32 @@ class ReadonlyError extends React.Component {
                 <a href="index.html" className="signInLink">Sign In.</a>
             </div>
         );
+    }
+}
+
+class AddonlyError extends React.Component {
+    render() {
+        return (
+            <div>
+                <h1 className="redError">Add-Only User</h1>
+                <p className="medium-red">Add-only users can view the shared project backlog and its associated tasks, as well add new items. </p>
+                <p className="medium-red">Add-only users cannot edit any information. </p>
+                <a href="index.html" className="signInLink">Sign In.</a>
+            </div>
+            );
+    }
+}
+
+class ModifyError extends React.Component {
+    render() {
+        return (
+            <div>
+                <h1 className="redError">Modify User</h1>
+                <p className="medium-red">Modify users can view the shared project backlog and its associated tasks, as well add new items. </p>
+                <p className="medium-red">Modify users can edit any information. </p>
+                <a href="index.html" className="signInLink">Sign In.</a>
+            </div>
+            );
     }
 }
 
@@ -281,6 +310,14 @@ firebase.auth().onAuthStateChanged(function (user) {
         };
 
         ReactDOM.render(<UserSection userData={userData} />, domContainer);
+        document.getElementById('loading-gif').style.display = 'none';
+    }
+    else if (canModify) {
+        ReactDOM.render(<ModifyError />, domContainer);
+        document.getElementById('loading-gif').style.display = 'none';
+    }
+    else if (canAdd) {
+        ReactDOM.render(<AddonlyError />, domContainer);
         document.getElementById('loading-gif').style.display = 'none';
     }
     else if (readonly) {

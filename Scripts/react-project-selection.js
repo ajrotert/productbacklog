@@ -206,7 +206,7 @@ class ProjectsList extends React.Component {
 const domContainer = document.querySelector('#root');
 
 firebase.auth().onAuthStateChanged(function (user) {
-    if (user != null) {
+    if (user != null & uid != null) {
         db.collection('users').doc(uid).collection('Projects')
             .onSnapshot((snapshot) => {
                 ReactDOM.render(<ProjectsList data={snapshot} />, domContainer, () => { });

@@ -13,7 +13,7 @@ const SHOW_ALL_ITEMS = "Show all items";
 const SHOW_ENTIRE_BACKLOG = "Show entire backlog";
 const SHOW_FIXED_SIZE_BACKLOG = "Show fixed size backlog";
 const ADD_YOUR_FIRST_TASK = "Add your first task";
-const PRESS_NEW_ITEM_TO_ADD_YOUR_FIRST_TASK = "Press 'New Item' to add your first task"
+const PRESS_NEW_ITEM_TO_ADD_YOUR_FIRST_TASK = "Press 'New Item' to add your first task";
 const USERS_WITH_THIS_CODE_CAN_ONLY_VIEW_THE_PRODUCT_BACKLOG_USERS_CANNOT_ADD_OR_MODIFY_ANY_STORIES_OR_DEFECTS = "Users with this code can only view the product backlog. Users cannot add or modify any stories or defects.";
 const USERS_WITH_THIS_CODE_CAN_VIEW_AND_ADD_TO_THE_PRODUCT_BACKLOG_USERS_CANNOT_MODIFY_ANY_EXISTING_STORIES_OR_DEFECTS = "Users with this code can view and add to the product backlog. Users cannot modify any stories or defects.";
 const USERS_WITH_THIS_CODE_CAN_VIEW_ADD_AND_MODIFY_THE_PRODUCT_BACKLOG_USERS_CAN_ADD_EDIT_AND_DELETE_ANY_STORY_OR_DEFECT = "Users with this code can view, add, and modify the product backlog. Users can add, edit, and delete any story or defect.";
@@ -395,8 +395,8 @@ class ModalShareView extends React.Component {
                         <hr />
                         <select id="access-selector" onChange={(e) => this.updateAccess(e)}>
                             <option value="read">Only Read Access</option>
-                            <option value="add">Add Access</option>
-                            <option value="all">Add/Edit/Modify Access</option>
+                            <option value="add" disabled={readonly && !canAdd}>Add Access</option>
+                            <option value="all" disabled={readonly && !canModify}>Add/Edit/Modify Access</option>
                         </select>
                         <h4>{this.state.share_text}</h4>
                         <button onClick={this.getShareCode.bind(this)}>Generate</button>
@@ -565,7 +565,7 @@ class Heading extends React.Component {
             <div>
                 <h1 className="pages">Selected {this.state.isStory ? "Story" : "Defect"}: </h1>
                 <PBI state={this.state} inProgressChecked={this.inProgressChecked} completedChecked={this.completedChecked}/>
-                <a id="shareLink" href="#null" onClick={this.shareLink}>Get Shareable Readonly Code</a>
+                <a id="shareLink" href="#null" onClick={this.shareLink}>Get Your Shareable Code</a>
             </div>
         );
         
@@ -627,7 +627,7 @@ class Stats extends React.Component {
         return (
             <div className="status" onClick={(e) => this.toggleContent(event)}>
                 <hr />
-                <div> {readonly ? <h1 className="readonly-link">READ-ONLY</h1> : null} <br className="clears" /></div>
+                <div> {readonly ? (canAdd ? (canModify ? <h1 className="readonly-link">MODIFY-ACCESS</h1> : <h1 className="readonly-link">ADD-ONLY</h1>) : <h1 className="readonly-link">READ-ONLY</h1>) : null} <br className="clears" /></div>
                 <div id="stats-display" className={this.state.hidden == 'true' ? "hide-const" : ""}>
                     <h3>Visible Backlog Items:</h3>
                     <p className="padding-right"><span className="bolder">Available: </span> Tasks: <span className="status-story">{this.props.stats.visible.inProgressTask}</span> </p>
