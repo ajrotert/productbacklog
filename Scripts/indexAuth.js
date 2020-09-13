@@ -76,7 +76,7 @@ function shareCodeEntered() {
     if (input.value != '') {
         getCodeFromDatabase(input.value)
             .then((doc) => {
-                if (doc.data() != null) {
+                if (doc.data() != null && !doc.data().inactive) {
                     firebase.auth().signOut().then(function () {
                         sessionStorage.removeItem('uid');
                         sessionStorage.removeItem('pid');
@@ -102,6 +102,10 @@ function shareCodeEntered() {
                     });
                     
                 }
+                else if (doc.data().inactive) {
+                    document.getElementById('labelShareCode').innerText = "(Share code is inactive)";
+                    document.getElementById('labelShareCode').style.color = 'red';
+                }
                 else {
                     document.getElementById('labelShareCode').innerText = "(Share code is invalid)";
                     document.getElementById('labelShareCode').style.color = 'red';
@@ -123,11 +127,17 @@ function validateShareCode() {
         if (input.value.length == 20) {
             getCodeFromDatabase(input.value)
                 .then((doc) => {
-                    if (doc.exists) {
+                    if (doc.exists && !doc.data().inactive) {
                         document.getElementById('labelShareCode').innerText = "(Share code is valid)";
                         document.getElementById('labelShareCode').style.color = '#0066FF';
                         document.getElementById('buttonShareCode').style.display = 'inline-block';
                         document.getElementById('startup').style.display = 'none';
+                    }
+                    else if (doc.data().inactive) {
+                        document.getElementById('labelShareCode').innerText = "(Share code is inactive)";
+                        document.getElementById('labelShareCode').style.color = 'red';
+                        document.getElementById('buttonShareCode').style.display = 'none';
+                        document.getElementById('startup').style.display = 'block';
                     }
                 });
         }

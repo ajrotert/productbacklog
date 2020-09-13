@@ -331,6 +331,7 @@ class ModalShareView extends React.Component {
             .where("read", "==", read)
             .where("add", "==", add)
             .where("write", "==", write)
+            .where("inactive", "==", false)
             .limit(1)
             .get()
             .then((querySnapshot) => {
@@ -345,7 +346,8 @@ class ModalShareView extends React.Component {
                         shared_pid: pid,
                         read: read,
                         write: write,
-                        add: add
+                        add: add,
+                        inactive: false
                     })
                         .then((docRef) => {
                             copyToClipboard(docRef.id);
