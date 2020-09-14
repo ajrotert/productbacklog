@@ -17,6 +17,7 @@ class ArNav extends React.Component {
             sessionStorage.removeItem('pid');
             sessionStorage.removeItem('bid');
             sessionStorage.removeItem('readonly');
+            handleReadonly();
         }, function (error) {
             console.error('Sign Out Error', error);
         });

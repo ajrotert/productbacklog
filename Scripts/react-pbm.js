@@ -950,3 +950,8 @@ window.addEventListener("pageshow", function (event) {
         window.location.reload();
     }
 });
+
+function handleReadonly() {
+    ReactDOM.render(<NotAuthErrorDemo />, domContainer);
+    document.getElementById('loading-gif').style.display = 'none';
+}

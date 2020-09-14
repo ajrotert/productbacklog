@@ -1050,3 +1050,8 @@ window.addEventListener('storage', function (e) {
         sessionStorage.setItem('readonly', readonly);
     }
 });
+
+function handleReadonly() {
+    ReactDOM.render(<NotAuthErrorDemo />, domContainer);
+    document.getElementById('loading-gif').style.display = 'none';
+}
