@@ -492,15 +492,39 @@ class Stats extends React.Component {
     }
 
     searching = (event) => {
-        var inProgressItems = document.getElementById('grid1');
-        var completedItems = document.getElementById('grid2');
-
-        hideAllElements(completedItems.getElementsByClassName('PBI'));
+        var searchItems;
+        var hideItems;
 
         if (event.target.value != "") {
             var keyword = event.target.value;
+            var checkboxes = document.getElementsByName('search-criteria');
+            var selectedValue = "inProgress";
+            for (let radios of checkboxes) {
+                if (radios.checked)
+                    selectedValue = radios.value;
+            }
 
-            searchAllElements(inProgressItems.getElementsByClassName('PBI'), keyword);
+            if (selectedValue == "inProgress") {
+                searchItems = document.getElementById('grid1');
+                hideItems = document.getElementById('grid2');
+            }
+            else if (selectedValue == "completed") {
+                searchItems = document.getElementById('grid2');
+                hideItems = document.getElementById('grid1');
+            }
+            else if (selectedValue == "all") {
+                hideItems = null;
+            }
+
+            if (hideItems != null) {
+                hideAllElements(hideItems.getElementsByClassName('PBI'));
+                searchAllElements(searchItems.getElementsByClassName('PBI'), keyword);
+            }
+            else {
+                searchAllElements(document.getElementById('grid1').getElementsByClassName('PBI'), keyword);
+                searchAllElements(document.getElementById('grid2').getElementsByClassName('PBI'), keyword);
+            }
+
         }
         else {
             resetAllElements(document.getElementsByClassName('PBI'));

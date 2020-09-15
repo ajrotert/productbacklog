@@ -610,7 +610,7 @@ class Stats extends React.Component {
         const hidden = localStorage.getItem('TASKSTATSAREAHIDDEN');
         this.state = {
             carrot: '\u2571\u2572',
-            hidden: hidden == null ? 'false' : hidden
+            hidden: hidden == null ? 'false' : hidden,
         };
     }
     toggleContent = (event) => {
@@ -654,15 +654,39 @@ class Stats extends React.Component {
     };
 
     searching = (event) => {
-        var inProgressItems = document.getElementById('grid1');
-        var completedItems = document.getElementById('grid2');
-
-        hideAllElements(completedItems.getElementsByClassName('PBI'));
+        var searchItems;
+        var hideItems;
 
         if (event.target.value != "") {
             var keyword = event.target.value;
+            var checkboxes = document.getElementsByName('search-criteria');
+            var selectedValue = "inProgress";
+            for (let radios of checkboxes) {
+                if (radios.checked)
+                    selectedValue = radios.value;
+            }
 
-            searchAllElements(inProgressItems.getElementsByClassName('PBI'), keyword);
+            if (selectedValue == "inProgress") {
+                searchItems = document.getElementById('grid1');
+                hideItems = document.getElementById('grid2');
+            }
+            else if (selectedValue == "completed") {
+                searchItems = document.getElementById('grid2');
+                hideItems = document.getElementById('grid1');
+            }
+            else if (selectedValue == "all") {
+                hideItems = null;
+            }
+
+            if (hideItems != null) {
+                hideAllElements(hideItems.getElementsByClassName('PBI'));
+                searchAllElements(searchItems.getElementsByClassName('PBI'), keyword);
+            }
+            else {
+                searchAllElements(document.getElementById('grid1').getElementsByClassName('PBI'), keyword);
+                searchAllElements(document.getElementById('grid2').getElementsByClassName('PBI'), keyword);
+            }
+            
         }
         else {
             resetAllElements(document.getElementsByClassName('PBI'));
@@ -716,7 +740,7 @@ class Stats extends React.Component {
                 <a id="hideShowLink-inprogress" className="stats-links padding-left" href="#null" onClick={this.props.action2} >{SHOW_IN_PROGRESS_ITEMS}</a><br className="clears" />
                 <div className="search-radios" id="searchRadio-hideShowLink">
                     <input className="search-input" id="searchInput-hideShowLink" type="text" placeholder="Search for a task: " onChange={(e) => this.searching(e)} /><br />
-                    <input type="radio" id="inProgressOnly-hideShowLink" name="search-criteria" value="inProgress"/>
+                    <input type="radio" id="inProgressOnly-hideShowLink" name="search-criteria" value="inProgress" checked={true}/>
                     <label for="inProgressOnly-hideShowLink" id="a-hideShowLink">In Progress</label>
                     <input type="radio" id="completedOnly-hideShowLink" name="search-criteria" value="completed" />
                     <label for="completedOnly-hideShowLink" id="b-hideShowLink">Completed</label> 
