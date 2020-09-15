@@ -286,9 +286,34 @@
     clear: both;
 }
 
-/********************************** React readonly Items **********************************/
+/********************************** React search Items **********************************/
+.search-input {
+    padding-top: .5em;
+    padding-bottom: .5em;
+    margin-top: .5em;
+    margin-bottom: .5em;
+    width: 100%;
+}
+.search-hide{
+    display: none;
+}
+.search-show{
+    display: block;
+}
+.search-radios{
+    float: right;
+}
+    .search-radios > input[type="radio"] {
+        margin-top: .5em;
+        margin-bottom: .5em;
+        margin-right: .5em;
+    }
+    .search-radios > label {
+        margin-right: .5em;
+    }
 
-.readonly-link{
+/********************************** React readonly Items **********************************/
+.readonly-link {
     color: red;
     float: right;
     clear: both;

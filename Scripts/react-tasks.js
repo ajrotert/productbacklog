@@ -653,6 +653,47 @@ class Stats extends React.Component {
         };
     };
 
+    searching = (event) => {
+        var inProgressItems = document.getElementById('grid1');
+        var completedItems = document.getElementById('grid2');
+
+        hideAllElements(completedItems.getElementsByClassName('PBI'));
+
+        if (event.target.value != "") {
+            var keyword = event.target.value;
+
+            searchAllElements(inProgressItems.getElementsByClassName('PBI'), keyword);
+        }
+        else {
+            resetAllElements(document.getElementsByClassName('PBI'));
+        }
+
+        function hideAllElements(elements) {
+            for (let element of elements) {
+                element.classList.add('search-hide');
+            }
+        };
+
+        function resetAllElements(elements) {
+            for (let element of elements) {
+                element.classList.remove('search-show');
+                element.classList.remove('search-hide');
+            }
+        };
+
+        function searchAllElements(elements, keyword) {
+            for (let element of elements) {
+                if (element.innerText != null && element.innerText.includes(keyword)) {
+                    element.classList.remove('search-hide');
+                    element.classList.add('search-show');
+                }
+                else {
+                    element.classList.remove('search-show');
+                    element.classList.add('search-hide');
+                }
+            }
+        };
+    }
 
     render() {
         return (
@@ -670,8 +711,19 @@ class Stats extends React.Component {
                     <p className="padding-right"><span className="bolder">Available: </span> Tasks: <span className="status-story">{this.props.stats.total.inProgressTask}</span> </p>
                     <p className="padding-right"><span className="bolder">Completed: </span>Tasks: <span className="status-completed">{this.props.stats.total.completedTask}</span> </p>
                 </div>
-                <a id="hideShowLink" className="stats-links padding-left" href="#null" onClick={this.props.action} >{SHOW_HIDDEN_ITEMS}</a><br />
-                <a id="hideShowLink-inprogress" className="stats-links padding-left" href="#null" onClick={this.props.action2} >{SHOW_IN_PROGRESS_ITEMS}</a>
+                <br className="clears" />
+                <a id="hideShowLink" className="stats-links padding-left" href="#null" onClick={this.props.action} >{SHOW_HIDDEN_ITEMS}</a><br className="clears" />
+                <a id="hideShowLink-inprogress" className="stats-links padding-left" href="#null" onClick={this.props.action2} >{SHOW_IN_PROGRESS_ITEMS}</a><br className="clears" />
+                <div className="search-radios" id="searchRadio-hideShowLink">
+                    <input className="search-input" id="searchInput-hideShowLink" type="text" placeholder="Search for a task: " onChange={(e) => this.searching(e)} /><br />
+                    <input type="radio" id="inProgressOnly-hideShowLink" name="search-criteria" value="inProgress"/>
+                    <label for="inProgressOnly-hideShowLink" id="a-hideShowLink">In Progress</label>
+                    <input type="radio" id="completedOnly-hideShowLink" name="search-criteria" value="completed" />
+                    <label for="completedOnly-hideShowLink" id="b-hideShowLink">Completed</label> 
+                    <input type="radio" id="allItems-hideShowLink" name="search-criteria" value="all" />
+                    <label for="allItems-hideShowLink" id="c-hideShowLink">All</label>
+                </div>
+                <br className="clears" />
                 <div id="carrot"> <center> <span>{this.state.carrot}</span> </center></div>
                 <hr />
             </div>
