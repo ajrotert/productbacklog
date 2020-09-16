@@ -730,7 +730,7 @@ class Stats extends React.Component {
     }
 
     componentDidMount() {
-        document.getElementById('inProgressOnly-hideShowLink').checked = true;
+        document.getElementById('inProgressOnly-hideShowLink').checked = true; 
     }
 
     render() {
