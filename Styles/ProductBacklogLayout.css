@@ -58,9 +58,10 @@
     margin: 5% 20%;
     opacity: 1;
 }
-.PBI:hover{
-    opacity: .75;
-}
+    .PBI:hover {
+        /*background-color: rgba(0,0,0,0.4);*/
+        opacity: .75;
+    }
 .normalizePBIheading {
     margin: 1em 20%;
 }
@@ -305,9 +306,12 @@
     /*float: right;*/
     
 }
+.search-results{
+    margin-top: 0;
+    padding-top: 0;
+}
     .search-radios > input[type="radio"] {
         margin-top: .5em;
-        margin-bottom: .5em;
         margin-right: .5em;
     }
     .search-radios > label {

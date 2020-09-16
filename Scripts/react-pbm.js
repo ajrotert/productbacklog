@@ -448,7 +448,8 @@ class Stats extends React.Component {
         const hidden = localStorage.getItem('PBSTATSAREAHIDDEN');
         this.state = {
             carrot: '\u2571\u2572',
-            hidden: hidden == null ? 'false' : hidden
+            hidden: hidden == null ? 'false' : hidden,
+            searchCount: 0
         };
     }
     toggleContent = (event) => {
@@ -528,20 +529,24 @@ class Stats extends React.Component {
 
             if (hideItems != null) {
                 hideAllElements(hideItems.getElementsByClassName('PBI'));
-                searchAllElements(searchItems.getElementsByClassName('PBI'), keyword);
+                var results = searchAllElements(searchItems.getElementsByClassName('PBI'), keyword);
+                this.setState({ searchCount: results });
             }
             else {
-                searchAllElements(document.getElementById('grid1').getElementsByClassName('PBI'), keyword);
-                searchAllElements(document.getElementById('grid2').getElementsByClassName('PBI'), keyword);
+                var results = searchAllElements(document.getElementById('grid1').getElementsByClassName('PBI'), keyword);
+                results += searchAllElements(document.getElementById('grid2').getElementsByClassName('PBI'), keyword);
+                this.setState({ searchCount: results });
             }
 
         }
         else {
             resetAllElements(document.getElementsByClassName('PBI'));
+            this.setState({ searchCount: 0 });
         }
 
         function hideAllElements(elements) {
             for (let element of elements) {
+                element.classList.remove('search-show');
                 element.classList.add('search-hide');
             }
         };
@@ -554,17 +559,26 @@ class Stats extends React.Component {
         };
 
         function searchAllElements(elements, keyword) {
+            var counter = 0;
             for (let element of elements) {
                 if (element.innerText != null && element.innerText.toLowerCase().includes(keyword.toLowerCase())) {
                     element.classList.remove('search-hide');
                     element.classList.add('search-show');
+                    counter++;
                 }
                 else {
                     element.classList.remove('search-show');
                     element.classList.add('search-hide');
                 }
             }
+            return counter;
         };
+    }
+    searching1 = () => {
+        var searchVal = document.getElementById('searchInput-hideShowLink').value;
+        var object = { target: null };
+        object.target = { value: searchVal }
+        this.searching(object);
     }
 
     componentDidMount() {
@@ -596,12 +610,13 @@ class Stats extends React.Component {
                 <div id="search-radios-container" className={this.state.hidden == 'true' ? "hide-const" : ""}>
                     <div className="search-radios" id="searchRadio-hideShowLink">
                         <input className="search-input" id="searchInput-hideShowLink" type="search" placeholder="Search for a story or defect: " onChange={(e) => this.searching(e)} /><br />
-                        <input type="radio" id="inProgressOnly-hideShowLink" name="search-criteria" value="inProgress" />
+                        <input type="radio" id="inProgressOnly-hideShowLink" name="search-criteria" value="inProgress" onClick={() => this.searching1()}/>
                         <label for="inProgressOnly-hideShowLink" id="a-hideShowLink">In Progress</label>
-                        <input type="radio" id="completedOnly-hideShowLink" name="search-criteria" value="completed" />
+                        <input type="radio" id="completedOnly-hideShowLink" name="search-criteria" value="completed" onClick={() => this.searching1()}/>
                         <label for="completedOnly-hideShowLink" id="b-hideShowLink">Completed</label>
-                        <input type="radio" id="allItems-hideShowLink" name="search-criteria" value="all" />
+                        <input type="radio" id="allItems-hideShowLink" name="search-criteria" value="all" onClick={() => this.searching1()}/>
                         <label for="allItems-hideShowLink" id="c-hideShowLink">All</label>
+                        <p className="search-results" hidden={this.state.searchCount==0}>{"Found Results: " + this.state.searchCount}</p>
                     </div>
                 </div>
             </div>
