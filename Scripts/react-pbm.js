@@ -454,38 +454,48 @@ class Stats extends React.Component {
     toggleContent = (event) => {
         var intervalID;
         var ids = document.getElementById("stats-display");
+        var searchFeatures = document.getElementById('search-radios-container');
         const pointsUp = '\u2571\u2572';
         const pointsDown = '\u2572\u2571';
         if (!event.target.id.includes('hideShowLink')) {
-            if (ids.classList.contains('hide-const')) {
+            if (ids.classList.contains('hide-const') || searchFeatures.classList.contains('hide-const')) {
+                //Show elements
                 ids.classList.remove('hide-const');
+                searchFeatures.classList.remove('hide-const');
                 ids.style.opacity = 0;
-                localStorage.setItem('PBSTATSAREAHIDDEN', 'false');
+                searchFeatures.style.opacity = 0;
                 this.setState({ carrot: pointsUp });
-                intervalID = setInterval(buildOpacity, 15, ids);
+                localStorage.setItem('TASKSTATSAREAHIDDEN', 'false');
+                intervalID = setInterval(buildOpacity, 15, ids, searchFeatures);
             }
             else {
+                //Hide elements
                 ids.style.opacity = 1;
-                localStorage.setItem('PBSTATSAREAHIDDEN', 'true');
+                searchFeatures.style.opacity = 1;
+                localStorage.setItem('TASKSTATSAREAHIDDEN', 'true');
                 this.setState({ carrot: pointsDown });
-                intervalID = setInterval(dropOpacity, 15, ids);
+                intervalID = setInterval(dropOpacity, 15, ids, searchFeatures);
             }
         }
 
-        function buildOpacity(node) {
+        function buildOpacity(node, node2 = null) {
             var opacity = parseFloat(node.style.opacity) + .05;
             node.style.opacity = opacity;
+            if (node2 != null)
+                node2.style.opacity = opacity;
             if (node.style.opacity >= 1.0) {
                 clearInterval(intervalID);
             }
         };
 
-        function dropOpacity(node) {
+        function dropOpacity(node, node2 = null) {
             var opacity = parseFloat(node.style.opacity) - .05;
             node.style.opacity = opacity;
+            node2.style.opacity = opacity;
             if (node.style.opacity <= 0) {
                 clearInterval(intervalID);
-                node.classList.add('hide-const'); 
+                node.classList.add('hide-const');
+                node2.classList.add('hide-const');
 
             }
         };
@@ -545,7 +555,7 @@ class Stats extends React.Component {
 
         function searchAllElements(elements, keyword) {
             for (let element of elements) {
-                if (element.innerText != null && element.innerText.includes(keyword)) {
+                if (element.innerText != null && element.innerText.toLowerCase().includes(keyword.toLowerCase())) {
                     element.classList.remove('search-hide');
                     element.classList.add('search-show');
                 }
@@ -557,38 +567,48 @@ class Stats extends React.Component {
         };
     }
 
+    componentDidMount() {
+        document.getElementById('inProgressOnly-hideShowLink').checked = true;
+    }
+
     render() {
     return (
         <div className="status" onClick={(e) => this.toggleContent(event)}>
             <hr />
             <div> {readonly ? (canAdd ? (canModify ? <h1 className="readonly-link">MODIFY-ACCESS</h1> : <h1 className="readonly-link">ADD-ONLY</h1>) : <h1 className="readonly-link">READ-ONLY</h1>) : null} <br className="clears" /></div>
-            <div id="stats-display" className={this.state.hidden == 'true' ? "hide-const" : ""}>
-                <h3>Visible Backlog Items:</h3>
-                <p className="padding-right"><span className="bolder">Available: </span> Defects: <span className="status-defect">{this.props.stats.visible.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.visible.inProgressStory} </span></p>
-                <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.visible.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.visible.completedStory}</span> </p>
-                <h3>Hidden Backlog Items:</h3>
-                <p className="padding-right"><span className="bolder">Available: </span> Defects: <span className="status-defect">{this.props.stats.hidden.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.hidden.inProgressStory} </span></p>
-                <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.hidden.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.hidden.completedStory}</span> </p>
-                <h3>Total Backlog Items:</h3>
-                <p className="padding-right"><span className="bolder">Available: </span> Defects: <span className="status-defect">{this.props.stats.total.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.total.inProgressStory} </span></p>
-                <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.total.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.total.completedStory}</span> </p>
+            <div id="Left-Side">
+                <div id="stats-display" className={this.state.hidden == 'true' ? "hide-const" : ""}>
+                    <h3>Visible Backlog Items:</h3>
+                    <p className="padding-right"><span className="bolder">Available: </span> Defects: <span className="status-defect">{this.props.stats.visible.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.visible.inProgressStory} </span></p>
+                    <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.visible.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.visible.completedStory}</span> </p>
+                    <h3>Hidden Backlog Items:</h3>
+                    <p className="padding-right"><span className="bolder">Available: </span> Defects: <span className="status-defect">{this.props.stats.hidden.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.hidden.inProgressStory} </span></p>
+                    <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.hidden.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.hidden.completedStory}</span> </p>
+                    <h3>Total Backlog Items:</h3>
+                    <p className="padding-right"><span className="bolder">Available: </span> Defects: <span className="status-defect">{this.props.stats.total.inProgressDefect}</span> Stories: <span className="status-story">{this.props.stats.total.inProgressStory} </span></p>
+                    <p className="padding-right"><span className="bolder">Completed: </span>Defects: <span className="status-completed">{this.props.stats.total.completedDefect}</span> Stories: <span className="status-completed">{this.props.stats.total.completedStory}</span> </p>
+                </div>
+            </div>
+            <div id="Right-Side">
+                <br className="clears" />
+                <a id="hideShowLink" className="stats-links" href="#null" onClick={this.props.action} >{SHOW_HIDDEN_ITEMS}</a><br className="clears" />
+                <a id="hideShowLink-inprogress" className="stats-links" href="#null" onClick={this.props.action2} >{SHOW_IN_PROGRESS_ITEMS}</a><br className="clears" />
+                <div id="search-radios-container" className={this.state.hidden == 'true' ? "hide-const" : ""}>
+                    <div className="search-radios" id="searchRadio-hideShowLink">
+                        <input className="search-input" id="searchInput-hideShowLink" type="search" placeholder="Search for a story or defect: " onChange={(e) => this.searching(e)} /><br />
+                        <input type="radio" id="inProgressOnly-hideShowLink" name="search-criteria" value="inProgress" />
+                        <label for="inProgressOnly-hideShowLink" id="a-hideShowLink">In Progress</label>
+                        <input type="radio" id="completedOnly-hideShowLink" name="search-criteria" value="completed" />
+                        <label for="completedOnly-hideShowLink" id="b-hideShowLink">Completed</label>
+                        <input type="radio" id="allItems-hideShowLink" name="search-criteria" value="all" />
+                        <label for="allItems-hideShowLink" id="c-hideShowLink">All</label>
+                    </div>
+                </div>
             </div>
             <br className="clears" />
-            <a id="hideShowLink" className="stats-links padding-left" href="#null" onClick={this.props.action} >{SHOW_HIDDEN_ITEMS}</a><br className="clears" />
-            <a id="hideShowLink-inprogress" className="stats-links padding-left" href="#null" onClick={this.props.action2} >{SHOW_IN_PROGRESS_ITEMS}</a><br className="clears" />
-            <div className="search-radios" id="searchRadio-hideShowLink">
-                <input className="search-input" id="searchInput-hideShowLink" type="text" placeholder="Search for a task: " onChange={(e) => this.searching(e)} /><br />
-                <input type="radio" id="inProgressOnly-hideShowLink" name="search-criteria" value="inProgress" />
-                <label for="inProgressOnly-hideShowLink" id="a-hideShowLink">In Progress</label>
-                <input type="radio" id="completedOnly-hideShowLink" name="search-criteria" value="completed" />
-                <label for="completedOnly-hideShowLink" id="b-hideShowLink">Completed</label>
-                <input type="radio" id="allItems-hideShowLink" name="search-criteria" value="all" />
-                <label for="allItems-hideShowLink" id="c-hideShowLink">All</label>
-            </div>
-            <br className="clears" />
-                <div id="carrot"> <center> <span>{this.state.carrot}</span> </center></div>
-                <hr />
-            </div>
+            <div id="carrot"> <center> <span>{this.state.carrot}</span> </center></div>
+            <hr />
+        </div>
             );
     }
 }

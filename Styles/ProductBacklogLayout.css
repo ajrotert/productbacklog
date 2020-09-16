@@ -213,13 +213,6 @@
     font-size: 110%;
     color: #022E6D;
 }
-.status > a{
-    font-size: 100%;
-    text-align: center;
-    position: relative;
-    display: inline-block;
-    float: right;
-}
 .status > hr{
     clear:both;
 }
@@ -230,25 +223,30 @@
     padding-bottom: 1em;
     padding-left: 1em;
 }
+.stats-links {
+    font-size: 100%;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+}
+.stats-links:link {
+    text-decoration: none;
+    color: #0066ff;
+}
 
-    .status > a:link {
-        text-decoration: none;
-        color: #0066ff;
-    }
+.stats-links:visited {
+    text-decoration: none;
+    color: #0066ff;
+}
 
-    .status > a:visited {
-        text-decoration: none;
-        color: #0066ff;
-    }
-
-    .status > a:hover {
-        text-decoration: underline;
-        color: #0066ff;
-    }
-    .status > a:active {
-        text-decoration: underline;
-        color: #0066ff;
-    }
+.stats-links:hover {
+    text-decoration: underline;
+    color: #0066ff;
+}
+.stats-links:active {
+    text-decoration: underline;
+    color: #0066ff;
+}
 .bolder{
     font-weight: bolder;
 }
@@ -279,11 +277,14 @@
 .text-green {
     color: #36FF54;
 }
-#stats-links {
-    clear: left;
-}
 #carrot{
     clear: both;
+}
+#Left-Side{
+    float: left;
+}
+#Right-Side {
+    float: right;
 }
 
 /********************************** React search Items **********************************/
@@ -301,7 +302,8 @@
     display: block;
 }
 .search-radios{
-    float: right;
+    /*float: right;*/
+    
 }
     .search-radios > input[type="radio"] {
         margin-top: .5em;
@@ -480,6 +482,16 @@
     }
     .modal {
         padding-top: 7%;
+    }
+    #Left-Side {
+        float: none;
+        width: 90%;
+    }
+
+    #Right-Side {
+        float: none;
+        width: 100%;
+        text-align: center;
     }
 }
 

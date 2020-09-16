@@ -1,4 +1,7 @@
-﻿/*********************** Parallax Layout ***************************/
+﻿input[type=search]::-webkit-search-cancel-button {
+    -webkit-appearance: searchfield-cancel-button;
+}
+/*********************** Parallax Layout ***************************/
 .parallax-container {
     min-height: 15vh;
     background-image: url("../Images/ServersImage.png");
