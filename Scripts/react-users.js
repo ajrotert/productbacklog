@@ -246,6 +246,31 @@ class UpdatePassword extends React.Component {
 }
 
 //Properties: userData
+class UserSignIn extends React.Component {
+    constructor(props) {
+        super(props);
+        const signinDate = new Date(this.props.userData.lastSignIn);
+        const firstDate = new Date(this.props.userData.firstSignOn);
+        this.state = {
+            lastSignIn: signinDate.toString(),
+            firstSignOn: firstDate.toString()
+        }
+    }
+
+    render() {
+        return (
+            <div>
+                <h1 className="large center">Sign In Information</h1>
+                <h4 className=""><span className="large-darkblue">Last Sign In: </span> <span className="large-blue">{this.state.lastSignIn}</span></h4>
+                <h4 className=""><span className="large-darkblue">First Sign on: </span> <span className="large-blue">{this.state.firstSignOn}</span></h4>
+                <h4 className=""><span className="large-darkblue">Provider: </span> <span className="large-blue">{this.props.userData.providerId}</span></h4>
+                <h4 className=""><span className="large-darkblue">UID: </span> <span className="large-blue">{this.props.userData.uid}</span></h4>
+            </div>
+            );
+    }
+}
+
+//Properties: userData
 class UserInfo extends React.Component {
     constructor(props) {
         super(props);
@@ -351,11 +376,6 @@ class UserInfo extends React.Component {
                     <br />
                 </div>
                 <p id="user-validation-message"></p>
-                <hr />
-                <h1 className="small left"><span className="large-darkblue">Last Sign In: </span> <span className="large-blue">{this.props.userData.lastSignIn}</span></h1>
-                <h1 className="small left"><span className="large-darkblue">First Sign on: </span> <span className="large-blue">{this.props.userData.firstSignOn}</span></h1>
-                <h1 className="small left"><span className="large-darkblue">Provider: </span> <span className="large-blue">{this.props.userData.providerId}</span></h1>
-                <h1 className="small left"><span className="large-darkblue">UID: </span> <span className="large-blue">{this.props.userData.uid}</span></h1>
             </div>
             );
     }
@@ -375,6 +395,9 @@ class UserSection extends React.Component {
                 </div>
                 <div id="user-share">
                     <ShareCodesView  uid={this.props.userData.uid} />
+                </div>
+                <div id="user-signin">
+                    <UserSignIn userData={this.props.userData}/>
                 </div>
             </div>
             );
