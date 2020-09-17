@@ -54,22 +54,24 @@
         background-color: #0066FF;
     }
 .PBI {
-    background-color: #848482;
+    /*background-color: #848482;opacity: .75;*/
     margin: 5% 20%;
     opacity: 1;
 }
     .PBI:hover {
-        /*background-color: rgba(0,0,0,0.4);*/
-        opacity: .75;
+        background-color: rgba(0,0,0,0.4);
+        
     }
 .normalizePBIheading {
     margin: 1em 20%;
 }
-.normalizePBIheading:hover{
+    .normalizePBIheading:hover {
+        opacity: 1;
+        background-color: #DCDCDC;
+    }
+.normalizePBI:hover {
     opacity: 1;
-}
-.normalizePBI:hover{
-    opacity: 1;
+    background-color: #DCDCDC;
 }
     .PBI > h1 {
         font-size: 1.75em;
@@ -133,15 +135,15 @@
 }
 
 .box_shadow_blue {
-    border: 2px solid #0066FF;
+    border: .3em solid #0066FF;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .box_shadow_green {
-    border: 2px solid #36FF54;
+    border: .3em solid #36FF54;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .box_shadow_red {
-    border: 2px solid #ff3333;
+    border: .3em solid #ff3333;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 #shareLink {

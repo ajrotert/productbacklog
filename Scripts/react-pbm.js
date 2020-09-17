@@ -561,7 +561,7 @@ class Stats extends React.Component {
         function searchAllElements(elements, keyword) {
             var counter = 0;
             for (let element of elements) {
-                if (element.innerText != null && element.innerText.toLowerCase().includes(keyword.toLowerCase())) {
+                if (element.innerText != null && element.innerText.toLowerCase().includes(keyword.toLowerCase().trim())) {
                     element.classList.remove('search-hide');
                     element.classList.add('search-show');
                     counter++;
@@ -579,6 +579,24 @@ class Stats extends React.Component {
         var object = { target: null };
         object.target = { value: searchVal }
         this.searching(object);
+    }
+
+    searching2(value) {
+        var searchVal = value;
+        document.getElementById('searchInput-hideShowLink').value = value;
+        var object = { target: null };
+        object.target = { value: searchVal }
+        this.searching(object);
+    }
+
+    hideClicked = (event) => {
+        this.searching2('');
+        this.props.action(event);
+    }
+
+    inprogressClicked = (event) => {
+        this.searching2('');
+        this.props.action2(event);
     }
 
     componentDidMount() {
@@ -605,8 +623,8 @@ class Stats extends React.Component {
             </div>
             <div id="Right-Side">
                 <br className="clears" />
-                <a id="hideShowLink" className="stats-links" href="#null" onClick={this.props.action} >{SHOW_HIDDEN_ITEMS}</a><br className="clears" />
-                <a id="hideShowLink-inprogress" className="stats-links" href="#null" onClick={this.props.action2} >{SHOW_IN_PROGRESS_ITEMS}</a><br className="clears" />
+                <a id="hideShowLink" className="stats-links" href="#null" onClick={(e) => this.hideClicked(e)} >{SHOW_HIDDEN_ITEMS}</a><br className="clears" />
+                <a id="hideShowLink-inprogress" className="stats-links" href="#null" onClick={(e) => this.inprogressClicked(e)} >{SHOW_IN_PROGRESS_ITEMS}</a><br className="clears" />
                 <div id="search-radios-container" className={this.state.hidden == 'true' ? "hide-const" : ""}>
                     <div className="search-radios" id="searchRadio-hideShowLink">
                         <input className="search-input" id="searchInput-hideShowLink" type="search" placeholder="Search for a story or defect: " onChange={(e) => this.searching(e)} /><br />
