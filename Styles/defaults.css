@@ -1,4 +1,14 @@
-﻿input[type=search]::-webkit-search-cancel-button {
+﻿textarea,
+input.text,
+input[type="text"],
+input[type="button"],
+input[type="submit"],
+input[type=search],
+.input-checkbox {
+    -webkit-appearance: none;
+    border-radius: 0;
+}
+input[type=search]::-webkit-search-cancel-button {
     -webkit-appearance: searchfield-cancel-button;
 }
 /*********************** Parallax Layout ***************************/
