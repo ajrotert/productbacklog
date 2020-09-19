@@ -355,22 +355,22 @@ class UserInfo extends React.Component {
                 <h1 className="large center">User Information</h1>
                 <div className={this.state.editDisplayName ? "hide-const" : ""}>
                     <span className="button_icons" id="edit_display_name" onClick={(e) => this.editNames(e)}>✎</span>
-                    <h1 className="large"><span className="large-darkblue">Display Name: </span> <span className="large-blue">{this.state.displayName}</span></h1>
+                    <h1 className=""><span className="large-darkblue">Display Name: <br/> </span> <span className="large-blue">{this.state.displayName}</span></h1>
                 </div>
                 <div className={this.state.editDisplayName ? "" : "hide-const"}>
                     <span className="button_icons" id="display_close" onClick={(e) => this.closeNames(e)}>&times;</span>
-                    <h1 className="large"><span className="large-darkblue">Display Name: </span></h1>
+                    <h1 className=""><span className="large-darkblue">Display Name: </span></h1>
                     <input className="edit-input-style" id="editDisplayInput" type="text" placeholder={this.state.displayName} />
                     <a className="button" id="edit_display_submit" onClick={(e) => this.submit(e)}>Submit</a>
                     <br/>
                 </div>
                 <div className={this.state.editEmail ? "hide-const" : ""}>
                     <span className="button_icons" id="edit_email" onClick={(e) => this.editNames(e)} >✎</span>
-                    <h1 className="large"><span className="large-darkblue">Email: </span> <span className="large-blue">{this.state.email}</span></h1>
+                    <h1 className=""><span className="large-darkblue">Email: <br /> </span> <span className="large-blue">{this.state.email}</span></h1>
                 </div>
                 <div className={this.state.editEmail ? "" : "hide-const"}>
                     <span className="button_icons" id="email_close" onClick={(e) => this.closeNames(e)}>&times;</span>
-                    <h1 className="large"><span className="large-darkblue">Email: </span></h1>
+                    <h1 className=""><span className="large-darkblue">Email: </span></h1>
                     <input className="edit-input-style" id="editEmailInput" type="text" placeholder={this.state.email} />
                     <a className="button" id="edit_email_submit" onClick={(e) => this.submit(e)}>Submit</a>
                     <br />
