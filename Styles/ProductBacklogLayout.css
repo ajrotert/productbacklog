@@ -297,11 +297,11 @@
     margin-bottom: .5em;
     width: 100%;
 }
-.search-hide{
-    display: none;
+.search-hide {
+    display: none !important;
 }
-.search-show{
-    display: block;
+.search-show {
+    display: block !important;
 }
 .search-radios{
     /*float: right;*/
