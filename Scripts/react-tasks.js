@@ -479,6 +479,7 @@ class PBI extends React.Component {
                 <label id={"inprogressL" + this.props.state.ID} htmlFor={"inprogress" + this.props.state.ID} hidden={this.props.state.completed}> In Progress</label><br /><br />
                 <input type="checkbox" id={"done" + this.props.state.ID} name={"done" + this.props.state.ID} checked={this.props.state.completed} value="none" disabled={false} onChange={this.props.completedChecked} />
                 <label id={"doneL" + this.props.state.ID} htmlFor={"done" + this.props.state.ID} disabled> Item Completed</label><br />
+                <p className="info" hidden={this.props.state.tasks == null}>Task Count: {this.props.state.tasks} </p>
                 <p className="small_info"> {this.props.state.hide ? "Hidden" : ""} </p>
                 <p className="small_info">Timestamp: {this.props.state.timestamp} </p>
                 <p className="small_info">ID: {this.props.state.ID}</p>
@@ -519,7 +520,8 @@ class Heading extends React.Component {
                     inprogress: doc.data().inprogress == null ? false : doc.data().inprogress,
                     timestamp: doc.data().timestamp,
                     shadowColor: "PBI normalizePBIheading " + (doc.data().completed ? "box_shadow_green" : doc.data().isStory ? "box_shadow_blue" : "box_shadow_red"),
-                    hide: doc.data().hidden == null ? false : doc.data().hidden
+                    hide: doc.data().hidden == null ? false : doc.data().hidden,
+                    tasks: doc.data().task_counter
                 });
             });
     }
