@@ -86,7 +86,8 @@ class ModalView extends React.Component {
             <div id="InputModal" className="modal">
                 <div className="modal-content">
                     <div className="samplePBI">
-                        <span className="button_icons" onClick={() => this.addToDatabase()}>&times;</span>
+                        <span className="button_icons" onClick={this.handler}>&times;</span>
+                        <br className="clears" />
                         <input className="heading" id="name" type="textbox" name="name" placeholder="Enter Project Name" required />
                         <hr />
                         <br />
@@ -162,7 +163,7 @@ class Projects extends React.Component {
             <div className="project_item" onClick={(e) => this.handler(e)}>
                 <span className="button_icons" id="close">&times;</span>
                 <span className="button_icons" id="edit" >✎</span>
-
+                <br className="clears" />
                 <h1>{this.props.name}</h1>
                 <hr />
                 <h3>{this.props.description}</h3>

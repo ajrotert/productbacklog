@@ -308,6 +308,7 @@ class ModalPbiView extends React.Component {
                 <div className="modal-content">
                     <div className={"samplePBI " + "box_shadow_blue"} id="parent-container">
                         <span className="button_icons" onClick={this.handler}>&times;</span>
+                        <br className="clears" />
                         <input className="heading" id="title" type="textbox" name="title" placeholder={"Enter Task Title"} required />
                         <hr />
                         <br />
@@ -422,6 +423,7 @@ class ModalShareView extends React.Component {
                 <div className="modal-content">
                     <div className="samplePBI extraPadding">
                         <span className="button_icons" onClick={() => this.handler()}>&times;</span>
+                        <br className="clears" />
                         <h1 className="heading">Allow other users to view your product backlog.</h1>
                         <hr />
                         <select id="access-selector" onChange={(e) => this.updateAccess(e)}>
