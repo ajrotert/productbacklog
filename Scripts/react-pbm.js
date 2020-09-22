@@ -215,7 +215,7 @@ class ModalPbiView extends React.Component {
                 });
             }
             else {
-                db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).set({
+                db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).update({
                     title: title,
                     description: description,
                     completed: document.getElementById('sample_checked').checked,
@@ -223,8 +223,6 @@ class ModalPbiView extends React.Component {
                     isStory: story
                 });
             }
-
-            
 
             titleNode.style.border = "1px solid black";
             descriptionNode.style.border = "1px solid black";

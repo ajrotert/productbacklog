@@ -77,7 +77,7 @@ function hidePbiDatabase(docId, hidden) {
 };
 function updateTasktoDatabase(title, description, completed, date, docId) {
     if (!readonly || canModify || canAdd) {
-        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).set({
+        return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog').doc(docId).update({
             title: title,
             description: description,
             completed: completed,
