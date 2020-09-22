@@ -53,6 +53,16 @@
     <None Include="Scripts\ProjectSelection\ModalView-project.js" />
     <None Include="Scripts\ProjectSelection\Projects-project.js" />
     <None Include="Scripts\ProjectSelection\Constants-project.js" />
+    <None Include="Scripts\Users\NotAuthError-user.js" />
+    <None Include="Scripts\Users\ReadonlyError-user.js" />
+    <None Include="Scripts\Users\AddonlyError-user.js" />
+    <None Include="Scripts\Users\ModifyError-user.js" />
+    <None Include="Scripts\Users\ShareCode-user.js" />
+    <None Include="Scripts\Users\ShareCodesView-user.js" />
+    <None Include="Scripts\Users\UpdatePassword-user.js" />
+    <None Include="Scripts\Users\UserSignIn-user.js" />
+    <None Include="Scripts\Users\UserInfo-user.js" />
+    <None Include="Scripts\Users\Constants-user.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
@@ -60,5 +70,6 @@
     <Folder Include="Images\ICONS\" />
     <Folder Include="Images\Demos\" />
     <Folder Include="Scripts\ProjectSelection\" />
+    <Folder Include="Scripts\Users\" />
   </ItemGroup>
 </Project>
