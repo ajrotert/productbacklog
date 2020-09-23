@@ -63,6 +63,18 @@
     <None Include="Scripts\Users\UserSignIn-user.js" />
     <None Include="Scripts\Users\UserInfo-user.js" />
     <None Include="Scripts\Users\Constants-user.js" />
+    <None Include="Scripts\Tasks\NotAuthError-task.js" />
+    <None Include="Scripts\Tasks\NotAuthErrorDemo-task.js" />
+    <None Include="Scripts\Tasks\NoProjectError-task.js" />
+    <None Include="Scripts\Tasks\NoBacklogItemError-task.js" />
+    <None Include="Scripts\Tasks\ModalPbiView-task.js" />
+    <None Include="Scripts\Tasks\ModalShareView-task.js" />
+    <None Include="Scripts\Tasks\FirstPbi-task.js" />
+    <None Include="Scripts\Tasks\PBI-task.js" />
+    <None Include="Scripts\Tasks\Heading-task.js" />
+    <None Include="Scripts\Tasks\Stats-task.js" />
+    <None Include="Scripts\Tasks\Task-task.js" />
+    <None Include="Scripts\Tasks\Constants-task.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
@@ -71,5 +83,6 @@
     <Folder Include="Images\Demos\" />
     <Folder Include="Scripts\ProjectSelection\" />
     <Folder Include="Scripts\Users\" />
+    <Folder Include="Scripts\Tasks\" />
   </ItemGroup>
 </Project>
