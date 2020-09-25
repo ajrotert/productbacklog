@@ -138,42 +138,6 @@ function updateBacklogUI() {
     }
 }
 
-class NotAuthError extends React.Component {
-    render() {
-        return (
-            <div>
-                <h1 className="redError">Not Authorized.</h1>
-                <a href="index.html" className="signInLink">Sign In.</a>
-                {this.props.children}
-            </div>
-        );
-    }
-}
-
-//Properties:
-class NotAuthErrorDemo extends React.Component {
-    render() {
-        return (
-            <NotAuthError>
-                <hr />
-                <h1>Product Backlog: </h1>
-                <h3>Easily manage projects through a product backlog. Each project has its own product backlog.</h3>
-                <img src="./Images/Demos/ProductBacklogDemo.png" className="resize-img-margin" />
-            </NotAuthError>
-        );
-    }
-}
-
-class NoProjectError extends React.Component {
-    render() {
-        return (
-            <div>
-                <h1 className="redError">No Project.</h1>
-                <a href="Projects.html" className="signInLink">Select Project.</a>
-            </div>
-        );
-    }
-}
 
 const debug = false;
 

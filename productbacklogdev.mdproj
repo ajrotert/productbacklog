@@ -75,6 +75,9 @@
     <None Include="Scripts\Tasks\Stats-task.js" />
     <None Include="Scripts\Tasks\Task-task.js" />
     <None Include="Scripts\Tasks\Constants-task.js" />
+    <None Include="Scripts\Pbm\NotAuthError-pbm.js" />
+    <None Include="Scripts\Pbm\NotAuthErrorDemo-pbm.js" />
+    <None Include="Scripts\Pbm\NoProjectError-pbm.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
@@ -84,5 +87,6 @@
     <Folder Include="Scripts\ProjectSelection\" />
     <Folder Include="Scripts\Users\" />
     <Folder Include="Scripts\Tasks\" />
+    <Folder Include="Scripts\Pbm\" />
   </ItemGroup>
 </Project>
