@@ -78,6 +78,13 @@
     <None Include="Scripts\Pbm\NotAuthError-pbm.js" />
     <None Include="Scripts\Pbm\NotAuthErrorDemo-pbm.js" />
     <None Include="Scripts\Pbm\NoProjectError-pbm.js" />
+    <None Include="Scripts\Pbm\ModalPbiView-pbm.js" />
+    <None Include="Scripts\Pbm\ModalShareVIew-pbm.js" />
+    <None Include="Scripts\Pbm\Projects-pbm.js" />
+    <None Include="Scripts\Pbm\Heading-pbm.js" />
+    <None Include="Scripts\Pbm\Stats-pbm.js" />
+    <None Include="Scripts\Pbm\FirstPbi-pbm.js" />
+    <None Include="Scripts\Pbm\PBI-pbm.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
