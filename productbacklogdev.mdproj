@@ -85,6 +85,7 @@
     <None Include="Scripts\Pbm\Stats-pbm.js" />
     <None Include="Scripts\Pbm\FirstPbi-pbm.js" />
     <None Include="Scripts\Pbm\PBI-pbm.js" />
+    <None Include="Scripts\Pbm\Constants-pbm.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
