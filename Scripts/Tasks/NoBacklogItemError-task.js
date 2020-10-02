@@ -1,7 +1,7 @@
 ﻿//Properties:
 //Global Methods:
 //Global Constants:
-class NoBacklogItemError extends React.Component {
+class NoBacklogItemErrorTask extends React.Component {
     render() {
         return (
             <div>

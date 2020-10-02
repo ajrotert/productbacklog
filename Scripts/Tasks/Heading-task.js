@@ -26,13 +26,13 @@ function getPbiForTaskDatabase(docId) {
 };
 
 function generateShareCodePopup() {
-    ReactDOM.render(<ModalShareView />, document.querySelector('#rootModal'));
+    ReactDOM.render(<ModalShareViewTask />, document.querySelector('#rootModal'));
 };
 
 //Properties:
 //Global Methods: updatePbiForTaskDatabaseWithInprogress, getPbiForTaskDatabase, updatePbiForTaskDatabase, generateShareCodePopup
 //Global Constants:
-class Heading extends React.Component {
+class HeadingTask extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -140,7 +140,7 @@ class Heading extends React.Component {
         return (
             <div>
                 <h1 className="pages">Selected {this.state.isStory ? "Story" : "Defect"}: </h1>
-                <PBI state={this.state} inProgressChecked={this.inProgressChecked} completedChecked={this.completedChecked} />
+                <PBITask state={this.state} inProgressChecked={this.inProgressChecked} completedChecked={this.completedChecked} />
                 <a id="shareLink" href="#null" onClick={this.shareLink}>Get Your Shareable Code</a>
             </div>
         );

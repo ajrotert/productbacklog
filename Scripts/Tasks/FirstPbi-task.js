@@ -1,7 +1,7 @@
 ﻿//Properties:
 //Global Methods:
 //Global Constants: ADD_YOUR_FIRST_TASK, PRESS_NEW_ITEM_TO_ADD_YOUR_FIRST_TASK
-class FirstPbi extends React.Component {
+class FirstPbiTask extends React.Component {
     render() {
         return (
             <div className="PBI normalizePBIheading box_shadow_blue" id="00000">

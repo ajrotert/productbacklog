@@ -11,7 +11,7 @@
 //Properties:
 //Global Methods: copyToClipboard
 //Global Constants: a few
-class ModalShareView extends React.Component {
+class ModalShareViewTask extends React.Component {
     constructor(props) {
         super(props);
         this.state = {

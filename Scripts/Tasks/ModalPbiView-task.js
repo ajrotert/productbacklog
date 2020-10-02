@@ -31,7 +31,7 @@ function addTasktoDatabase(title, description, completed, date) {
 //Properties: hide
 //Global Methods: addTasktoDatabase, updateTasktoDatabase
 //Global Constants:
-class ModalPbiView extends React.Component {
+class ModalPbiViewTask extends React.Component {
     constructor(props) {
         super(props);
         this.state = {

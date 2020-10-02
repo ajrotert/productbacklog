@@ -1,7 +1,7 @@
 ﻿//Properties: stats, action, action2
 //Global Methods:
 //Global Constants:
-class Stats extends React.Component {
+class StatsTask extends React.Component {
     constructor(props) {
         super(props);
         const hidden = localStorage.getItem('TASKSTATSAREAHIDDEN');

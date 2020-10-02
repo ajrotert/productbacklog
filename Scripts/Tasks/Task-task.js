@@ -103,7 +103,7 @@ function getPbiDocFromDatabase() {
 //Properties: id, title, description, completed, timestamp, hidden, hiddenPB, showInprogress, inprogress
 //Global Methods: deleteProjectFromDatabase, hidePbiDatabase, updateHiddenAttributes, updateBacklogUI, getPbiDatabase, updatePbiDatabase, updateInProgressAttributes, updatePbiDatabaseWithInprogress
 //Global Constants:
-class Task extends React.Component {
+class TaskTask extends React.Component {
     constructor(props) {
         super(props);
         var hiddenState = this.props.hidden == null ? false : this.props.hidden;

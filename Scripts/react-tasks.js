@@ -6,7 +6,7 @@
 
 function generatePbiModalPopup(hide = false) {
     if (!readonly || canAdd || canModify) {
-        ReactDOM.render(<ModalPbiView hide={hide} />, document.querySelector('#rootModal'));
+        ReactDOM.render(<ModalPbiViewTask hide={hide} />, document.querySelector('#rootModal'));
 
     }
     else {
@@ -17,7 +17,7 @@ function generatePbiModalPopup(hide = false) {
 //Properties: data
 //Global Methods: generatePbiModalPopup updateBacklogUI updateHiddenAttributes updateInProgressAttributes
 //Global Constants: a few
-class PB extends React.Component {
+class PBTask extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -30,7 +30,7 @@ class PB extends React.Component {
 
     renderPBI(id, title, description, completed, timestamp, hidden, inprogress) {
         return (
-            <Task id={id} title={title} description={description} completed={completed} timestamp={timestamp} hidden={hidden} hiddenPB={this.state.hidePbiItems} showInprogress={this.state.showInprogress} inprogress={inprogress}/>
+            <TaskTask id={id} title={title} description={description} completed={completed} timestamp={timestamp} hidden={hidden} hiddenPB={this.state.hidePbiItems} showInprogress={this.state.showInprogress} inprogress={inprogress}/>
         );
     };
 
@@ -138,9 +138,9 @@ class PB extends React.Component {
             <div>
                 <div className="grid-container">
 
-                <Heading />
+                <HeadingTask />
 
-                <Stats stats={statsGroup} action={this.handleHiddenItems} action2={this.toggleInprogress} />
+                <StatsTask stats={statsGroup} action={this.handleHiddenItems} action2={this.toggleInprogress} />
 
                 <div id="pregrid1" className="grid_border_right">
                     <h1 className="grid_border_bottom">Backlog</h1>
@@ -154,7 +154,7 @@ class PB extends React.Component {
                         <a className="button" onClick={this.handler}>New Item</a>
                         </div>
                         {PBIContainer}
-                        {PBIContainer.length == 0 ? <FirstPbi /> : null}
+                        {PBIContainer.length == 0 ? <FirstPbiTask /> : null}
                 </div>
                 <div id="grid2" className="grid_border_left"></div>
                 
@@ -174,21 +174,21 @@ const domContainer = document.querySelector('#root');
 firebase.auth().onAuthStateChanged(function (user) {
     if (user != null || readonly) {
         if (uid == null) {
-            ReactDOM.render(<NotAuthError />, domContainer);
+            ReactDOM.render(<NotAuthErrorTask />, domContainer);
             document.getElementById('loading-gif').style.display = 'none';
         }
         else if (pid == null) {
-            ReactDOM.render(<NoProjectError />, domContainer);
+            ReactDOM.render(<NoProjectErrorTask />, domContainer);
             document.getElementById('loading-gif').style.display = 'none';
         }
         else if (bid == null) {
-            ReactDOM.render(<NoBacklogItemError />, domContainer);
+            ReactDOM.render(<NoBacklogItemErrorTask />, domContainer);
             document.getElementById('loading-gif').style.display = 'none';
         }
         else {
             db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(bid).collection('task_backlog')
                 .onSnapshot((snapshot) => {
-                    ReactDOM.render(<PB data={snapshot} />, domContainer, () => {
+                    ReactDOM.render(<PBTask data={snapshot} />, domContainer, () => {
                         var inProgressItems = document.getElementById('grid1');
                         var completedItems = document.getElementById('grid2');
                         var completedNodeList = new Array(0);
@@ -218,7 +218,7 @@ firebase.auth().onAuthStateChanged(function (user) {
         }
     }
     else {
-            ReactDOM.render(<NotAuthErrorDemo />, domContainer);
+            ReactDOM.render(<NotAuthErrorDemoTask />, domContainer);
             document.getElementById('loading-gif').style.display = 'none';
     }
 });
@@ -236,6 +236,6 @@ window.addEventListener('storage', function (e) {
 });
 
 function handleReadonly() {
-    ReactDOM.render(<NotAuthErrorDemo />, domContainer);
+    ReactDOM.render(<NotAuthErrorDemoTask />, domContainer);
     document.getElementById('loading-gif').style.display = 'none';
 }

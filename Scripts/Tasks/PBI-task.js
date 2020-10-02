@@ -1,7 +1,7 @@
 ﻿//Properties: state, inProgressChecked
 //Global Methods:
 //Global Constants:
-class PBI extends React.Component {
+class PBITask extends React.Component {
     constructor(props) {
         super(props);
         var hiddenState = this.props.hidden == null ? false : this.props.hidden;
