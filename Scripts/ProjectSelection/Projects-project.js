@@ -9,7 +9,7 @@
 
 function generatePbiModalPopup(id = null, timestamp = null) { //Duplicate in react-project-selection.js
     if (!readonly) {
-        ReactDOM.render(<ModalView id={id} timestamp={timestamp} />, document.querySelector('#rootModal'));
+        ReactDOM.render(<ModalViewProject id={id} timestamp={timestamp} />, document.querySelector('#rootModal'));
 
     }
     else {
@@ -20,7 +20,7 @@ function generatePbiModalPopup(id = null, timestamp = null) { //Duplicate in rea
 //Properties: id, name, description, timestamp
 //Global Methods: deleteProjectFromDatabase, generatePbiModalPopup
 //Global Constants: uid
-class Projects extends React.Component {
+class ProjectsProject extends React.Component {
     constructor(props) {
         super(props);
     }

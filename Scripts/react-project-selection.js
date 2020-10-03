@@ -7,7 +7,7 @@
 
 function generatePbiModalPopup(id = null, timestamp = null) { //Duplicate in Projects-project.js
     if (!readonly) {
-        ReactDOM.render(<ModalView id={id} timestamp={timestamp} />, document.querySelector('#rootModal'));
+        ReactDOM.render(<ModalViewProject id={id} timestamp={timestamp} />, document.querySelector('#rootModal'));
 
     }
     else {
@@ -18,7 +18,7 @@ function generatePbiModalPopup(id = null, timestamp = null) { //Duplicate in Pro
 //Properties: data
 //Global Methods: generatePbiModalPopup
 //Global Constants: 
-class ProjectsList extends React.Component {
+class ProjectsListProject extends React.Component {
 
     handler() {
         generatePbiModalPopup();
@@ -34,7 +34,7 @@ class ProjectsList extends React.Component {
         const projectsArray = orderedData.map((object, index) => {
             return (
                 <div key={object.id} >
-                    <Projects id={object.id} name={object.data().name} description={object.data().description} timestamp={object.data().timestamp}/>
+                    <ProjectsProject id={object.id} name={object.data().name} description={object.data().description} timestamp={object.data().timestamp}/>
                 </div>
             );
         });
@@ -55,12 +55,12 @@ firebase.auth().onAuthStateChanged(function (user) {
     if (user != null & uid != null) {
         db.collection('users').doc(uid).collection('Projects')
             .onSnapshot((snapshot) => {
-                ReactDOM.render(<ProjectsList data={snapshot} />, domContainer, () => { });
+                ReactDOM.render(<ProjectsListProject data={snapshot} />, domContainer, () => { });
                 document.getElementById('loading-gif').style.display = 'none';
             });
     }
     else {
-        ReactDOM.render(<NotAuthErrorDemo />, domContainer);
+        ReactDOM.render(<NotAuthErrorDemoProject />, domContainer);
         document.getElementById('loading-gif').style.display = 'none';
     }
 });

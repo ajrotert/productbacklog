@@ -27,7 +27,7 @@
 //Properties: Optional id, timestamp
 //Global Methods: addNewProjectDB
 //Global Constants: 
-class ModalView extends React.Component {
+class ModalViewProject extends React.Component {
     handler() {
         ReactDOM.unmountComponentAtNode(document.querySelector("#rootModal"));
     }
