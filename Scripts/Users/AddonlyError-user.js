@@ -1,7 +1,7 @@
 ﻿//Properties:
 //Global Methods:
 //Global Constants:
-class AddonlyError extends React.Component {
+class AddonlyErrorUser extends React.Component {
     render() {
         return (
             <div>

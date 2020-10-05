@@ -1,7 +1,7 @@
 ﻿//Properties: uid
 //Global Methods:
 //Global Constants:
-class ShareCodesView extends React.Component {
+class ShareCodesViewUser extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -18,7 +18,7 @@ class ShareCodesView extends React.Component {
                 const array = querySnapshot.docs.map((object, index) => {
 
                     return (
-                        <ShareCode id={object.id} addonly={object.data().add} modify={object.data().write} pid={object.data().shared_pid} uid={this.props.uid} />
+                        <ShareCodeUser id={object.id} addonly={object.data().add} modify={object.data().write} pid={object.data().shared_pid} uid={this.props.uid} />
                     );
                 });
                 this.setState({ objectArray: array });

@@ -1,7 +1,7 @@
 ﻿//Properties:
 //Global Methods:
 //Global Constants:
-class ModifyError extends React.Component {
+class ModifyErrorUser extends React.Component {
     render() {
         return (
             <div>

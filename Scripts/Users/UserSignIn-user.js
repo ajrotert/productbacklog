@@ -1,7 +1,7 @@
 ﻿//Properties: userData
 //Global Methods:
 //Global Constants:
-class UserSignIn extends React.Component {
+class UserSignInUser extends React.Component {
     constructor(props) {
         super(props);
         const signinDate = new Date(this.props.userData.lastSignIn);

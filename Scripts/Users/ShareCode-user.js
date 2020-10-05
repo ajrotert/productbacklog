@@ -1,7 +1,7 @@
 ﻿//Properties: id, addonly, modify, pid, uid
 //Global Methods:
 //Global Constants: defaultUser
-class ShareCode extends React.Component {
+class ShareCodeUser extends React.Component {
     constructor(props) {
         super(props);
         this.state = {

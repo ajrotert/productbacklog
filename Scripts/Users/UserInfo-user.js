@@ -1,7 +1,7 @@
 ﻿//Properties: userData
 //Global Methods:
 //Global Constants: defaultUser, readonly
-class UserInfo extends React.Component {
+class UserInfoUser extends React.Component {
     constructor(props) {
         super(props);
         this.state = {

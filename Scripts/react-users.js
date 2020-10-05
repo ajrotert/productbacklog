@@ -5,21 +5,21 @@
  **/
 
 //Properties: userData: dispalyName, email, providerId, uid, lastSignIn, firstSignOn
-class UserSection extends React.Component {
+class UserSectionUser extends React.Component {
     render() {
         return (
             <div className="user-section">
                 <div id="user-info">
-                    <UserInfo  userData={this.props.userData} />
+                    <UserInfoUser  userData={this.props.userData} />
                 </div>
                 <div id="user-password">
-                    <UpdatePassword  uid={this.props.userData.uid} />
+                    <UpdatePasswordUser  uid={this.props.userData.uid} />
                 </div>
                 <div id="user-share">
-                    <ShareCodesView  uid={this.props.userData.uid} />
+                    <ShareCodesViewUser  uid={this.props.userData.uid} />
                 </div>
                 <div id="user-signin">
-                    <UserSignIn userData={this.props.userData}/>
+                    <UserSignInUser userData={this.props.userData}/>
                 </div>
             </div>
             );
@@ -42,23 +42,23 @@ firebase.auth().onAuthStateChanged(function (user) {
             firstSignOn: user.metadata.creationTime
         };
 
-        ReactDOM.render(<UserSection userData={userData} />, domContainer);
+        ReactDOM.render(<UserSectionUser userData={userData} />, domContainer);
         document.getElementById('loading-gif').style.display = 'none';
     }
     else if (canModify) {
-        ReactDOM.render(<ModifyError />, domContainer);
+        ReactDOM.render(<ModifyErrorUser />, domContainer);
         document.getElementById('loading-gif').style.display = 'none';
     }
     else if (canAdd) {
-        ReactDOM.render(<AddonlyError />, domContainer);
+        ReactDOM.render(<AddonlyErrorUser />, domContainer);
         document.getElementById('loading-gif').style.display = 'none';
     }
     else if (readonly) {
-        ReactDOM.render(<ReadonlyError />, domContainer);
+        ReactDOM.render(<ReadonlyErrorUser />, domContainer);
         document.getElementById('loading-gif').style.display = 'none';
     }
     else {
-        ReactDOM.render(<NotAuthError />, domContainer);
+        ReactDOM.render(<NotAuthErrorUser />, domContainer);
         document.getElementById('loading-gif').style.display = 'none';
     }
 });

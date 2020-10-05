@@ -1,7 +1,7 @@
 ﻿//Properties: uid
 //Global Methods:
 //Global Constants: defaultUser, readonly
-class UpdatePassword extends React.Component {
+class UpdatePasswordUser extends React.Component {
     constructor(props) {
         super(props);
     }
