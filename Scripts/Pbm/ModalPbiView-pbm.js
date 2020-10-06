@@ -1,7 +1,7 @@
 ﻿//Properties: shadow, placeholderValue, hide
 //Global Methods:
 //Global Constants:
-class ModalPbiView extends React.Component {
+class ModalPbiViewPbm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {

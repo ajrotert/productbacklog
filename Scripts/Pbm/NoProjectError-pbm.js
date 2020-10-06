@@ -1,7 +1,7 @@
 ﻿//Properties:
 //Global Methods:
 //Global Constants:
-class NoProjectError extends React.Component {
+class NoProjectErrorPbm extends React.Component {
     render() {
         return (
             <div>

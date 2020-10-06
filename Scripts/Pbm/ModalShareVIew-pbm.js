@@ -1,7 +1,7 @@
 ﻿//Properties:
 //Global Methods:
 //Global Constants:
-class ModalShareView extends React.Component {
+class ModalShareViewPbm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {

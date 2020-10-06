@@ -1,7 +1,7 @@
 ﻿//Properties:
 //Global Methods:
 //Global Constants:
-class NotAuthError extends React.Component {
+class NotAuthErrorPbm extends React.Component {
     render() {
         return (
             <div>

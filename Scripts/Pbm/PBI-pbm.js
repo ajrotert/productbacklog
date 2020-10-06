@@ -1,4 +1,4 @@
-﻿class PBI extends React.Component {
+﻿class PBIPbm extends React.Component {
     constructor(props) {
         super(props);
         var hiddenState = this.props.hidden == null ? false : this.props.hidden;

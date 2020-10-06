@@ -1,7 +1,7 @@
 ﻿//Props: state: name, description
 //Global Methods:
 //Global Constants:
-class Projects extends React.Component {
+class ProjectsPbm extends React.Component {
     constructor(props) {
         super(props);
     }

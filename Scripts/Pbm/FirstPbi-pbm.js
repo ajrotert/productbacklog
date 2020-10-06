@@ -1,7 +1,7 @@
 ﻿//Properties:
 //Global Methods:
 //Global Constants:
-class FirstPbi extends React.Component {
+class FirstPbiPbm extends React.Component {
     render() {
         return (
             <div className="PBI normalizePBIheading box_shadow_blue" id="00000">

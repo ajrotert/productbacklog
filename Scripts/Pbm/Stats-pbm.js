@@ -1,7 +1,7 @@
 ﻿//Props: 
 //Global Methods:
 //Global Constants:
-class Stats extends React.Component {
+class StatsPbm extends React.Component {
     constructor(props) {
         super(props);
         const hidden = localStorage.getItem('PBSTATSAREAHIDDEN');

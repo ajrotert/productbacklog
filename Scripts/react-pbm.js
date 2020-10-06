@@ -51,7 +51,7 @@ const copyToClipboard = str => {
 
 function generatePbiModalPopup(shadowColor = null, hide = false) {
     if (!readonly || canAdd || canModify) {
-        ReactDOM.render(<ModalPbiView shadow={shadowColor} placeholderValue={shadowColor == null ? null : "Defect"} hide={hide} />, document.querySelector('#rootModal'));
+        ReactDOM.render(<ModalPbiViewPbm shadow={shadowColor} placeholderValue={shadowColor == null ? null : "Defect"} hide={hide} />, document.querySelector('#rootModal'));
 
     }
     else {
@@ -67,7 +67,7 @@ function generateShareCodeFromDatabase(sentUid, sentPid, read, add, all) {
 }
 
 function generateShareCodePopup() {
-    ReactDOM.render(<ModalShareView />, document.querySelector('#rootModal'));
+    ReactDOM.render(<ModalShareViewPbm />, document.querySelector('#rootModal'));
 }
 
 function updateHiddenAttributes(show) {
@@ -119,7 +119,7 @@ function updateBacklogUI() {
     }
 }
 
-class PB extends React.Component {
+class PBPbm extends React.Component {
     constructor(props) {
         super(props);
         this.state={
@@ -132,7 +132,7 @@ class PB extends React.Component {
 
     renderPBI(id, title, description, completed, timestamp, isStory, hidden, inprogress, tasks) {
         return (
-            <PBI id={id} title={title} description={description} completed={completed} timestamp={timestamp} isStory={isStory} hidden={hidden} hiddenPB={this.state.hidePbiItems} showInprogress={this.state.showInprogress} inprogress={inprogress} tasks={tasks}/>
+            <PBIPbm id={id} title={title} description={description} completed={completed} timestamp={timestamp} isStory={isStory} hidden={hidden} hiddenPB={this.state.hidePbiItems} showInprogress={this.state.showInprogress} inprogress={inprogress} tasks={tasks}/>
             );
     };
 
@@ -263,9 +263,9 @@ class PB extends React.Component {
             <div>
                 <div className="grid-container">
 
-                <Heading />
+                <HeadingPbm />
 
-                <Stats stats={statsGroup} action={this.handleHiddenItems} action2={this.toggleInprogress} />
+                <StatsPbm stats={statsGroup} action={this.handleHiddenItems} action2={this.toggleInprogress} />
 
                 <div id="pregrid1" className="grid_border_right">
                     <h1 className="grid_border_bottom">Backlog</h1>
@@ -300,17 +300,17 @@ firebase.auth().onAuthStateChanged(function (user) {
 
     if (user != null || readonly) {
         if (uid == null) {
-            ReactDOM.render(<NotAuthError />, domContainer);
+            ReactDOM.render(<NotAuthErrorPbm />, domContainer);
             document.getElementById('loading-gif').style.display = 'none';
         }
         else if (pid == null) {
-            ReactDOM.render(<NoProjectError />, domContainer);
+            ReactDOM.render(<NoProjectErrorPbm />, domContainer);
             document.getElementById('loading-gif').style.display = 'none';
         }
         else {
             db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog')
                 .onSnapshot((snapshot) => {
-                    ReactDOM.render(<PB data={snapshot} />, domContainer, () => {
+                    ReactDOM.render(<PBPbm data={snapshot} />, domContainer, () => {
                         var inProgressItems = document.getElementById('grid1');
                         var completedItems = document.getElementById('grid2');
                         var completedNodeList = new Array(0);
@@ -340,7 +340,7 @@ firebase.auth().onAuthStateChanged(function (user) {
         }
     }
     else {
-        ReactDOM.render(<NotAuthErrorDemo />, domContainer);
+        ReactDOM.render(<NotAuthErrorDemoPbm />, domContainer);
         document.getElementById('loading-gif').style.display = 'none';
     }
     
@@ -373,6 +373,6 @@ window.addEventListener("pageshow", function (event) {
 });
 
 function handleReadonly() {
-    ReactDOM.render(<NotAuthErrorDemo />, domContainer);
+    ReactDOM.render(<NotAuthErrorDemoPbm />, domContainer);
     document.getElementById('loading-gif').style.display = 'none';
 }
