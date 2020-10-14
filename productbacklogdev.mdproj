@@ -48,11 +48,11 @@
     <None Include="Images\Demos\TasksDemo.png" />
     <None Include="Images\Demos\ProductBacklogDemo.png" />
     <None Include="Images\Demos\ProjectsDemo.png" />
-    <None Include="Scripts\ProjectSelection\NotAuthError-project.js" />
-    <None Include="Scripts\ProjectSelection\NotAuthErrorDemo-project.js" />
-    <None Include="Scripts\ProjectSelection\ModalView-project.js" />
-    <None Include="Scripts\ProjectSelection\Projects-project.js" />
-    <None Include="Scripts\ProjectSelection\Constants-project.js" />
+    <None Include="Scripts\ProjectSelection\NotAuthErrorProject.js" />
+    <None Include="Scripts\ProjectSelection\NotAuthErrorDemoProject.js" />
+    <None Include="Scripts\ProjectSelection\ModalViewProject.js" />
+    <None Include="Scripts\ProjectSelection\ProjectsProject.js" />
+    <None Include="Scripts\ProjectSelection\ConstantsProject.js" />
     <None Include="Scripts\Users\NotAuthError-user.js" />
     <None Include="Scripts\Users\ReadonlyError-user.js" />
     <None Include="Scripts\Users\AddonlyError-user.js" />
