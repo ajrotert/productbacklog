@@ -75,17 +75,17 @@
     <None Include="Scripts\Tasks\StatsTask.js" />
     <None Include="Scripts\Tasks\TaskTask.js" />
     <None Include="Scripts\Tasks\ConstantsTask.js" />
-    <None Include="Scripts\Pbm\NotAuthError-pbm.js" />
-    <None Include="Scripts\Pbm\NotAuthErrorDemo-pbm.js" />
-    <None Include="Scripts\Pbm\NoProjectError-pbm.js" />
-    <None Include="Scripts\Pbm\ModalPbiView-pbm.js" />
-    <None Include="Scripts\Pbm\ModalShareVIew-pbm.js" />
-    <None Include="Scripts\Pbm\Projects-pbm.js" />
-    <None Include="Scripts\Pbm\Heading-pbm.js" />
-    <None Include="Scripts\Pbm\Stats-pbm.js" />
-    <None Include="Scripts\Pbm\FirstPbi-pbm.js" />
-    <None Include="Scripts\Pbm\PBI-pbm.js" />
-    <None Include="Scripts\Pbm\Constants-pbm.js" />
+    <None Include="Scripts\Pbm\NotAuthErrorPbm.js" />
+    <None Include="Scripts\Pbm\NotAuthErrorDemoPbm.js" />
+    <None Include="Scripts\Pbm\NoProjectErrorPbm.js" />
+    <None Include="Scripts\Pbm\ModalPbiViewPbm.js" />
+    <None Include="Scripts\Pbm\ModalShareVIewPbm.js" />
+    <None Include="Scripts\Pbm\ProjectsPbm.js" />
+    <None Include="Scripts\Pbm\HeadingPbm.js" />
+    <None Include="Scripts\Pbm\StatsPbm.js" />
+    <None Include="Scripts\Pbm\FirstPbiPbm.js" />
+    <None Include="Scripts\Pbm\PBIPbm.js" />
+    <None Include="Scripts\Pbm\ConstantsPbm.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
