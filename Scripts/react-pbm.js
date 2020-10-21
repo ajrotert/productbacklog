@@ -1,4 +1,10 @@
-﻿function getPbiDatabase(docId) {
+﻿'use strict';
+
+/**
+ * Components are defined in the Pbm directory, and are added to the global scope
+ **/
+
+function getPbiDatabase(docId) {
     if (!readonly || canModify) {
         return db.collection('users').doc(uid).collection('Projects').doc(pid).collection('product_backlog').doc(docId).get();
     }
